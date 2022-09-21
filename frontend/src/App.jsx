@@ -1,24 +1,25 @@
 import React from 'react';
-import logo from './logo.svg';
+import { Routes, Route } from 'react-router-dom';
 import './App.css';
+import Grid from '@mui/material/Grid';
+import NavBar from './component/NavBar';
+import UserInfo from './pages/UserInfo';
+
+// const url = process.env.REACT_APP_ENV === 'dev' ? '' : 'https://api.butler.co.kr';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Grid container rowSpacing={1} sx={{ p: 2, backgroundColor: '#F0F2F5' }}>
+        <Grid item xs={2}>
+          <NavBar />
+        </Grid>
+        <Grid item xs={10}>
+          <Routes>
+            <Route path="/UserInfo" element={<UserInfo />} />
+          </Routes>
+        </Grid>
+      </Grid>
     </div>
   );
 }
