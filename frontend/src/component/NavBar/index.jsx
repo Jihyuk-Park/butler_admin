@@ -70,10 +70,12 @@ export default function NavBar() {
           sx={{
             background: 'linear-gradient(180deg, #3E3E45 0%, #1D1C1D 100%);',
             height: '90vh',
+            width: '13vw',
             p: 1,
             pt: 3,
             borderRadius: '12px 0px 0px 12px',
             overflowY: 'scroll',
+            position: 'fixed',
           }}
         >
           <Typography variant="h6" color="#FFFFFF" fontWeight={600}>
@@ -81,7 +83,7 @@ export default function NavBar() {
           </Typography>
           <Button
             onClick={companyList === false ? openCompanyList : closeCompanyList}
-            sx={{ color: 'white', fontSize: '1.15rem', width: '180px', mb: '5px', mt: '40px' }}
+            sx={{ color: 'white', fontSize: '1.15rem', width: '11vw', mb: '5px', mt: '40px' }}
           >
             <Grid container direction="row" justifyContent="space-between" alignItems="center">
               <BusinessIcon />
@@ -98,7 +100,7 @@ export default function NavBar() {
                     onClick={() => goToLink(companyUrl[index], index, 'company')}
                     sx={[
                       selectedMenu === index ? { backgroundColor: '#F1A239' } : { opacity: 0.5 },
-                      { color: 'white', width: '180px', fontWeight: 600 },
+                      { color: 'white', width: '11vw', fontWeight: 600 },
                     ]}
                   >
                     {eachdata}
@@ -109,7 +111,7 @@ export default function NavBar() {
           )}
           <Button
             onClick={userList === false ? openUserList : closeUserList}
-            sx={{ color: 'white', fontSize: '1.15rem', width: '180px', mt: '10px', mb: '5px' }}
+            sx={{ color: 'white', fontSize: '1.15rem', width: '11vw', mt: '10px', mb: '5px' }}
           >
             <Grid container direction="row" justifyContent="space-between" alignItems="center">
               <PersonIcon />
@@ -128,7 +130,7 @@ export default function NavBar() {
                       selectedMenu === index + 100
                         ? { backgroundColor: '#F1A239' }
                         : { opacity: 0.5 },
-                      { color: 'white', width: '180px', fontWeight: 600 },
+                      { color: 'white', width: '11vw', fontWeight: 600 },
                     ]}
                   >
                     {eachdata}

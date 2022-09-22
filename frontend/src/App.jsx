@@ -11,10 +11,10 @@ function App() {
   return (
     <div className="App">
       <Grid container rowSpacing={1} sx={{ p: 2, backgroundColor: '#F0F2F5' }}>
-        <Grid item xs={2}>
+        <Grid item xs={1.8}>
           <NavBar />
         </Grid>
-        <Grid item xs={10}>
+        <Grid item xs={10.2}>
           <Routes>
             <Route path="/UserInfo" element={<UserInfo />} />
           </Routes>

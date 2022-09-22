@@ -9,7 +9,31 @@ import reportWebVitals from './reportWebVitals';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#F1A239',
+      main: '#FF9D00',
+    },
+    secondary: {
+      main: '#10263B',
+    },
+  },
+  components: {
+    MuiButton: {
+      defaultProps: {
+        style: { fontWeight: 600 },
+      },
+    },
+    MuiTextField: {
+      defaultProps: {
+        inputProps: {
+          style: { padding: 10 },
+        },
+      },
+    },
+    MuiSelect: {
+      defaultProps: {
+        SelectDisplayProps: {
+          style: { padding: '10px 130px 10px 15px' },
+        },
+      },
     },
   },
 });
