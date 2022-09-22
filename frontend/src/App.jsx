@@ -4,8 +4,7 @@ import './App.css';
 import Grid from '@mui/material/Grid';
 import NavBar from './component/NavBar';
 import UserInfo from './pages/UserInfo';
-
-// const url = process.env.REACT_APP_ENV === 'dev' ? '' : 'https://api.butler.co.kr';
+import UserMemo from './pages/UserMemo';
 
 function App() {
   return (
@@ -17,6 +16,7 @@ function App() {
         <Grid item xs={10.2}>
           <Routes>
             <Route path="/UserInfo" element={<UserInfo />} />
+            <Route path="/UserMemo" element={<UserMemo />} />
           </Routes>
         </Grid>
       </Grid>

@@ -28,7 +28,6 @@ export default function UserInfo() {
   const searchTypeList = ['닉네임', '이름', '로그인 방식', 'Grade', 'Type', 'Uid'];
   // 유저 정보 데이터
   const [userInfoData, setUserInfoData] = useState([]);
-  const [page, setPage] = useState(1);
   const [searchType, setSearchType] = useState('닉네임');
   const [searchInput, setSearchInput] = useState('');
   const [isSearch, setIsSearch] = useState(false);
@@ -36,6 +35,7 @@ export default function UserInfo() {
   // 무한 스크롤 (ref가 화면에 나타나면 inView는 true, 아니면 false를 반환)
   const [ref, inView] = useInView();
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState(100);
   // 수정 내용이 있는지 비교를 위한 데이터
   const [originalData, setOriginalData] = useState(['', '', '', '', '', '', '', '']);
@@ -95,7 +95,7 @@ export default function UserInfo() {
   useEffect(() => {
     if (isSearch === false) {
       axios
-        .get(`/admin/user/userInfo/getResult/all/${page}`)
+        .get(`${process.env.REACT_APP_APIURL}/admin/user/userInfo/getData/all/${page}`)
         .then(result => {
           // console.log(result.data);
           setUserInfoData([...userInfoData, ...result.data]);
@@ -107,7 +107,9 @@ export default function UserInfo() {
         });
     } else {
       axios
-        .get(`/admin/user/userInfo/getResult/search/${page}/${searchType}/${searchInput}`)
+        .get(
+          `${process.env.REACT_APP_APIURL}/admin/user/userInfo/getData/search/${page}/${searchType}/${searchInput}`,
+        )
         .then(result => {
           // console.log(result.data);
           setUserInfoData([...userInfoData, ...result.data]);
@@ -122,7 +124,7 @@ export default function UserInfo() {
   useEffect(() => {
     if (isSearch === false) {
       axios
-        .get(`/admin/user/userInfo/getTotalNum/all`)
+        .get(`${process.env.REACT_APP_APIURL}/admin/user/userInfo/getTotalNum/all`)
         .then(result => {
           // console.log(result.data);
           setMaxPage(Math.ceil(result.data.totalnum / 12));
@@ -132,7 +134,9 @@ export default function UserInfo() {
         });
     } else {
       axios
-        .get(`/admin/user/userInfo/getTotalNum/search/${searchType}/${searchInput}`)
+        .get(
+          `${process.env.REACT_APP_APIURL}/admin/user/userInfo/getTotalNum/search/${searchType}/${searchInput}`,
+        )
         .then(result => {
           // console.log(result.data);
           setMaxPage(Math.ceil(result.data.totalnum / 12));
