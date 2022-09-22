@@ -62,6 +62,9 @@ export default function NavBar() {
       setSelectedMenu(num + 100);
     }
   };
+  const goToHome = () => {
+    navigate('/');
+  };
 
   return (
     <div>
@@ -78,7 +81,13 @@ export default function NavBar() {
             position: 'fixed',
           }}
         >
-          <Typography variant="h6" color="#FFFFFF" fontWeight={600}>
+          <Typography
+            onClick={goToHome}
+            variant="h6"
+            color="#FFFFFF"
+            fontWeight={600}
+            sx={{ cursor: 'pointer' }}
+          >
             Butler Admin
           </Typography>
           <Button

@@ -6,4 +6,5 @@ export default styled(Box)({
   border: 'solid 1px #B9BABC',
   borderRadius: '4px',
   marginTop: '10px',
+  backgroundColor: '#FFFFFF',
 });

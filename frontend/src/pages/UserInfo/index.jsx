@@ -24,39 +24,124 @@ import StyledTableCell from '../../component/UI/StyledTableCell';
 import StyledTableRow from '../../component/UI/StyledTableRow';
 
 export default function UserInfo() {
-  const [userInfoData, setUserInfoData] = useState([]);
-  const [page, setPage] = useState(1);
-  const [ref, inView] = useInView();
-  const [loading, setLoading] = useState(false);
-  const [maxPage, setMaxPage] = useState(10);
   const dataTable = ['닉네임', '이름', '전화번호', '이메일', '로그인 방식', 'Grade', 'Type', 'Uid'];
   const searchTypeList = ['닉네임', '이름', '로그인 방식', 'Grade', 'Type', 'Uid'];
+  // 유저 정보 데이터
+  const [userInfoData, setUserInfoData] = useState([]);
+  const [page, setPage] = useState(1);
   const [searchType, setSearchType] = useState('닉네임');
+  const [searchInput, setSearchInput] = useState('');
+  const [isSearch, setIsSearch] = useState(false);
+  const [refreshSwitch, setRefreshSwitch] = useState(true);
+  // 무한 스크롤 (ref가 화면에 나타나면 inView는 true, 아니면 false를 반환)
+  const [ref, inView] = useInView();
+  const [loading, setLoading] = useState(false);
+  const [maxPage, setMaxPage] = useState(100);
+  // 수정 내용이 있는지 비교를 위한 데이터
+  const [originalData, setOriginalData] = useState(['', '', '', '', '', '', '', '']);
+  const [isChange, setIsChange] = useState(false);
+  const [originalId, setOriginalId] = useState(0);
+  const [editInput, setEditInput] = useState({
+    editNickName: '',
+    editName: '',
+    editPhone: '',
+    editEmail: '',
+    editAuthType: '',
+    editGrade: '',
+    editType: '',
+    editUid: '',
+  });
+  const {
+    editNickName,
+    editName,
+    editPhone,
+    editEmail,
+    editAuthType,
+    editGrade,
+    editType,
+    editUid,
+  } = editInput;
+  const editArray = [
+    editNickName,
+    editName,
+    editPhone,
+    editEmail,
+    editAuthType,
+    editGrade,
+    editType,
+    editUid,
+  ];
+  const editArrayName = [
+    'editNickName',
+    'editName',
+    'editPhone',
+    'editEmail',
+    'editAuthType',
+    'editGrade',
+    'editType',
+    'editUid',
+  ];
+  const [editableSwitch, setEditableSwitch] = useState([
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+  ]);
 
   useEffect(() => {
-    axios
-      .get(`/admin/user/UserInfo/get/${page}`)
-      .then(result => {
-        // console.log(result.data);
-        setUserInfoData([...userInfoData, ...result.data]);
-        setLoading(false);
-      })
-      .catch(() => {
-        console.log('실패했습니다');
-      });
-  }, [page]);
+    if (isSearch === false) {
+      axios
+        .get(`/admin/user/userInfo/getResult/all/${page}`)
+        .then(result => {
+          // console.log(result.data);
+          setUserInfoData([...userInfoData, ...result.data]);
+          setLoading(false);
+          setIsSearch(false);
+        })
+        .catch(() => {
+          console.log('실패했습니다');
+        });
+    } else {
+      axios
+        .get(`/admin/user/userInfo/getResult/search/${page}/${searchType}/${searchInput}`)
+        .then(result => {
+          // console.log(result.data);
+          setUserInfoData([...userInfoData, ...result.data]);
+          setLoading(false);
+        })
+        .catch(() => {
+          console.log('실패했습니다');
+        });
+    }
+  }, [page, refreshSwitch]);
 
   useEffect(() => {
-    axios
-      .get(`/admin/user/UserInfo/getTotalNum`)
-      .then(result => {
-        // console.log(result.data);
-        setMaxPage(Math.ceil(result.data.totalnum / 12));
-      })
-      .catch(() => {
-        console.log('실패했습니다');
-      });
-  }, []);
+    if (isSearch === false) {
+      axios
+        .get(`/admin/user/userInfo/getTotalNum/all`)
+        .then(result => {
+          // console.log(result.data);
+          setMaxPage(Math.ceil(result.data.totalnum / 12));
+        })
+        .catch(() => {
+          console.log('실패했습니다');
+        });
+    } else {
+      axios
+        .get(`/admin/user/userInfo/getTotalNum/search/${searchType}/${searchInput}`)
+        .then(result => {
+          // console.log(result.data);
+          setMaxPage(Math.ceil(result.data.totalnum / 12));
+        })
+        .catch(() => {
+          console.log('실패했습니다');
+        });
+    }
+  }, [isSearch, refreshSwitch]);
 
   useEffect(() => {
     if (inView && !loading && page <= maxPage && userInfoData.length !== 0) {
@@ -67,8 +152,135 @@ export default function UserInfo() {
     }
   }, [inView, loading]);
 
+  const searchUserInfo = () => {
+    if (searchInput.length === 0) {
+      setIsSearch(false);
+    } else {
+      setIsSearch(true);
+    }
+    setUserInfoData([]);
+    if (page !== 1) {
+      setPage(1);
+    } else {
+      setPage(1);
+      setRefreshSwitch(!refreshSwitch);
+    }
+    onReset();
+    setOriginalData(['', '', '', '', '', '', '', '']);
+  };
+
   const selectType = e => {
     setSearchType(e.target.value);
+  };
+
+  const searchInputOnChange = e => {
+    setSearchInput(e.target.value);
+  };
+
+  const onChangeEditInput = e => {
+    const { name, value } = e.target;
+    setEditInput({
+      ...editInput,
+      [name]: value,
+    });
+  };
+
+  const setEditData = each => {
+    setEditInput({
+      editNickName: each.NickName,
+      editName: each.Name,
+      editPhone: each.Phone,
+      editEmail: each.EMail,
+      editAuthType: each.AuthType,
+      editGrade: each.id,
+      editType: each.id,
+      editUid: each.id,
+    });
+    setOriginalId(each.id);
+    setOriginalData([
+      each.NickName,
+      each.Name,
+      each.Phone,
+      each.EMail,
+      each.AuthType,
+      each.id,
+      each.id,
+      each.id,
+    ]);
+    setEditableSwitch([false, false, false, false, false, false, false, false]);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setIsChange(false);
+  };
+
+  const onReset = () => {
+    setEditInput({
+      editNickName: '',
+      editName: '',
+      editPhone: '',
+      editEmail: '',
+      editAuthType: '',
+      editGrade: '',
+      editType: '',
+      editUid: '',
+    });
+    setEditableSwitch([false, false, false, false, false, false, false, false]);
+    setOriginalData(['', '', '', '', '', '', '', '']);
+    setIsChange(false);
+  };
+
+  const clickEditableSwitch = ind => {
+    const tempArray = [...editableSwitch];
+    tempArray[ind] = !tempArray[ind];
+    setEditableSwitch(tempArray);
+    if (editArray[ind] === originalData[ind]) {
+      setIsChange(false);
+    } else {
+      setIsChange(true);
+    }
+  };
+
+  const saveData = () => {
+    const body = {
+      id: originalId,
+      NickName: editNickName,
+      Name: editName,
+      Phone: editPhone,
+      Email: editEmail,
+      AuthType: editAuthType,
+      Grade: editGrade,
+      Type: editType,
+      Uid: editUid,
+    };
+
+    axios.post(`/admin/user/userInfo/edit`, body).then(() => {
+      userInfoData.map((eachdata, index) => {
+        if (eachdata.id === originalId) {
+          const temp = {
+            NickName: editNickName,
+            Name: editName,
+            Phone: editPhone,
+            EMail: editEmail,
+            AuthType: editAuthType,
+            Grade: editGrade,
+            Type: editType,
+            Uid: editUid,
+          };
+          Object.assign(userInfoData[index], temp);
+        }
+        return eachdata;
+      });
+
+      setEditInput({
+        editNickName: '',
+        editName: '',
+        editPhone: '',
+        editEmail: '',
+        editAuthType: '',
+        editGrade: '',
+        editType: '',
+        editUid: '',
+      });
+    });
   };
 
   return (
@@ -91,7 +303,9 @@ export default function UserInfo() {
               {userInfoData.map(eachdata => (
                 <StyledTableRow key={eachdata.id}>
                   <StyledTableCell align="center" component="th" scope="row">
-                    <Button color="secondary">{eachdata.NickName}</Button>
+                    <Button onClick={() => setEditData(eachdata)} color="secondary">
+                      {eachdata.NickName}
+                    </Button>
                   </StyledTableCell>
                   <StyledTableCell align="center">{eachdata.Name}</StyledTableCell>
                   <StyledTableCell align="center">{eachdata.Phone}</StyledTableCell>
@@ -121,13 +335,13 @@ export default function UserInfo() {
               })}
             </Select>
           </FormControl>
-          <TextField fullWidth />
-          <Button variant="contained" color="secondary">
+          <TextField fullWidth value={searchInput} onChange={searchInputOnChange} />
+          <Button onClick={searchUserInfo} variant="contained" color="secondary">
             검색
           </Button>
         </Stack>
         <OutLinedBox>
-          {dataTable.map(function (eachdata) {
+          {dataTable.map(function (eachdata, index) {
             return (
               <Grid container alignItems="center" spacing={1} key={eachdata} sx={{ mb: '10px' }}>
                 <Grid item xs={3}>
@@ -136,20 +350,37 @@ export default function UserInfo() {
                   </Typography>
                 </Grid>
                 <Grid item xs={7}>
-                  <TextField fullWidth />
+                  <TextField
+                    disabled={editableSwitch[index] === false}
+                    fullWidth
+                    name={editArrayName[index]}
+                    value={editArray[index] || ''}
+                    onChange={onChangeEditInput}
+                  />
                 </Grid>
                 <Grid item xs={2}>
-                  <Button variant="contained" color="secondary">
-                    수정
+                  <Button
+                    onClick={() => clickEditableSwitch(index)}
+                    variant="contained"
+                    color={editArray[index] === originalData[index] ? 'secondary' : 'primary'}
+                    sx={{ color: '#FFFFFF' }}
+                  >
+                    {editableSwitch[index] === false ? '수정' : '완료'}
                   </Button>
                 </Grid>
               </Grid>
             );
           })}
-          <Button fullWidth variant="contained" sx={{ color: '#FFFFFF', my: '10px' }}>
+          <Button
+            onClick={saveData}
+            disabled={isChange === false}
+            fullWidth
+            variant="contained"
+            sx={{ color: '#FFFFFF', my: '10px' }}
+          >
             저장
           </Button>
-          <Button fullWidth variant="contained" color="secondary">
+          <Button onClick={onReset} fullWidth variant="contained" color="secondary">
             취소
           </Button>
         </OutLinedBox>

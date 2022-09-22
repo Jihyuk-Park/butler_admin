@@ -24,14 +24,14 @@ const theme = createTheme({
     MuiTextField: {
       defaultProps: {
         inputProps: {
-          style: { padding: 10 },
+          style: { padding: 10, backgroundColor: '#FFFFFF' },
         },
       },
     },
     MuiSelect: {
       defaultProps: {
         SelectDisplayProps: {
-          style: { padding: '10px 130px 10px 15px' },
+          style: { padding: '10px 130px 10px 15px', backgroundColor: '#FFFFFF' },
         },
       },
     },
