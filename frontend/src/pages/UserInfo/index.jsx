@@ -22,21 +22,25 @@ import {
 import OutLinedBox from '../../component/UI/OutLinedBox';
 import StyledTableCell from '../../component/UI/StyledTableCell';
 import StyledTableRow from '../../component/UI/StyledTableRow';
+import { itemNumber, url } from '../../component/constVariable';
 
 export default function UserInfo() {
   const dataTable = ['닉네임', '이름', '전화번호', '이메일', '로그인 방식', 'Grade', 'Type', 'Uid'];
   const searchTypeList = ['닉네임', '이름', '로그인 방식', 'Grade', 'Type', 'Uid'];
-  // 유저 정보 데이터
+
+  // 유저 정보 데이터 및 검색
   const [userInfoData, setUserInfoData] = useState([]);
   const [searchType, setSearchType] = useState('닉네임');
   const [searchInput, setSearchInput] = useState('');
   const [isSearch, setIsSearch] = useState(false);
   const [refreshSwitch, setRefreshSwitch] = useState(true);
+
   // 무한 스크롤 (ref가 화면에 나타나면 inView는 true, 아니면 false를 반환)
   const [ref, inView] = useInView();
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState(100);
+
   // 수정 내용이 있는지 비교를 위한 데이터
   const [originalData, setOriginalData] = useState(['', '', '', '', '', '', '', '']);
   const [isChange, setIsChange] = useState(false);
@@ -61,7 +65,8 @@ export default function UserInfo() {
     editType,
     editUid,
   } = editInput;
-  const editArray = [
+
+  const editInputArray = [
     editNickName,
     editName,
     editPhone,
@@ -71,7 +76,8 @@ export default function UserInfo() {
     editType,
     editUid,
   ];
-  const editArrayName = [
+
+  const editInputNameArray = [
     'editNickName',
     'editName',
     'editPhone',
@@ -95,7 +101,7 @@ export default function UserInfo() {
   useEffect(() => {
     if (isSearch === false) {
       axios
-        .get(`${process.env.REACT_APP_APIURL}/admin/user/userInfo/getData/all/${page}`)
+        .get(`${url}/admin/user/userInfo/getData/all/${page}`)
         .then(result => {
           // console.log(result.data);
           setUserInfoData([...userInfoData, ...result.data]);
@@ -107,9 +113,7 @@ export default function UserInfo() {
         });
     } else {
       axios
-        .get(
-          `${process.env.REACT_APP_APIURL}/admin/user/userInfo/getData/search/${page}/${searchType}/${searchInput}`,
-        )
+        .get(`${url}/admin/user/userInfo/getData/search/${page}/${searchType}/${searchInput}`)
         .then(result => {
           // console.log(result.data);
           setUserInfoData([...userInfoData, ...result.data]);
@@ -124,22 +128,20 @@ export default function UserInfo() {
   useEffect(() => {
     if (isSearch === false) {
       axios
-        .get(`${process.env.REACT_APP_APIURL}/admin/user/userInfo/getTotalNum/all`)
+        .get(`${url}/admin/user/userInfo/getTotalNum/all`)
         .then(result => {
           // console.log(result.data);
-          setMaxPage(Math.ceil(result.data.totalnum / 12));
+          setMaxPage(Math.ceil(result.data.totalnum / itemNumber));
         })
         .catch(() => {
           console.log('실패했습니다');
         });
     } else {
       axios
-        .get(
-          `${process.env.REACT_APP_APIURL}/admin/user/userInfo/getTotalNum/search/${searchType}/${searchInput}`,
-        )
+        .get(`${url}/admin/user/userInfo/getTotalNum/search/${searchType}/${searchInput}`)
         .then(result => {
           // console.log(result.data);
-          setMaxPage(Math.ceil(result.data.totalnum / 12));
+          setMaxPage(Math.ceil(result.data.totalnum / itemNumber));
         })
         .catch(() => {
           console.log('실패했습니다');
@@ -236,7 +238,7 @@ export default function UserInfo() {
     const tempArray = [...editableSwitch];
     tempArray[ind] = !tempArray[ind];
     setEditableSwitch(tempArray);
-    if (editArray[ind] === originalData[ind]) {
+    if (editInputArray[ind] === originalData[ind]) {
       setIsChange(false);
     } else {
       setIsChange(true);
@@ -289,6 +291,7 @@ export default function UserInfo() {
 
   return (
     <Grid container columnSpacing={1}>
+      {/* userInfo 표 영역 */}
       <Grid item xs={8}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 700 }}>
@@ -325,8 +328,10 @@ export default function UserInfo() {
         </TableContainer>
         <Box ref={ref} sx={{ height: '10px', mt: '30px' }} />
       </Grid>
+
+      {/* 검색 창 부분 */}
       <Grid item xs={4}>
-        <Stack direction="row" spacing={1}>
+        <Stack direction="row" spacing={1} sx={{ mb: '10px' }}>
           <FormControl>
             <InputLabel>검색타입</InputLabel>
             <Select value={searchType} label="검색 타입" onChange={selectType}>
@@ -344,10 +349,11 @@ export default function UserInfo() {
             검색
           </Button>
         </Stack>
+
         <OutLinedBox>
           {dataTable.map(function (eachdata, index) {
             return (
-              <Grid container alignItems="center" spacing={1} key={eachdata} sx={{ mb: '10px' }}>
+              <Grid key={eachdata} container alignItems="center" spacing={1} sx={{ mb: '10px' }}>
                 <Grid item xs={3}>
                   <Typography fontSize={14} align="left">
                     {eachdata}
@@ -357,8 +363,8 @@ export default function UserInfo() {
                   <TextField
                     disabled={editableSwitch[index] === false}
                     fullWidth
-                    name={editArrayName[index]}
-                    value={editArray[index] || ''}
+                    name={editInputNameArray[index]}
+                    value={editInputArray[index] || ''}
                     onChange={onChangeEditInput}
                   />
                 </Grid>
@@ -366,7 +372,7 @@ export default function UserInfo() {
                   <Button
                     onClick={() => clickEditableSwitch(index)}
                     variant="contained"
-                    color={editArray[index] === originalData[index] ? 'secondary' : 'primary'}
+                    color={editInputArray[index] === originalData[index] ? 'secondary' : 'primary'}
                     sx={{ color: '#FFFFFF' }}
                   >
                     {editableSwitch[index] === false ? '수정' : '완료'}

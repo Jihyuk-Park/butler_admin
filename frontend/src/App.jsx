@@ -5,6 +5,8 @@ import Grid from '@mui/material/Grid';
 import NavBar from './component/NavBar';
 import UserInfo from './pages/UserInfo';
 import UserMemo from './pages/UserMemo';
+import UserUsage from './pages/UserUsage';
+import UserEntire from './pages/UserEntire';
 
 function App() {
   return (
@@ -16,7 +18,9 @@ function App() {
         <Grid item xs={10.2}>
           <Routes>
             <Route path="/UserInfo" element={<UserInfo />} />
+            <Route path="/UserEntire" element={<UserEntire />} />
             <Route path="/UserMemo" element={<UserMemo />} />
+            <Route path="/UserUsage" element={<UserUsage />} />
           </Routes>
         </Grid>
       </Grid>

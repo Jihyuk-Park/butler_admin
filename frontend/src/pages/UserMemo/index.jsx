@@ -21,25 +21,30 @@ import {
 import StyledTableCell from '../../component/UI/StyledTableCell';
 import StyledTableRow from '../../component/UI/StyledTableRow';
 import CustomModal from '../../component/UI/CustomModal';
+import { itemNumber, url } from '../../component/constVariable';
 
 export default function UserMemo() {
   const dataTable = ['순번', '작성일', '갱신일', '기업명', '유저 닉네임', '타입', '메모', '삭제'];
+  const sortFieldList = ['순번', '작성일', '갱신일', '기업명', '유저 닉네임'];
+
+  // 메모 데이터 및 정렬
+  const [memoData, setMemoData] = useState([]);
   const [sortField, setSortField] = useState('순번');
   const [sortType, setSortType] = useState('내림차순');
-  const sortFieldList = ['순번', '작성일', '갱신일', '기업명', '유저 닉네임'];
-  const [memoData, setMemoData] = useState([]);
-  const [page, setPage] = useState(1);
-  const [maxPage, setMaxPage] = useState(100);
-  const [ref, inView] = useInView();
-  const [loading, setLoading] = useState(false);
+
+  // 삭제 모달 스위치 및 삭제 ID 트래킹
   const [deleteModal, setDeleteModal] = useState(false);
   const [memoId, setMemoId] = useState(0);
 
+  // 무한 스크롤 (ref가 화면에 나타나면 inView는 true, 아니면 false를 반환)
+  const [ref, inView] = useInView();
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [maxPage, setMaxPage] = useState(100);
+
   useEffect(() => {
     axios
-      .get(
-        `${process.env.REACT_APP_APIURL}/admin/user/userMemo/getData/all/${page}/${sortField}/${sortType}`,
-      )
+      .get(`${url}/admin/user/userMemo/getData/all/${page}/${sortField}/${sortType}`)
       .then(result => {
         // console.log(result.data);
         setMemoData([...memoData, ...result.data]);
@@ -52,10 +57,10 @@ export default function UserMemo() {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_APIURL}/admin/user/userMemo/getTotalNum/all`)
+      .get(`${url}/admin/user/userMemo/getTotalNum/all`)
       .then(result => {
         // console.log(result.data);
-        setMaxPage(Math.ceil(result.data.totalnum / 12));
+        setMaxPage(Math.ceil(result.data.totalnum / itemNumber));
       })
       .catch(() => {
         console.log('실패했습니다');
@@ -106,6 +111,7 @@ export default function UserMemo() {
 
   return (
     <div>
+      {/* 정렬 영역  */}
       <Grid container alignItems="flex-start" sx={{ mb: '20px' }}>
         <FormControl sx={{ mr: '15px' }}>
           <InputLabel>정렬 타입</InputLabel>
@@ -126,6 +132,8 @@ export default function UserMemo() {
           오름차순
         </Button>
       </Grid>
+
+      {/* 메모 데이터 영역 */}
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }}>
           <TableHead>
@@ -164,6 +172,8 @@ export default function UserMemo() {
         </Table>
       </TableContainer>
       <Box ref={ref} sx={{ height: '10px', mt: '30px' }} />
+
+      {/* 삭제 모달 영역 */}
       {deleteModal === false ? null : (
         <CustomModal
           customFunction={deleteMemo}

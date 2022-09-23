@@ -21,7 +21,7 @@ const theme = createTheme({
   components: {
     MuiButton: {
       defaultProps: {
-        style: { fontWeight: 600 },
+        style: { fontWeight: 600, maxWidth: '400px' },
       },
     },
     MuiTextField: {
