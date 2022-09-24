@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import moment from 'moment';
 import 'moment/locale/ko';
 import {
   Table,
@@ -7,7 +9,6 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Button,
   FormControl,
   InputLabel,
   Select,
@@ -17,10 +18,10 @@ import {
 
 import StyledTableCell from '../../component/UI/StyledTableCell';
 import StyledTableRow from '../../component/UI/StyledTableRow';
+import { url } from '../../component/constVariable';
 
 export default function UserEntire() {
   const sortTypeList = ['일간', '월간'];
-
   // 메모 데이터 및 정렬
   const [entireUserData, setEntireData] = useState([]);
   const [sortType, setSortType] = useState('일간');
@@ -36,10 +37,19 @@ export default function UserEntire() {
   ];
 
   useEffect(() => {
-    console.log(setEntireData, setSortType);
-  }, []);
+    axios
+      .get(`${url}/admin/user/userEntire/getData/${sortType}`)
+      .then(result => {
+        // console.log(result.data);
+        setEntireData(result.data);
+      })
+      .catch(() => {
+        console.log('실패했습니다');
+      });
+  }, [sortType]);
 
   const selectSortType = e => {
+    setEntireData([]);
     setSortType(e.target.value);
   };
 
@@ -76,25 +86,38 @@ export default function UserEntire() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {entireUserData.map(eachdata => (
-              <StyledTableRow key={eachdata.id}>
-                <StyledTableCell align="center">{eachdata.id}</StyledTableCell>
-                <StyledTableCell align="center">{eachdata.created_at}</StyledTableCell>
-                <StyledTableCell align="center">{eachdata.updated_at}</StyledTableCell>
-                <StyledTableCell align="center">{eachdata.corp_name}</StyledTableCell>
-                <StyledTableCell align="center">{eachdata.NickName}</StyledTableCell>
-                <StyledTableCell align="center">{eachdata.type}</StyledTableCell>
-                <StyledTableCell align="center">{eachdata.memo}</StyledTableCell>
-                <StyledTableCell align="center">
-                  <Button variant="contained" color="secondary">
-                    삭제
-                  </Button>
-                </StyledTableCell>
-              </StyledTableRow>
-            ))}
+            {entireUserData.map(function (eachdata) {
+              return (
+                <StyledTableRow key={eachdata.date}>
+                  <StyledTableCell align="center">
+                    {changeDate(eachdata.date, sortType)}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">{eachdata.NAVER}</StyledTableCell>
+                  <StyledTableCell align="center">
+                    {eachdata.daily - eachdata.NAVER}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">{eachdata.daily}</StyledTableCell>
+                  <StyledTableCell align="center">{eachdata.TOTAL_NAVER}</StyledTableCell>
+                  <StyledTableCell align="center">
+                    {eachdata.TOTAL_Daily - eachdata.TOTAL_NAVER}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">{eachdata.TOTAL_Daily}</StyledTableCell>
+                </StyledTableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>
     </div>
   );
+}
+
+function changeDate(date, sortType) {
+  let publishDate;
+  if (sortType === '일간') {
+    publishDate = moment(date).format('YYYY.MM.DD (dd)');
+  } else {
+    publishDate = moment(date).format('YYYY.MM');
+  }
+  return publishDate;
 }
