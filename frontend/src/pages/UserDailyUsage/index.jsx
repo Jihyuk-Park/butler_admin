@@ -8,7 +8,6 @@ import {
   TableRow,
   Paper,
   Button,
-  Box,
   TextField,
   Typography,
 } from '@mui/material';
@@ -16,54 +15,47 @@ import OutLinedBox from '../../component/UI/OutLinedBox';
 import StyledTableCell from '../../component/UI/StyledTableCell';
 import StyledTableRow from '../../component/UI/StyledTableRow';
 
-export default function UserUsage() {
+export default function UserDailyUsage() {
   const dataTable = [
-    '닉네임',
-    '가입일',
-    '최근 접속일',
-    '기업 검색 횟수',
-    '관심목록 그룹 수',
-    '관심목록 기업 수',
-    '작성메모 수',
+    '일자',
+    '가입자의 기업 검색 횟수',
+    '비 가입자의 기업 검색 횟수',
+    '검색 횟수 총합',
+    '관심목록 신규 유저 수',
+    '관심목록 누적 유저 수',
   ];
-  const searchField = ['닉네임', '가입 기간', '접속 기간'];
-  const [userUsageData, setUserUsageData] = useState([]);
+  const searchField = ['기업명', '검색 횟수', '관심 목록 유저 수'];
+  const [companyUsageData, setCompanyUsageData] = useState([]);
   const [searchInput, setSearchInput] = useState({
-    searchNickName: '',
-    searchRegisterStart: '',
-    searchRegisterEnd: '',
-    searchConnectStart: '',
-    searchConnectEnd: '',
-    searchCompanyStart: '',
-    searchCompanyEnd: '',
+    searchCompanyName: '',
+    searchCountingStart: '',
+    searchCountingEnd: '',
+    searchUserCountingStart: '',
+    searchUserCountingEnd: '',
   });
   const {
-    searchNickName,
-    searchRegisterStart,
-    searchRegisterEnd,
-    searchConnectStart,
-    searchConnectEnd,
-    searchCompanyStart,
-    searchCompanyEnd,
+    searchCompanyName,
+    searchCountingStart,
+    searchCountingEnd,
+    searchUserCountingStart,
+    searchUserCountingEnd,
   } = searchInput;
 
   const searchInputArray = [
-    searchNickName,
-    [searchRegisterStart, searchRegisterEnd],
-    [searchConnectStart, searchConnectEnd],
-    [searchCompanyStart, searchCompanyEnd],
+    searchCompanyName,
+    [searchCountingStart, searchCountingEnd],
+    [searchUserCountingStart, searchUserCountingEnd],
   ];
 
   const searchInputNameArray = [
-    'searchNickName',
-    ['searchRegisterStart', 'searchRegisterEnd'],
-    ['searchConnectStart', 'searchConnectEnd'],
-    ['searchCompanyStart', 'searchCompanyEnd'],
+    'searchCompanyName',
+    ['searchCountingStart', 'searchCountingEnd'],
+    ['searchUserCountingStart', 'searchUserCountingEnd'],
   ];
 
   // 곧 지울 것 임시
   useEffect(() => {
-    console.log(setUserUsageData);
+    console.log(setCompanyUsageData);
   }, []);
 
   const onChangeSearchInput = e => {
@@ -76,13 +68,11 @@ export default function UserUsage() {
 
   const onAllReset = () => {
     setSearchInput({
-      searchNickName: '',
-      searchRegisterStart: '',
-      searchRegisterEnd: '',
-      searchConnectStart: '',
-      searchConnectEnd: '',
-      searchCompanyStart,
-      searchCompanyEnd,
+      searchCompanyName: '',
+      searchCountingStart: '',
+      searchCountingEnd: '',
+      searchUserCountingStart: '',
+      searchUserCountingEnd: '',
     });
   };
 
@@ -90,19 +80,19 @@ export default function UserUsage() {
     if (ind === 0) {
       setSearchInput({
         ...searchInput,
-        searchNickName: '',
+        searchCompanyName: '',
       });
     } else if (ind === 1) {
       setSearchInput({
         ...searchInput,
-        searchRegisterStart: '',
-        searchRegisterEnd: '',
+        searchCountingStart: '',
+        searchCountingEnd: '',
       });
     } else {
       setSearchInput({
         ...searchInput,
-        searchConnectStart: '',
-        searchConnectEnd: '',
+        searchUserCountingStart: '',
+        searchUserCountingEnd: '',
       });
     }
   };
@@ -125,7 +115,7 @@ export default function UserUsage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {userUsageData.map(eachdata => (
+              {companyUsageData.map(eachdata => (
                 <StyledTableRow key={eachdata.id}>
                   <StyledTableCell align="center" component="th" scope="row">
                     <Button color="secondary">{eachdata.NickName}</Button>
@@ -134,8 +124,6 @@ export default function UserUsage() {
                   <StyledTableCell align="center">{eachdata.Phone}</StyledTableCell>
                   <StyledTableCell align="center">{eachdata.EMail}</StyledTableCell>
                   <StyledTableCell align="center">{eachdata.AuthType}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.id}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.id}</StyledTableCell>
                   <StyledTableCell align="center">{eachdata.id}</StyledTableCell>
                 </StyledTableRow>
               ))}
@@ -210,44 +198,6 @@ export default function UserUsage() {
           <Button onClick={onAllReset} fullWidth variant="contained" color="secondary">
             조건 초기화
           </Button>
-        </OutLinedBox>
-
-        {/* 필터링2 - 검색 유효기간 */}
-        <OutLinedBox sx={{ mt: '30px' }}>
-          <Grid container alignItems="flex-start" sx={{ mb: '10px' }}>
-            <Typography fontSize="17px" fontWeight="600">
-              검색 유효기간 설정
-            </Typography>
-          </Grid>
-          <Grid container alignItems="center" spacing={1} sx={{ mb: '10px' }}>
-            <Grid item xs={2.3}>
-              <Typography component="div" fontSize={14} align="left">
-                <Box sx={{ my: '10px' }}>기업 검색 기간</Box>
-              </Typography>
-            </Grid>
-            <Grid item xs={7.2}>
-              <Grid container alignItems="center" sx={{ my: '10px' }}>
-                <TextField
-                  onChange={onChangeSearchInput}
-                  name={searchInputNameArray[3][0]}
-                  value={searchInputArray[3][0]}
-                  sx={{ width: 0.45 }}
-                />
-                &nbsp;-&nbsp;
-                <TextField
-                  onChange={onChangeSearchInput}
-                  name={searchInputNameArray[3][1]}
-                  value={searchInputArray[3][1]}
-                  sx={{ width: 0.45 }}
-                />
-              </Grid>
-            </Grid>
-            <Grid item xs={2.2}>
-              <Button onClick={() => {}} variant="contained" color="secondary" sx={{ px: 0.5 }}>
-                검색
-              </Button>
-            </Grid>
-          </Grid>
         </OutLinedBox>
       </Grid>
     </Grid>
