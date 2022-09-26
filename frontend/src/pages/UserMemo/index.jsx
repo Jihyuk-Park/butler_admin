@@ -24,17 +24,14 @@ import CustomModal from '../../component/UI/CustomModal';
 import { itemNumber, url } from '../../component/constVariable';
 
 export default function UserMemo() {
-  const dataTable = ['순번', '작성일', '갱신일', '기업명', '유저 닉네임', '타입', '메모', '삭제'];
+  // 데이터 정렬 기준 선택
   const sortFieldList = ['순번', '작성일', '갱신일', '기업명', '유저 닉네임'];
-
-  // 메모 데이터 및 정렬
-  const [memoData, setMemoData] = useState([]);
   const [sortField, setSortField] = useState('순번');
   const [sortType, setSortType] = useState('내림차순');
 
-  // 삭제 모달 스위치 및 삭제 ID 트래킹
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [memoId, setMemoId] = useState(0);
+  // 메모 데이터 관련
+  const dataTable = ['순번', '작성일', '갱신일', '기업명', '유저 닉네임', '타입', '메모', '삭제'];
+  const [memoData, setMemoData] = useState([]);
 
   // 무한 스크롤 (ref가 화면에 나타나면 inView는 true, 아니면 false를 반환)
   const [ref, inView] = useInView();
@@ -42,6 +39,11 @@ export default function UserMemo() {
   const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState(100);
 
+  // 삭제 모달 스위치 및 삭제 ID 트래킹
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [memoId, setMemoId] = useState(0);
+
+  // 정렬 기준에 따라 메모를 받아오는 Hook
   useEffect(() => {
     axios
       .get(`${url}/admin/user/userMemo/getData/all/${page}/${sortField}/${sortType}`)
@@ -55,6 +57,7 @@ export default function UserMemo() {
       });
   }, [page, sortField, sortType]);
 
+  // 전체 페이지 수 계산을 위한 Hook (무한 스크롤)
   useEffect(() => {
     axios
       .get(`${url}/admin/user/userMemo/getTotalNum/all`)
@@ -67,6 +70,7 @@ export default function UserMemo() {
       });
   }, []);
 
+  // 무한 스크롤 훅 (하단 도달 시 페이지 갱신(+1))
   useEffect(() => {
     if (inView && !loading && page <= maxPage && memoData.length !== 0) {
       setLoading(true);
@@ -76,11 +80,31 @@ export default function UserMemo() {
     }
   }, [inView, loading]);
 
+  // 데이터 정렬 타입 선택
+  const selectField = e => {
+    setMemoData([]);
+    setPage(1);
+    setSortField(e.target.value);
+  };
+
+  // 내림/오름차순 선택
+  const selectSortType = () => {
+    setMemoData([]);
+    setPage(1);
+    if (sortType === '내림차순') {
+      setSortType('오름차순');
+    } else {
+      setSortType('내림차순');
+    }
+  };
+
+  // 삭제 버튼 (모달 창 열기)
   const openDeleteModal = id => {
     setDeleteModal(true);
     setMemoId(id);
   };
 
+  // 삭제 확인 시, 데이터 삭제
   const deleteMemo = () => {
     axios.post(`${process.env.REACT_APP_APIURL}/admin/user/userMemo/delete/${memoId}`).then(() => {
       setDeleteModal(false);
@@ -91,22 +115,6 @@ export default function UserMemo() {
         return eachdata;
       });
     });
-  };
-
-  const selectField = e => {
-    setMemoData([]);
-    setPage(1);
-    setSortField(e.target.value);
-  };
-
-  const selectSortType = () => {
-    setMemoData([]);
-    setPage(1);
-    if (sortType === '내림차순') {
-      setSortType('오름차순');
-    } else {
-      setSortType('내림차순');
-    }
   };
 
   return (

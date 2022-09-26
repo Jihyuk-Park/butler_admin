@@ -9,6 +9,7 @@ import UserUsage from './pages/UserUsage';
 import UserEntire from './pages/UserEntire';
 import UserCompanyUsage from './pages/UserCompanyUsage';
 import UserDailyUsage from './pages/UserDailyUsage';
+import CompanyList from './pages/CompanyList';
 
 function App() {
   return (
@@ -25,6 +26,8 @@ function App() {
             <Route path="/UserUsage" element={<UserUsage />} />
             <Route path="/UserCompanyUsage" element={<UserCompanyUsage />} />
             <Route path="/UserDailyUsage" element={<UserDailyUsage />} />
+
+            <Route path="/CompanyList" element={<CompanyList />} />
           </Routes>
         </Grid>
       </Grid>

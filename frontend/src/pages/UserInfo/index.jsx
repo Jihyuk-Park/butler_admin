@@ -25,15 +25,9 @@ import StyledTableRow from '../../component/UI/StyledTableRow';
 import { itemNumber, url } from '../../component/constVariable';
 
 export default function UserInfo() {
+  // 유저 정보 데이터 관련
   const dataTable = ['닉네임', '이름', '전화번호', '이메일', '로그인 방식', 'Grade', 'Type', 'Uid'];
-  const searchTypeList = ['닉네임', '이름', '로그인 방식', 'Grade', 'Type', 'Uid'];
-
-  // 유저 정보 데이터 및 검색
   const [userInfoData, setUserInfoData] = useState([]);
-  const [searchType, setSearchType] = useState('닉네임');
-  const [searchInput, setSearchInput] = useState('');
-  const [isSearch, setIsSearch] = useState(false);
-  const [refreshSwitch, setRefreshSwitch] = useState(true);
 
   // 무한 스크롤 (ref가 화면에 나타나면 inView는 true, 아니면 false를 반환)
   const [ref, inView] = useInView();
@@ -41,7 +35,14 @@ export default function UserInfo() {
   const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState(100);
 
-  // 수정 내용이 있는지 비교를 위한 데이터
+  // 검색 관련
+  const searchTypeList = ['닉네임', '이름', '로그인 방식', 'Grade', 'Type', 'Uid'];
+  const [searchType, setSearchType] = useState('닉네임');
+  const [searchInput, setSearchInput] = useState('');
+  const [isSearch, setIsSearch] = useState(false);
+  const [refreshSwitch, setRefreshSwitch] = useState(true);
+
+  // 수정 관련 (수정 내용이 있는지 비교를 위한 데이터 및 인풋)
   const [originalData, setOriginalData] = useState(['', '', '', '', '', '', '', '']);
   const [isChange, setIsChange] = useState(false);
   const [originalId, setOriginalId] = useState(0);
@@ -98,6 +99,8 @@ export default function UserInfo() {
     false,
   ]);
 
+  // 유저 정보 데이터를 받아오는 Hook
+  // 검색 유무에 따라 전체 데이터 혹은 일치하는 데이터
   useEffect(() => {
     if (isSearch === false) {
       axios
@@ -125,6 +128,7 @@ export default function UserInfo() {
     }
   }, [page, refreshSwitch]);
 
+  // 전체 페이지 수 계산을 위한 Hook (무한 스크롤)
   useEffect(() => {
     if (isSearch === false) {
       axios
@@ -149,6 +153,7 @@ export default function UserInfo() {
     }
   }, [isSearch, refreshSwitch]);
 
+  // 무한 스크롤 훅 (하단 도달 시 페이지 갱신(+1))
   useEffect(() => {
     if (inView && !loading && page <= maxPage && userInfoData.length !== 0) {
       setLoading(true);
@@ -158,6 +163,17 @@ export default function UserInfo() {
     }
   }, [inView, loading]);
 
+  // 검색 타입 설정
+  const selectType = e => {
+    setSearchType(e.target.value);
+  };
+
+  // 검색어 입력 input
+  const searchInputOnChange = e => {
+    setSearchInput(e.target.value);
+  };
+
+  // 검색 버튼 클릭 (검색어로 데이터 로드)
   const searchUserInfo = () => {
     if (searchInput.length === 0) {
       setIsSearch(false);
@@ -175,22 +191,7 @@ export default function UserInfo() {
     setOriginalData(['', '', '', '', '', '', '', '']);
   };
 
-  const selectType = e => {
-    setSearchType(e.target.value);
-  };
-
-  const searchInputOnChange = e => {
-    setSearchInput(e.target.value);
-  };
-
-  const onChangeEditInput = e => {
-    const { name, value } = e.target;
-    setEditInput({
-      ...editInput,
-      [name]: value,
-    });
-  };
-
+  // 데이터 클릭 (수정 영역에 데이터 세팅 + 오리지날 데이터 세팅)
   const setEditData = each => {
     setEditInput({
       editNickName: each.NickName,
@@ -218,6 +219,16 @@ export default function UserInfo() {
     setIsChange(false);
   };
 
+  // 데이터 수정 input
+  const onChangeEditInput = e => {
+    const { name, value } = e.target;
+    setEditInput({
+      ...editInput,
+      [name]: value,
+    });
+  };
+
+  // 데이터 수정 input 초기화
   const onReset = () => {
     setEditInput({
       editNickName: '',
@@ -234,6 +245,7 @@ export default function UserInfo() {
     setIsChange(false);
   };
 
+  // 데이터 수정 가능 스위치
   const clickEditableSwitch = ind => {
     const tempArray = [...editableSwitch];
     tempArray[ind] = !tempArray[ind];
@@ -245,6 +257,7 @@ export default function UserInfo() {
     }
   };
 
+  // 수정된 데이터 서버 전송
   const saveData = () => {
     const body = {
       id: originalId,

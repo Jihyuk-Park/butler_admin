@@ -21,11 +21,11 @@ import StyledTableRow from '../../component/UI/StyledTableRow';
 import { url } from '../../component/constVariable';
 
 export default function UserEntire() {
+  // 데이터 정렬 기준 관련
   const sortTypeList = ['일간', '월간'];
-  // 메모 데이터 및 정렬
-  const [entireUserData, setEntireData] = useState([]);
   const [sortType, setSortType] = useState('일간');
 
+  // 전체 유저 정보 데이터 관련
   const dataTable = [
     '일자',
     `네이버 ${sortType} 가입자`,
@@ -35,7 +35,9 @@ export default function UserEntire() {
     '카카오 누적 가입자',
     '누적 가입자 통계',
   ];
+  const [entireUserData, setEntireData] = useState([]);
 
+  // 정렬 기준에 따라 전체 유저 정보를 받아오는 Hook
   useEffect(() => {
     axios
       .get(`${url}/admin/user/userEntire/getData/${sortType}`)
@@ -48,6 +50,7 @@ export default function UserEntire() {
       });
   }, [sortType]);
 
+  // 데이터 정렬 기준 선택
   const selectSortType = e => {
     setEntireData([]);
     setSortType(e.target.value);

@@ -17,6 +17,7 @@ import StyledTableCell from '../../component/UI/StyledTableCell';
 import StyledTableRow from '../../component/UI/StyledTableRow';
 
 export default function UserUsage() {
+  // 유저 사용 정보 관련
   const dataTable = [
     '닉네임',
     '가입일',
@@ -26,8 +27,12 @@ export default function UserUsage() {
     '관심목록 기업 수',
     '작성메모 수',
   ];
-  const searchField = ['닉네임', '가입 기간', '접속 기간'];
   const [userUsageData, setUserUsageData] = useState([]);
+
+  // 무한 스크롤 관련
+  // ~~ 지금은 없으니 생략
+  // 노출 조건 관련
+  const searchField = ['닉네임', '가입 기간', '접속 기간'];
   const [searchInput, setSearchInput] = useState({
     searchNickName: '',
     searchRegisterStart: '',
@@ -66,6 +71,7 @@ export default function UserUsage() {
     console.log(setUserUsageData);
   }, []);
 
+  // 노출 조건 입력 input
   const onChangeSearchInput = e => {
     const { name, value } = e.target;
     setSearchInput({
@@ -74,18 +80,7 @@ export default function UserUsage() {
     });
   };
 
-  const onAllReset = () => {
-    setSearchInput({
-      searchNickName: '',
-      searchRegisterStart: '',
-      searchRegisterEnd: '',
-      searchConnectStart: '',
-      searchConnectEnd: '',
-      searchCompanyStart,
-      searchCompanyEnd,
-    });
-  };
-
+  // 노출 조건 부분 reset
   const onPartsReset = ind => {
     if (ind === 0) {
       setSearchInput({
@@ -105,6 +100,19 @@ export default function UserUsage() {
         searchConnectEnd: '',
       });
     }
+  };
+
+  // 노출 조건 reset
+  const onAllReset = () => {
+    setSearchInput({
+      searchNickName: '',
+      searchRegisterStart: '',
+      searchRegisterEnd: '',
+      searchConnectStart: '',
+      searchConnectEnd: '',
+      searchCompanyStart,
+      searchCompanyEnd,
+    });
   };
 
   return (

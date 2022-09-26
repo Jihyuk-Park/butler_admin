@@ -29,6 +29,7 @@ export default function NavBar() {
     '/UserDailyUsage',
     '/UserMemo',
   ];
+
   const companyMenu = [
     '기업 목록',
     '주식',
@@ -40,7 +41,17 @@ export default function NavBar() {
     '부문별 실적',
     '지역별 실적',
   ];
-  const companyUrl = ['/', '/', '/', '/', '/', '/', '/', '/', '/'];
+  const companyUrl = [
+    '/CompanyList',
+    '/Stock',
+    '/Dividend',
+    '/TreasuryStock',
+    '/Employee',
+    '/Executive',
+    '/IR',
+    '/PerformanceBySector',
+    '/PerformanceByRegion',
+  ];
 
   const openCompanyList = () => {
     setCompanyList(true);

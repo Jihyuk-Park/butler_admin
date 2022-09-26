@@ -17,6 +17,7 @@ import StyledTableCell from '../../component/UI/StyledTableCell';
 import StyledTableRow from '../../component/UI/StyledTableRow';
 
 export default function UserCompanyUsage() {
+  // 기업 사용 정보 데이터 관련
   const dataTable = [
     '기업명',
     '가입자의 기업 검색 횟수',
@@ -25,8 +26,10 @@ export default function UserCompanyUsage() {
     '관심목록 유저 수',
     '작성메모 수',
   ];
-  const searchField = ['기업명', '검색 횟수', '관심 목록 유저 수'];
   const [companyUsageData, setCompanyUsageData] = useState([]);
+
+  // 노출 조건 설정 관련
+  const searchField = ['기업명', '검색 횟수', '관심 목록 유저 수'];
   const [searchInput, setSearchInput] = useState({
     searchCompanyName: '',
     searchCountingStart: '',
@@ -65,6 +68,7 @@ export default function UserCompanyUsage() {
     console.log(setCompanyUsageData);
   }, []);
 
+  // 노출 조건 및 검색 유효기간 입력 input
   const onChangeSearchInput = e => {
     const { name, value } = e.target;
     setSearchInput({
@@ -73,18 +77,7 @@ export default function UserCompanyUsage() {
     });
   };
 
-  const onAllReset = () => {
-    setSearchInput({
-      searchCompanyName: '',
-      searchCountingStart: '',
-      searchCountingEnd: '',
-      searchUserCountingStart: '',
-      searchUserCountingEnd: '',
-      searchCompanyStart,
-      searchCompanyEnd,
-    });
-  };
-
+  // 노출 조건 부분 초기화
   const onPartsReset = ind => {
     if (ind === 0) {
       setSearchInput({
@@ -104,6 +97,19 @@ export default function UserCompanyUsage() {
         searchUserCountingEnd: '',
       });
     }
+  };
+
+  // 노출 조건 전체 초기화
+  const onAllReset = () => {
+    setSearchInput({
+      searchCompanyName: '',
+      searchCountingStart: '',
+      searchCountingEnd: '',
+      searchUserCountingStart: '',
+      searchUserCountingEnd: '',
+      searchCompanyStart,
+      searchCompanyEnd,
+    });
   };
 
   return (
