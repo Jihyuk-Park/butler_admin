@@ -74,7 +74,7 @@ export default function UserEntire() {
         </FormControl>
       </Grid>
 
-      {/* 메모 데이터 영역 */}
+      {/* 전체 유저 정보 영역 */}
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }}>
           <TableHead>

@@ -342,12 +342,19 @@ export default function UserInfo() {
         <Box ref={ref} sx={{ height: '10px', mt: '30px' }} />
       </Grid>
 
-      {/* 검색 창 부분 */}
       <Grid item xs={4}>
+        {/* 검색 창 부분 */}
         <Stack direction="row" spacing={1} sx={{ mb: '10px' }}>
           <FormControl>
             <InputLabel>검색타입</InputLabel>
-            <Select value={searchType} label="검색 타입" onChange={selectType}>
+            <Select
+              value={searchType}
+              label="검색 타입"
+              onChange={selectType}
+              SelectDisplayProps={{
+                style: { padding: '10px 150px 10px 15px', backgroundColor: '#FFF' },
+              }}
+            >
               {searchTypeList.map(function (eachdata) {
                 return (
                   <MenuItem key={eachdata} value={eachdata}>
@@ -363,6 +370,7 @@ export default function UserInfo() {
           </Button>
         </Stack>
 
+        {/* 수정 영역 */}
         <OutLinedBox>
           {dataTable.map(function (eachdata, index) {
             return (

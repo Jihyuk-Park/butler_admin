@@ -114,7 +114,7 @@ export default function UserCompanyUsage() {
 
   return (
     <Grid container columnSpacing={2}>
-      {/* UserUsage 데이터 영역 */}
+      {/* 기업 사용 정보 데이터 영역 */}
       <Grid item xs={8}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 700 }}>

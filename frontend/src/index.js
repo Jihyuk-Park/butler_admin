@@ -34,7 +34,7 @@ const theme = createTheme({
     MuiSelect: {
       defaultProps: {
         SelectDisplayProps: {
-          style: { padding: '10px 130px 10px 15px', backgroundColor: '#FFFFFF' },
+          style: { padding: '10px 50px 10px 15px', backgroundColor: '#FFFFFF' },
         },
       },
     },
