@@ -11,10 +11,6 @@ import {
   TableRow,
   Paper,
   Button,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Box,
   Grid,
 } from '@mui/material';
@@ -22,6 +18,7 @@ import StyledTableCell from '../../component/UI/StyledTableCell';
 import StyledTableRow from '../../component/UI/StyledTableRow';
 import CustomModal from '../../component/UI/CustomModal';
 import { itemNumber, url } from '../../component/constVariable';
+import DropDown from '../../component/UI/DropDown';
 
 export default function UserMemo() {
   // 데이터 정렬 기준 선택
@@ -121,19 +118,17 @@ export default function UserMemo() {
     <div>
       {/* 정렬 영역  */}
       <Grid container alignItems="flex-start" sx={{ mb: '20px' }}>
-        <FormControl sx={{ mr: '15px' }}>
-          <InputLabel>정렬 타입</InputLabel>
-          <Select value={sortField} label="정렬 타입" onChange={selectField}>
-            {sortFieldList.map(function (eachdata) {
-              return (
-                <MenuItem key={eachdata} value={eachdata}>
-                  {eachdata}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </FormControl>
-        <Button onClick={selectSortType} color={sortType === '내림차순' ? 'primary' : 'inactive'}>
+        <DropDown
+          value={sortField}
+          label="정렬 타입"
+          onChange={selectField}
+          selectList={sortFieldList}
+        />
+        <Button
+          onClick={selectSortType}
+          color={sortType === '내림차순' ? 'primary' : 'inactive'}
+          sx={{ ml: '15px' }}
+        >
           내림차순
         </Button>
         <Button onClick={selectSortType} color={sortType === '오름차순' ? 'primary' : 'inactive'}>

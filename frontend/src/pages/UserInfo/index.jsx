@@ -12,17 +12,15 @@ import {
   Button,
   TextField,
   Stack,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
   Typography,
   Box,
 } from '@mui/material';
 import OutLinedBox from '../../component/UI/OutLinedBox';
+import FixedBox from '../../component/UI/FixedBox';
 import StyledTableCell from '../../component/UI/StyledTableCell';
 import StyledTableRow from '../../component/UI/StyledTableRow';
 import { itemNumber, url } from '../../component/constVariable';
+import DropDown from '../../component/UI/DropDown';
 
 export default function UserInfo() {
   // 유저 정보 데이터 관련
@@ -41,6 +39,12 @@ export default function UserInfo() {
   const [searchInput, setSearchInput] = useState('');
   const [isSearch, setIsSearch] = useState(false);
   const [refreshSwitch, setRefreshSwitch] = useState(true);
+
+  const [isInputType, setIsInputType] = useState(true);
+  const [typeSelect, setTypeSelect] = useState([]);
+  const loginList = ['KAKAO', 'NAVER'];
+  const gradeList = ['CANCEL', 'PROGRESS', 'EXPIRED'];
+  const typeList = ['SIGNUP', 'MONTH', 'HARF_YEAR', 'YEAR'];
 
   // 수정 관련 (수정 내용이 있는지 비교를 위한 데이터 및 인풋)
   const [originalData, setOriginalData] = useState(['', '', '', '', '', '', '', '']);
@@ -165,7 +169,21 @@ export default function UserInfo() {
 
   // 검색 타입 설정
   const selectType = e => {
-    setSearchType(e.target.value);
+    const type = e.target.value;
+    setSearchType(type);
+    if (type === '로그인 방식') {
+      setTypeSelect(loginList);
+      setIsInputType(false);
+    } else if (type === 'Grade') {
+      setTypeSelect(gradeList);
+      setIsInputType(false);
+    } else if (type === 'Type') {
+      setTypeSelect(typeList);
+      setIsInputType(false);
+    } else {
+      setIsInputType(true);
+      setSearchInput('');
+    }
   };
 
   // 검색어 입력 input
@@ -199,8 +217,8 @@ export default function UserInfo() {
       editPhone: each.Phone,
       editEmail: each.EMail,
       editAuthType: each.AuthType,
-      editGrade: each.id,
-      editType: each.id,
+      editGrade: each.status,
+      editType: each.type,
       editUid: each.id,
     });
     setOriginalId(each.id);
@@ -210,12 +228,11 @@ export default function UserInfo() {
       each.Phone,
       each.EMail,
       each.AuthType,
-      each.id,
-      each.id,
+      each.status,
+      each.type,
       each.id,
     ]);
     setEditableSwitch([false, false, false, false, false, false, false, false]);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
     setIsChange(false);
   };
 
@@ -280,9 +297,9 @@ export default function UserInfo() {
             Phone: editPhone,
             EMail: editEmail,
             AuthType: editAuthType,
-            Grade: editGrade,
-            Type: editType,
-            Uid: editUid,
+            status: editGrade,
+            type: editType,
+            id: editUid,
           };
           Object.assign(userInfoData[index], temp);
         }
@@ -300,6 +317,9 @@ export default function UserInfo() {
         editUid: '',
       });
     });
+    setEditableSwitch([false, false, false, false, false, false, false, false]);
+    setOriginalData(['', '', '', '', '', '', '', '']);
+    setIsChange(false);
   };
 
   return (
@@ -307,7 +327,7 @@ export default function UserInfo() {
       {/* userInfo 표 영역 */}
       <Grid item xs={8}>
         <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 700 }}>
+          <Table stickyHeader>
             <TableHead>
               <TableRow>
                 {dataTable.map(function (eachdata) {
@@ -331,8 +351,8 @@ export default function UserInfo() {
                   <StyledTableCell align="center">{eachdata.Phone}</StyledTableCell>
                   <StyledTableCell align="center">{eachdata.EMail}</StyledTableCell>
                   <StyledTableCell align="center">{eachdata.AuthType}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.id}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.id}</StyledTableCell>
+                  <StyledTableCell align="center">{eachdata.status}</StyledTableCell>
+                  <StyledTableCell align="center">{eachdata.type}</StyledTableCell>
                   <StyledTableCell align="center">{eachdata.id}</StyledTableCell>
                 </StyledTableRow>
               ))}
@@ -342,79 +362,80 @@ export default function UserInfo() {
         <Box ref={ref} sx={{ height: '10px', mt: '30px' }} />
       </Grid>
 
-      <Grid item xs={4}>
+      <Grid item xs={4} sx={{ width: 10 / 36 }}>
         {/* 검색 창 부분 */}
-        <Stack direction="row" spacing={1} sx={{ mb: '10px' }}>
-          <FormControl>
-            <InputLabel>검색타입</InputLabel>
-            <Select
+        <FixedBox>
+          <Stack direction="row" spacing={1} sx={{ mb: '10px' }}>
+            <DropDown
               value={searchType}
               label="검색 타입"
               onChange={selectType}
-              SelectDisplayProps={{
-                style: { padding: '10px 150px 10px 15px', backgroundColor: '#FFF' },
-              }}
-            >
-              {searchTypeList.map(function (eachdata) {
-                return (
-                  <MenuItem key={eachdata} value={eachdata}>
-                    {eachdata}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
-          <TextField fullWidth value={searchInput} onChange={searchInputOnChange} />
-          <Button onClick={searchUserInfo} variant="contained" color="secondary">
-            검색
-          </Button>
-        </Stack>
+              selectList={searchTypeList}
+              p="10px 100px 10px 15px"
+            />
+            {isInputType === true ? (
+              <TextField fullWidth value={searchInput} onChange={searchInputOnChange} />
+            ) : (
+              <DropDown
+                value={searchInput}
+                label="검색 타입"
+                onChange={searchInputOnChange}
+                selectList={typeSelect}
+              />
+            )}
+            <Button onClick={searchUserInfo} variant="contained" color="secondary">
+              검색
+            </Button>
+          </Stack>
 
-        {/* 수정 영역 */}
-        <OutLinedBox>
-          {dataTable.map(function (eachdata, index) {
-            return (
-              <Grid key={eachdata} container alignItems="center" spacing={1} sx={{ mb: '10px' }}>
-                <Grid item xs={3}>
-                  <Typography fontSize={14} align="left">
-                    {eachdata}
-                  </Typography>
+          {/* 수정 영역 */}
+          <OutLinedBox>
+            {dataTable.map(function (eachdata, index) {
+              return (
+                <Grid key={eachdata} container alignItems="center" spacing={1} sx={{ mb: '10px' }}>
+                  <Grid item xs={3}>
+                    <Typography fontSize={14} align="left">
+                      {eachdata}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={7}>
+                    <TextField
+                      disabled={editableSwitch[index] === false}
+                      fullWidth
+                      name={editInputNameArray[index]}
+                      value={editInputArray[index] || ''}
+                      onChange={onChangeEditInput}
+                    />
+                  </Grid>
+                  <Grid item xs={2}>
+                    <Button
+                      onClick={() => clickEditableSwitch(index)}
+                      variant="contained"
+                      color={
+                        editInputArray[index] === originalData[index] ? 'secondary' : 'primary'
+                      }
+                      sx={{ color: '#FFFFFF' }}
+                    >
+                      {editableSwitch[index] === false ? '수정' : '완료'}
+                    </Button>
+                  </Grid>
                 </Grid>
-                <Grid item xs={7}>
-                  <TextField
-                    disabled={editableSwitch[index] === false}
-                    fullWidth
-                    name={editInputNameArray[index]}
-                    value={editInputArray[index] || ''}
-                    onChange={onChangeEditInput}
-                  />
-                </Grid>
-                <Grid item xs={2}>
-                  <Button
-                    onClick={() => clickEditableSwitch(index)}
-                    variant="contained"
-                    color={editInputArray[index] === originalData[index] ? 'secondary' : 'primary'}
-                    sx={{ color: '#FFFFFF' }}
-                  >
-                    {editableSwitch[index] === false ? '수정' : '완료'}
-                  </Button>
-                </Grid>
-              </Grid>
-            );
-          })}
-          <Button
-            onClick={saveData}
-            disabled={isChange === false}
-            fullWidth
-            variant="contained"
-            sx={{ color: '#FFFFFF', my: '10px' }}
-          >
-            저장
-          </Button>
-          <Button onClick={onReset} fullWidth variant="contained" color="secondary">
-            취소
-          </Button>
-        </OutLinedBox>
+              );
+            })}
+            <Button
+              onClick={saveData}
+              disabled={isChange === false}
+              fullWidth
+              variant="contained"
+              sx={{ color: '#FFFFFF', my: '10px' }}
+            >
+              저장
+            </Button>
+            <Button onClick={onReset} fullWidth variant="contained" color="secondary">
+              취소
+            </Button>
+          </OutLinedBox>
+        </FixedBox>
       </Grid>
     </Grid>
   );

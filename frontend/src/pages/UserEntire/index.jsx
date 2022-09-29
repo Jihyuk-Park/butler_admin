@@ -2,23 +2,12 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import 'moment/locale/ko';
-import {
-  Table,
-  TableBody,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Grid,
-} from '@mui/material';
+import { Table, TableBody, TableContainer, TableHead, TableRow, Paper, Grid } from '@mui/material';
 
 import StyledTableCell from '../../component/UI/StyledTableCell';
 import StyledTableRow from '../../component/UI/StyledTableRow';
 import { url } from '../../component/constVariable';
+import DropDown from '../../component/UI/DropDown';
 
 export default function UserEntire() {
   // 데이터 정렬 기준 관련
@@ -60,18 +49,12 @@ export default function UserEntire() {
     <div>
       {/* 정렬 영역  */}
       <Grid container alignItems="flex-start" sx={{ mb: '20px' }}>
-        <FormControl sx={{ mr: '15px' }}>
-          <InputLabel>정렬 타입</InputLabel>
-          <Select value={sortType} label="정렬 타입" onChange={selectSortType}>
-            {sortTypeList.map(function (eachdata) {
-              return (
-                <MenuItem key={eachdata} value={eachdata}>
-                  {eachdata}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </FormControl>
+        <DropDown
+          value={sortType}
+          label="정렬 타입"
+          onChange={selectSortType}
+          selectList={sortTypeList}
+        />
       </Grid>
 
       {/* 전체 유저 정보 영역 */}

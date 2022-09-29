@@ -7,7 +7,8 @@ import { itemNumber } from '../../module/constVariable.js';
 router.get('/getData/all/:page', function(req,res){
   let page = req.params.page;
 
-  let sql = `SELECT id, AuthType, EMail, Phone, Name, NickName FROM Users
+  let sql = `SELECT a.id, a.AuthType, a.EMail, a.Phone, a.Name, a.NickName, b.status, b.type
+    FROM Users a LEFT JOIN Subscribe b ON a.id = b.uid
     ORDER BY id DESC
     LIMIT ${itemNumber} OFFSET ${itemNumber*(page-1)};`;
 	
@@ -29,7 +30,8 @@ router.get('/getData/search/:page/:searchType/:searchInput', function(req,res){
 
   // console.log(page, searchInput, searchType, searchField);
 
-  let sql = `SELECT id, AuthType, EMail, Phone, Name, NickName FROM Users
+  let sql = `SELECT a.id, a.AuthType, a.EMail, a.Phone, a.Name, a.NickName, b.status, b.type
+    FROM Users a LEFT JOIN Subscribe b ON a.id = b.uid
     WHERE ${searchField} LIKE "%${searchInput}%"
     ORDER BY id DESC
     LIMIT ${itemNumber} OFFSET ${itemNumber*(page-1)};`;
@@ -63,7 +65,8 @@ router.get('/getTotalNum/search/:searchType/:searchInput', function(req,res){
 
   let searchField = userInfoSearchType(searchType);
 
-  let sql = `SELECT COUNT(*) as totalnum FROM Users 
+  let sql = `SELECT COUNT(*) as totalnum
+    FROM Users a LEFT JOIN Subscribe b ON a.id = b.uid
     WHERE ${searchField} LIKE "%${searchInput}%"`;
 
   connection.query(sql, function(err, rows, fields){
@@ -90,8 +93,10 @@ router.post('/edit', function(req, res){
 
   // console.log(id, NickName, Name, Phone, Email, AuthType, Grade, Type, Uid);
 
-  var sql = 'UPDATE Users SET NickName =?, Name=?, Phone=?, Email =?, AuthType =? WHERE id = ?';
-  connection.query(sql, [NickName, Name, Phone, Email, AuthType, id], function(err, result, fields){
+  var sql = `UPDATE Users a INNER JOIN Subscribe b
+  ON a.id = b.uid
+  SET a.NickName=?, a.Name=?, a.Phone=?, a.Email=?, a.AuthType=?, b.status=?, b.type=?, a.id=? WHERE a.id = ? && b.uid = ?`;
+  connection.query(sql, [NickName, Name, Phone, Email, AuthType, Grade, Type, Uid, id, id], function(err, result, fields){
       if(err){
           console.log(err);
           res.status(500).send('Interner Server Error')

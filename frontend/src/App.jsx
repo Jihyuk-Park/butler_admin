@@ -10,16 +10,18 @@ import UserEntire from './pages/UserEntire';
 import UserCompanyUsage from './pages/UserCompanyUsage';
 import UserDailyUsage from './pages/UserDailyUsage';
 import CompanyList from './pages/CompanyList';
+import Test from './pages/Test';
 
 function App() {
   return (
     <div className="App">
-      <Grid container rowSpacing={1} sx={{ p: 2, backgroundColor: '#F0F2F5' }}>
+      <Grid container maxWidth="false" rowSpacing={1} sx={{ p: 2, backgroundColor: '#F0F2F5' }}>
         <Grid item xs={1.8}>
           <NavBar />
         </Grid>
         <Grid item xs={10.2}>
           <Routes>
+            <Route path="Test" element={<Test />} />
             <Route path="/UserInfo" element={<UserInfo />} />
             <Route path="/UserEntire" element={<UserEntire />} />
             <Route path="/UserMemo" element={<UserMemo />} />

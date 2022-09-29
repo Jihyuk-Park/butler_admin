@@ -14,6 +14,7 @@ import {
 import OutLinedBox from '../../component/UI/OutLinedBox';
 import StyledTableCell from '../../component/UI/StyledTableCell';
 import StyledTableRow from '../../component/UI/StyledTableRow';
+import FixedBox from '../../component/UI/FixedBox';
 
 export default function UserDailyUsage() {
   // 일별 전체 기업 정보 데이터 관련
@@ -139,72 +140,74 @@ export default function UserDailyUsage() {
       </Grid>
       {/* 필터 검색 영역 */}
       <Grid item xs={4}>
-        {/* 필터링1 - 노출 조건 설정 */}
-        <OutLinedBox sx={{ pt: '15px' }}>
-          <Grid container alignItems="flex-start" sx={{ mb: '10px' }}>
-            <Typography fontSize="17px" fontWeight="600">
-              노출 조건 설정
-            </Typography>
-          </Grid>
-          {searchField.map(function (eachdata, index) {
-            return (
-              <Grid key={eachdata} container alignItems="center" spacing={1} sx={{ mb: '10px' }}>
-                <Grid item xs={2.3}>
-                  <Typography component="div" fontSize={14} align="left">
-                    {eachdata}
-                  </Typography>
-                </Grid>
-                <Grid item xs={7.2}>
-                  {index === 1 || index === 2 ? (
-                    <Grid container alignItems="center">
+        <FixedBox>
+          {/* 필터링1 - 노출 조건 설정 */}
+          <OutLinedBox sx={{ pt: '15px' }}>
+            <Grid container alignItems="flex-start" sx={{ mb: '10px' }}>
+              <Typography fontSize="17px" fontWeight="600">
+                노출 조건 설정
+              </Typography>
+            </Grid>
+            {searchField.map(function (eachdata, index) {
+              return (
+                <Grid key={eachdata} container alignItems="center" spacing={1} sx={{ mb: '10px' }}>
+                  <Grid item xs={2.3}>
+                    <Typography component="div" fontSize={14} align="left">
+                      {eachdata}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={7.2}>
+                    {index === 1 || index === 2 ? (
+                      <Grid container alignItems="center">
+                        <TextField
+                          onChange={onChangeSearchInput}
+                          name={searchInputNameArray[index][0]}
+                          value={searchInputArray[index][0]}
+                          sx={{ width: 0.45 }}
+                        />
+                        &nbsp;-&nbsp;
+                        <TextField
+                          onChange={onChangeSearchInput}
+                          name={searchInputNameArray[index][1]}
+                          value={searchInputArray[index][1]}
+                          sx={{ width: 0.45 }}
+                        />
+                      </Grid>
+                    ) : (
                       <TextField
+                        fullWidth
                         onChange={onChangeSearchInput}
-                        name={searchInputNameArray[index][0]}
-                        value={searchInputArray[index][0]}
-                        sx={{ width: 0.45 }}
+                        name={searchInputNameArray[index]}
+                        value={searchInputArray[index]}
                       />
-                      &nbsp;-&nbsp;
-                      <TextField
-                        onChange={onChangeSearchInput}
-                        name={searchInputNameArray[index][1]}
-                        value={searchInputArray[index][1]}
-                        sx={{ width: 0.45 }}
-                      />
-                    </Grid>
-                  ) : (
-                    <TextField
-                      fullWidth
-                      onChange={onChangeSearchInput}
-                      name={searchInputNameArray[index]}
-                      value={searchInputArray[index]}
-                    />
-                  )}
+                    )}
+                  </Grid>
+                  <Grid item xs={2.2}>
+                    <Button
+                      onClick={() => onPartsReset(index)}
+                      variant="contained"
+                      color="secondary"
+                      sx={{ px: 0.5 }}
+                    >
+                      초기화
+                    </Button>
+                  </Grid>
                 </Grid>
-                <Grid item xs={2.2}>
-                  <Button
-                    onClick={() => onPartsReset(index)}
-                    variant="contained"
-                    color="secondary"
-                    sx={{ px: 0.5 }}
-                  >
-                    초기화
-                  </Button>
-                </Grid>
-              </Grid>
-            );
-          })}
-          <Button
-            onClick={() => {}}
-            fullWidth
-            variant="contained"
-            sx={{ color: '#FFFFFF', my: '10px' }}
-          >
-            검색
-          </Button>
-          <Button onClick={onAllReset} fullWidth variant="contained" color="secondary">
-            조건 초기화
-          </Button>
-        </OutLinedBox>
+              );
+            })}
+            <Button
+              onClick={() => {}}
+              fullWidth
+              variant="contained"
+              sx={{ color: '#FFFFFF', my: '10px' }}
+            >
+              검색
+            </Button>
+            <Button onClick={onAllReset} fullWidth variant="contained" color="secondary">
+              조건 초기화
+            </Button>
+          </OutLinedBox>
+        </FixedBox>
       </Grid>
     </Grid>
   );

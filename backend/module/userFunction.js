@@ -3,18 +3,18 @@ function userInfoSearchType (input) {
   let result;
 
   if (input === "닉네임") {
-    result = 'NickName';
+    result = 'a.NickName';
   } else if (input === "로그인 방식") {
-    result = 'AuthType';
+    result = 'a.AuthType';
   } else if (input === "이름") {
-    result = 'Name';
+    result = 'a.Name';
     // 임시로. Grade, Type 아직 없는 듯한
   } else if (input === "Grade") {
-    result = 'Name';
+    result = 'b.status';
   } else if (input === "Type") {
-    result = 'Name';
+    result = 'b.type';
   } else {
-    result = 'id';
+    result = 'a.id';
   }
 
   // console.log(input);
