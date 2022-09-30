@@ -138,5 +138,108 @@ function userUsageCompanyCondition (searchCompanyStart, searchCompanyEnd) {
   return condition;
 }
 
+/** (userCompanyUsage) 정렬 기준(필드)을 반환 */
+function userCompanyUsageSortField (sortField) {
+  if (sortField === "가입자의 검색 횟수"){
+    sortField = 'b.memberSearchCounting';
+  } else if (sortField === "비 가입자의 검색 횟수") {
+    sortField = 'd.nonMemberSearchCounting';
+  } else if (sortField === "검색 횟수 총합") {
+    sortField = 'c.totalSearchCounting';
+  } else if (sortField === "관심목록 수") {
+    sortField = 'e.watchCounting';
+  } else {
+    sortField = 'f.memoCounting';
+  }
 
-export { sortTypeReturn, userInfoSearchType, userMemoSortField, userUsageSortField, userUsageSearchCondition, userUsageCompanyCondition }
+  return sortField;
+}
+
+/** (userCompanyUsage) 검색 조건에 따라 WHERE 조건문을 반환 */
+function userCompanyUsageSearchCondition (searchCompanyName, searchCountingStart, searchCountingEnd, searchUserCountingStart, searchUserCountingEnd) {
+  let condition = "WHERE ";
+  let isStart = true;
+
+  if (searchCompanyName.length !== 0) {
+    isStart = false;
+    condition = condition + `a.corp_name LIKE "%${searchCompanyName}%"`;
+  }
+  if (searchCountingStart.length !== 0) {
+    if (isStart === true) {
+      isStart = false; 
+    } else {
+      condition = condition + " && ";
+    }
+    condition = condition + `c.totalSearchCounting >= ${searchCountingStart}`
+  }
+  if (searchCountingEnd.length !== 0) {
+    if (isStart === true) {
+      isStart = false; 
+    } else {
+      condition = condition + " && ";
+    }
+    condition = condition + `c.totalSearchCounting <= ${searchCountingEnd}`
+  }
+  if (searchUserCountingStart.length !== 0) {
+    if (isStart === true) {
+      isStart = false; 
+    } else {
+      condition = condition + " && ";
+    }
+    condition = condition + `e.watchCounting >= ${searchUserCountingStart}`
+  }
+  if (searchUserCountingEnd.length !== 0) {
+    if (isStart === true) {
+      isStart = false; 
+    } else {
+      condition = condition + " && ";
+    }
+    condition = condition + `e.watchCounting <= ${searchUserCountingEnd}`
+  }
+
+  if (isStart === true) {
+    condition = "";
+  }
+
+  return condition;
+}
+
+/** (userCompanyUsage) 기업 검색 기간 조건에 따라 WHERE 조건문을 반환 */
+function userCompanyUsageCompanyCondition (searchCompanyStart, searchCompanyEnd) {
+  let condition = "";
+  let isStart = true;
+
+  if (searchCompanyStart.length !== 0) {
+    isStart = false
+    condition = condition + `created_at >= ${searchCompanyStart}`
+  }
+  if (searchCompanyEnd.length !== 0) {
+    if (isStart === true) {
+      isStart = false; 
+    } else {
+      condition = condition + " && ";
+    }
+    condition = condition + `created_at <= ${searchCompanyEnd}`
+  }
+
+  let conditionArray = ["&& " + condition, "WHERE " + condition];
+
+  if (isStart === true) {
+    conditionArray = ["", ""];
+  }
+
+  return conditionArray;
+}
+
+
+export { 
+  sortTypeReturn,
+  userInfoSearchType,
+  userMemoSortField,
+  userUsageSortField,
+  userUsageSearchCondition,
+  userUsageCompanyCondition,
+  userCompanyUsageSortField,
+  userCompanyUsageSearchCondition,
+  userCompanyUsageCompanyCondition,
+}

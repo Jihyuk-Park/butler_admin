@@ -185,7 +185,7 @@ export default function UserUsage() {
   };
 
   // 노출 조건 입력 (검색어로 데이터 로드)
-  const searchUserInfo = () => {
+  const searchUserUsage = () => {
     if (searchInput.length === 0) {
       setIsSearch(false);
     } else {
@@ -200,7 +200,7 @@ export default function UserUsage() {
     }
   };
 
-  // 노출 조건 부분 reset
+  // 노출 조건 부분 초기화
   const onPartsReset = ind => {
     if (ind === 0) {
       setSearchInput({
@@ -222,7 +222,7 @@ export default function UserUsage() {
     }
   };
 
-  // 노출 조건 reset
+  // 노출 조건 전체 초기화
   const onAllReset = () => {
     setSearchInput({
       searchNickName: '',
@@ -363,7 +363,7 @@ export default function UserUsage() {
                 );
               })}
               <Button
-                onClick={searchUserInfo}
+                onClick={searchUserUsage}
                 fullWidth
                 variant="contained"
                 sx={{ color: '#FFFFFF', my: '10px' }}
@@ -407,7 +407,7 @@ export default function UserUsage() {
                 </Grid>
                 <Grid item xs={2.2}>
                   <Button
-                    onClick={searchUserInfo}
+                    onClick={searchUserUsage}
                     variant="contained"
                     color="secondary"
                     sx={{ px: 0.5 }}
