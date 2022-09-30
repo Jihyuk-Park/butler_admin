@@ -26,7 +26,7 @@ export default function NavBar() {
     '/UserUsage',
     '/UserEntire',
     '/UserCompanyUsage',
-    '/UserDailyUsage',
+    '/UserDailyCompany',
     '/UserMemo',
   ];
 

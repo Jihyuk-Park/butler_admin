@@ -8,9 +8,9 @@ import UserMemo from './pages/UserMemo';
 import UserUsage from './pages/UserUsage';
 import UserEntire from './pages/UserEntire';
 import UserCompanyUsage from './pages/UserCompanyUsage';
-import UserDailyUsage from './pages/UserDailyUsage';
+import UserDailyCompany from './pages/UserDailyCompany';
 import CompanyList from './pages/CompanyList';
-import Test from './pages/Test';
+import Test from './pages/Test/index2';
 
 function App() {
   return (
@@ -27,7 +27,7 @@ function App() {
             <Route path="/UserMemo" element={<UserMemo />} />
             <Route path="/UserUsage" element={<UserUsage />} />
             <Route path="/UserCompanyUsage" element={<UserCompanyUsage />} />
-            <Route path="/UserDailyUsage" element={<UserDailyUsage />} />
+            <Route path="/UserDailyCompany" element={<UserDailyCompany />} />
 
             <Route path="/CompanyList" element={<CompanyList />} />
           </Routes>

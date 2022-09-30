@@ -232,6 +232,48 @@ function userCompanyUsageCompanyCondition (searchCompanyStart, searchCompanyEnd)
 }
 
 
+/** (userDailyCompany) 검색 조건에 따라 WHERE 조건문을 반환 */
+function userDailyCompanySearchCondition (searchCountingStart, searchCountingEnd, searchUserCountingStart, searchUserCountingEnd) {
+  let condition = "WHERE ";
+  let isStart = true;
+
+  if (searchCountingStart.length !== 0) {
+    isStart = false;
+    condition = condition + `totalSearchCounting >= ${searchCountingStart}`;
+  }
+  if (searchCountingEnd.length !== 0) {
+    if (isStart === true) {
+      isStart = false; 
+    } else {
+      condition = condition + " && ";
+    }
+    condition = condition + `totalSearchCounting <= ${searchCountingEnd}`
+  }
+  if (searchUserCountingStart.length !== 0) {
+    if (isStart === true) {
+      isStart = false; 
+    } else {
+      condition = condition + " && ";
+    }
+    condition = condition + `watchCounting >= ${searchUserCountingStart}`
+  }
+  if (searchUserCountingEnd.length !== 0) {
+    if (isStart === true) {
+      isStart = false; 
+    } else {
+      condition = condition + " && ";
+    }
+    condition = condition + `watchCounting <= ${searchUserCountingEnd}`
+  }
+
+  if (isStart === true) {
+    condition = "";
+  }
+  
+  return condition;
+}
+
+
 export { 
   sortTypeReturn,
   userInfoSearchType,
@@ -242,4 +284,5 @@ export {
   userCompanyUsageSortField,
   userCompanyUsageSearchCondition,
   userCompanyUsageCompanyCondition,
+  userDailyCompanySearchCondition,
 }
