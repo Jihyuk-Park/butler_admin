@@ -4,6 +4,7 @@ import connection from '../../module/database.js';
 import { userInfoSearchType } from '../../module/userFunction.js';
 import { itemNumber } from '../../module/constVariable.js';
 
+// getData
 router.get('/getData/all/:page', function(req,res){
   let page = req.params.page;
 
@@ -22,9 +23,7 @@ router.get('/getData/all/:page', function(req,res){
 });
 
 router.get('/getData/search/:page/:searchType/:searchInput', function(req,res){
-  let page = req.params.page;
-  let searchType = req.params.searchType;
-  let searchInput = req.params.searchInput;
+  let [page, searchType, searchInput] = [req.params.page, req.params.searchType, req.params.searchInput];
 
   let searchField = userInfoSearchType(searchType);
 
@@ -45,6 +44,8 @@ router.get('/getData/search/:page/:searchType/:searchInput', function(req,res){
   })
 });
 
+
+// getTotalNum
 router.get('/getTotalNum/all', function(req,res){
 
   let sql = `SELECT COUNT(*) as totalnum FROM Users`;
@@ -60,8 +61,7 @@ router.get('/getTotalNum/all', function(req,res){
 });
 
 router.get('/getTotalNum/search/:searchType/:searchInput', function(req,res){
-  let searchType = req.params.searchType;
-  let searchInput = req.params.searchInput;
+  let [searchType, searchInput] = [req.params.searchType, req.params.searchInput];
 
   let searchField = userInfoSearchType(searchType);
 
@@ -79,6 +79,8 @@ router.get('/getTotalNum/search/:searchType/:searchInput', function(req,res){
   })
 });
 
+
+// edit
 router.post('/edit', function(req, res){
 
   let id = req.body.id;

@@ -2,29 +2,14 @@ import express from 'express';
 const router = express.Router();
 import connection from '../../module/database.js';
 import { itemNumber } from '../../module/constVariable.js';
+import { sortTypeReturn, userMemoSortField } from '../../module/userFunction.js'
 
-
+// getData
 router.get('/getData/all/:page/:sortField/:sortType', function(req,res){
-  let page = req.params.page;
-  let sortField = req.params.sortField;
-  let sortType = req.params.sortType;
+  let [page, sortField, sortType] = [req.params.page, req.params.sortField, req.params.sortType];
 
-  if (sortType === "내림차순") {
-    sortType = 'DESC';
-  } else {
-    sortType = 'ASC';
-  }
-  if (sortField === "순번"){
-    sortField = 'a.id';
-  } else if (sortField === "작성일") {
-    sortField = 'a.created_at';
-  } else if (sortField === "갱신일") {
-    sortField = 'a.updated_at';
-  } else if (sortField === "기업명") {
-    sortField = 'b.corp_name';
-  } else {
-    sortField = 'c.NickName';
-  }
+  sortType = sortTypeReturn(sortType);
+  sortField = userMemoSortField(sortField);
 
   let sql = `SELECT a.id, a.created_at, a.updated_at, a.type, a.memo, a.corp_code, b.corp_name, c.NickName
     FROM Memo a LEFT JOIN CompanyInfo b ON a.corp_code = b.corp_code
@@ -41,8 +26,8 @@ router.get('/getData/all/:page/:sortField/:sortType', function(req,res){
   })
 });
 
+// getTotalNum
 router.get('/getTotalNum/all', function(req,res){
-
   let sql = `SELECT COUNT(*) as totalnum FROM Memo`;
 
   connection.query(sql, function(err, rows, fields){
@@ -55,10 +40,11 @@ router.get('/getTotalNum/all', function(req,res){
   })
 });
 
+// delete
 router.post('/delete/:memoId', function(req,res){
   let memoId = req.params.memoId;
 
-  var sql = 'DELETE FROM Memo WHERE id=?';
+  let sql = 'DELETE FROM Memo WHERE id=?';
 
   connection.query(sql, memoId, function(err, rows, fields){
     if (err){
