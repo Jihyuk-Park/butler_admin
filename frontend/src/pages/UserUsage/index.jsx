@@ -149,7 +149,7 @@ export default function UserUsage() {
 
   // 무한 스크롤 훅 (하단 도달 시 페이지 갱신(+1))
   useEffect(() => {
-    if (inView && !loading && page <= maxPage && userUsageData.length !== 0) {
+    if (inView && !loading && page < maxPage && userUsageData.length !== 0) {
       setLoading(true);
       if (page < maxPage) {
         setPage(page + 1);
@@ -191,13 +191,9 @@ export default function UserUsage() {
     } else {
       setIsSearch(true);
     }
+    setPage(1);
     setUserUsageData([]);
-    if (page !== 1) {
-      setPage(1);
-    } else {
-      setPage(1);
-      setRefreshSwitch(!refreshSwitch);
-    }
+    setRefreshSwitch(!refreshSwitch);
   };
 
   // 노출 조건 부분 초기화

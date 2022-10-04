@@ -188,13 +188,9 @@ export default function UserCompanyUsage() {
     } else {
       setIsSearch(true);
     }
+    setPage(1);
     setUserCompanyUsageData([]);
-    if (page !== 1) {
-      setPage(1);
-    } else {
-      setPage(1);
-      setRefreshSwitch(!refreshSwitch);
-    }
+    setRefreshSwitch(!refreshSwitch);
   };
 
   // 노출 조건 부분 초기화
@@ -271,7 +267,7 @@ export default function UserCompanyUsage() {
               </TableHead>
               <TableBody>
                 {userCompanyUsageData.map(eachdata => (
-                  <StyledTableRow key={eachdata.corp_name}>
+                  <StyledTableRow key={eachdata.corp_code}>
                     <StyledTableCell align="center" component="th" scope="row">
                       {eachdata.corp_name}
                     </StyledTableCell>

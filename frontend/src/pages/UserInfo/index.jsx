@@ -159,7 +159,7 @@ export default function UserInfo() {
 
   // 무한 스크롤 훅 (하단 도달 시 페이지 갱신(+1))
   useEffect(() => {
-    if (inView && !loading && page <= maxPage && userInfoData.length !== 0) {
+    if (inView && !loading && page < maxPage && userInfoData.length !== 0) {
       setLoading(true);
       if (page < maxPage) {
         setPage(page + 1);
@@ -198,13 +198,10 @@ export default function UserInfo() {
     } else {
       setIsSearch(true);
     }
+    setPage(1);
     setUserInfoData([]);
-    if (page !== 1) {
-      setPage(1);
-    } else {
-      setPage(1);
-      setRefreshSwitch(!refreshSwitch);
-    }
+    setRefreshSwitch(!refreshSwitch);
+
     onReset();
     setOriginalData(['', '', '', '', '', '', '', '']);
   };

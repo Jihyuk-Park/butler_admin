@@ -16,7 +16,7 @@ router.get('/getData/all/:page/:sortField/:sortType', function(req,res){
     LEFT JOIN (SELECT userId, COUNT(*) as searchCounting FROM SearchHistory Group BY userId) as c ON a.id = c.userId
     LEFT JOIN (SELECT uid, COUNT(*) as watchGroupCounting FROM WatchGroup Group By uid) as d ON a.id = d.uid
     LEFT JOIN (SELECT f.uid, COUNT(*) as watchCompanyCounting FROM Watch e LEFT JOIN WatchGroup f ON e.watchGroupId = f.id GROUP BY f.uid) as g ON a.id = g.uid
-    ORDER BY ${sortField} ${sortType}
+    ORDER BY ${sortField} ${sortType}, a.id DESC
     LIMIT ${itemNumber} OFFSET ${itemNumber*(page-1)};`;
 	
   connection.query(sql, function(err, rows, fields){
@@ -51,7 +51,7 @@ router.get(`/getData/search/:page/:sortField/:sortType`, function(req,res){
     LEFT JOIN (SELECT uid, COUNT(*) as watchGroupCounting FROM WatchGroup Group By uid) as d ON a.id = d.uid
     LEFT JOIN (SELECT f.uid, COUNT(*) as watchCompanyCounting FROM Watch e LEFT JOIN WatchGroup f ON e.watchGroupId = f.id GROUP BY f.uid) as g ON a.id = g.uid
     ${searchCondition}
-    ORDER BY ${sortField} ${sortType}
+    ORDER BY ${sortField} ${sortType}, a.id DESC
     LIMIT ${itemNumber} OFFSET ${itemNumber*(page-1)};`;
 	
   connection.query(sql, function(err, rows, fields){
