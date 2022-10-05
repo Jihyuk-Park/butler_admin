@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useInView } from 'react-intersection-observer';
 import {
   Table,
   Grid,
@@ -18,6 +20,7 @@ import {
   Stack,
 } from '@mui/material';
 import OutLinedBox from '../../component/UI/OutLinedBox';
+import { itemNumber, url } from '../../component/constVariable';
 import StyledTableCell from '../../component/UI/StyledTableCell';
 import StyledTableRow from '../../component/UI/StyledTableRow';
 
@@ -31,8 +34,11 @@ export default function CompanyList() {
   const dataTable = ['기업명', '종목코드', 'Corpcode', '시장', '업종1', '업종2', '업종3', 'IR주소'];
   const [companyListData, setCompanyListData] = useState([]);
 
-  // 무한 스크롤 (ref가 화면에 나타나면 inView는 true, 아니면 false를 반환)
+  // 무한 스크롤 관련
+  const [ref, inView] = useInView();
+  const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
+  const [maxPage, setMaxPage] = useState(100);
 
   // 사업 보고서 영역
   const yearArray = ['2017', '2018', '2019', '2020', '2021', '2022'];
@@ -47,7 +53,6 @@ export default function CompanyList() {
   const businessReportInputArray = [startYear, startQuarter, endYear, endQuarter];
   const businessReportInputNameArray = ['startYear', 'startQuarter', 'endYear', 'endQuarter'];
 
-  // 곧 쓸 예정
   // 노출 조건 설정, 기업 정보 수정
   const searchField = ['기업명', '사람', '업종1', '업종2', '업종3', '검색 키워드'];
   const companyInfoEdit = ['IR 주소', '키워드'];
@@ -71,6 +76,8 @@ export default function CompanyList() {
     editIRAdress,
     editKeyWord,
   } = searchInput;
+  const [isSearch, setIsSearch] = useState(false);
+  const [refreshSwitch, setRefreshSwitch] = useState(true);
 
   const searchInputArray = [
     searchCompanyName,
@@ -82,7 +89,6 @@ export default function CompanyList() {
     editIRAdress,
     editKeyWord,
   ];
-
   const searchInputNameArray = [
     'searchCompanyName',
     'searchMarket',
@@ -94,10 +100,76 @@ export default function CompanyList() {
     'editKeyWord',
   ];
 
-  // 임시 곧 지울 예정
+  // 유저 정보 데이터를 받아오는 Hook
+  // 검색 유무에 따라 전체 데이터 혹은 일치하는 데이터
   useEffect(() => {
-    console.log(page);
-  }, []);
+    if (isSearch === false) {
+      axios
+        .get(`${url}/admin/company/companyList/getData/all/${page}/${sortField}/${sortType}`)
+        .then(result => {
+          // console.log(result.data);
+          setCompanyListData([...companyListData, ...result.data]);
+          setLoading(false);
+          setIsSearch(false);
+        })
+        .catch(() => {
+          console.log('실패했습니다');
+        });
+    } else {
+      // 임시용 삭제 예정
+      setRefreshSwitch(refreshSwitch);
+      axios
+        .get(`${url}/admin/company/companyList/getData/search/${page}/${sortField}/${sortType}`, {
+          params: searchInput,
+        })
+        .then(result => {
+          // console.log(result.data);
+          setCompanyListData([...companyListData, ...result.data]);
+          setLoading(false);
+        })
+        .catch(() => {
+          console.log('실패했습니다');
+        });
+    }
+  }, [page, refreshSwitch, sortField, sortType]);
+
+  // 전체 페이지 수 계산을 위한 Hook (무한 스크롤)
+  useEffect(() => {
+    if (isSearch === false) {
+      axios
+        .get(`${url}/admin/company/companyList/getTotalNum/all`)
+        .then(result => {
+          setMaxPage(Math.ceil(result.data.totalnum / itemNumber));
+        })
+        .catch(() => {
+          console.log('실패했습니다');
+        });
+    } else {
+      // eslint-disable-next-line object-shorthand
+      const body = {};
+      axios
+        .get(`${url}/admin/user/userDailyCompany/getTotalNum/search`, {
+          params: body,
+        })
+        .then(result => {
+          // console.log(result.data);
+          setMaxPage(Math.ceil(result.data.totalnum / itemNumber));
+        })
+        .catch(() => {
+          console.log('실패했습니다');
+        });
+    }
+  }, [isSearch, refreshSwitch]);
+
+  // 무한 스크롤 훅 (하단 도달 시 페이지 갱신(+1))
+  useEffect(() => {
+    if (inView && !loading && page < maxPage && companyListData.length !== 0) {
+      setLoading(true);
+      if (page < maxPage) {
+        setPage(page + 1);
+      }
+    }
+  }, [inView, loading]);
 
   // 데이터 정렬 타입 선택
   const selectField = e => {
@@ -199,20 +271,23 @@ export default function CompanyList() {
               </TableHead>
               <TableBody>
                 {companyListData.map(eachdata => (
-                  <StyledTableRow key={eachdata.id}>
+                  <StyledTableRow key={eachdata.corp_code}>
                     <StyledTableCell align="center" component="th" scope="row">
-                      <Button color="secondary">{eachdata.NickName}</Button>
+                      <Button color="secondary">{eachdata.corp_name}</Button>
                     </StyledTableCell>
-                    <StyledTableCell align="center">{eachdata.Name}</StyledTableCell>
-                    <StyledTableCell align="center">{eachdata.Phone}</StyledTableCell>
-                    <StyledTableCell align="center">{eachdata.EMail}</StyledTableCell>
+                    <StyledTableCell align="center">{eachdata.corp_code}</StyledTableCell>
+                    <StyledTableCell align="center">{eachdata.corp_code}</StyledTableCell>
+                    <StyledTableCell align="center">{eachdata.market_code}</StyledTableCell>
                     <StyledTableCell align="center">{eachdata.AuthType}</StyledTableCell>
                     <StyledTableCell align="center">{eachdata.id}</StyledTableCell>
+                    <StyledTableCell align="center">{eachdata.id}</StyledTableCell>
+                    <StyledTableCell align="center">{eachdata.ir_url}</StyledTableCell>
                   </StyledTableRow>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
+          <Box ref={ref} sx={{ height: '10px', mt: '30px' }} />
         </Grid>
 
         <Grid item xs={4}>

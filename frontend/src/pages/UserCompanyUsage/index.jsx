@@ -146,7 +146,7 @@ export default function UserCompanyUsage() {
 
   // 무한 스크롤 훅 (하단 도달 시 페이지 갱신(+1))
   useEffect(() => {
-    if (inView && !loading && page <= maxPage && userCompanyUsageData.length !== 0) {
+    if (inView && !loading && page < maxPage && userCompanyUsageData.length !== 0) {
       setLoading(true);
       if (page < maxPage) {
         setPage(page + 1);

@@ -6,9 +6,9 @@ app.use(express.urlencoded( {extended : false } ));
 app.use(express.json());
 
 
-// common
-import common from './router/common.js';
-app.use('/admin/common', common);
+// company
+import companyList from './router/company/companyList.js';
+app.use('/admin/company/companyList', companyList);
 
 // user
 import userInfo from './router/user/userInfo.js';
@@ -23,6 +23,10 @@ app.use('/admin/user/userEntire', userEntire);
 app.use('/admin/user/userUsage', userUsage);
 app.use('/admin/user/userCompanyUsage', userCompanyUsage);
 app.use('/admin/user/userDailyCompany', userDailyCompany);
+
+// common
+import common from './router/common.js';
+app.use('/admin/common', common);
 
 
 app.listen(port, () => {

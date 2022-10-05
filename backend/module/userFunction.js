@@ -18,7 +18,6 @@ function userInfoSearchType (input) {
     result = 'a.AuthType';
   } else if (input === "이름") {
     result = 'a.Name';
-    // 임시로. Grade, Type 아직 없는 듯한
   } else if (input === "Grade") {
     result = 'b.status';
   } else if (input === "Type") {

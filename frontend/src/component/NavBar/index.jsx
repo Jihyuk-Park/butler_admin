@@ -9,9 +9,11 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 export default function NavBar() {
   const navigate = useNavigate();
 
-  const [companyList, setCompanyList] = useState(false);
+  const [companyMenuList, setCompanyMenuList] = useState(false);
+  const [selectedCompanyMenu, setSelectedCompanyMenu] = useState(100);
   const [userList, setUserList] = useState(false);
-  const [selectedMenu, setSelectedMenu] = useState(999);
+
+  const [selectedMenu, setSelectedMenu] = useState('');
 
   const userMenu = [
     '유저 정보',
@@ -30,7 +32,9 @@ export default function NavBar() {
     '/UserMemo',
   ];
 
-  const companyMenu = [
+  const companyMenu = ['비재무 데이터', '재무 데이터', 'Raw Data'];
+
+  const nonFinancialMenu = [
     '기업 목록',
     '주식',
     '배당',
@@ -41,7 +45,7 @@ export default function NavBar() {
     '부문별 실적',
     '지역별 실적',
   ];
-  const companyUrl = [
+  const nonFinancialUrl = [
     '/CompanyList',
     '/Stock',
     '/Dividend',
@@ -53,11 +57,26 @@ export default function NavBar() {
     '/PerformanceByRegion',
   ];
 
-  const openCompanyList = () => {
-    setCompanyList(true);
+  const FinancialMenu = ['재무상태표', '손익계산서', '현금흐름표', '분석', '밸류에이션'];
+  const FinancialUrl = [
+    '/FinancialStatement',
+    '/IncomeStatement',
+    '/CashFlowStatement',
+    '/Analysis',
+    '/Valuation',
+  ];
+
+  const RawDataMenu = ['재무상태표(Raw)', '손익계산서(Raw)', '현금흐름표(Raw)'];
+  const RawDataUrl = ['/RawFinancialStatement', '/RawIncomeStatement', '/RawCashFlowStatement'];
+
+  const companyMenuArray = [nonFinancialMenu, FinancialMenu, RawDataMenu];
+  const companyUrlArray = [nonFinancialUrl, FinancialUrl, RawDataUrl];
+
+  const openCompanyMenuList = () => {
+    setCompanyMenuList(true);
   };
-  const closeCompanyList = () => {
-    setCompanyList(false);
+  const closeCompanyMenuList = () => {
+    setCompanyMenuList(false);
   };
   const openUserList = () => {
     setUserList(true);
@@ -65,16 +84,20 @@ export default function NavBar() {
   const closeUserList = () => {
     setUserList(false);
   };
-  const goToLink = (link, num, which) => {
+  const goToLink = (link, eachdata) => {
     navigate(link);
-    if (which === 'company') {
-      setSelectedMenu(num);
-    } else {
-      setSelectedMenu(num + 100);
-    }
+    setSelectedMenu(eachdata);
   };
   const goToHome = () => {
     navigate('/');
+  };
+
+  const openSelectedCompanyMenu = ind => {
+    setSelectedCompanyMenu(ind);
+  };
+
+  const closeSelectedCompanyMenu = () => {
+    setSelectedCompanyMenu(100);
   };
 
   return (
@@ -102,33 +125,77 @@ export default function NavBar() {
             Butler Admin
           </Typography>
           <Button
-            onClick={companyList === false ? openCompanyList : closeCompanyList}
+            onClick={companyMenuList === false ? openCompanyMenuList : closeCompanyMenuList}
             sx={{ color: 'white', fontSize: '1.15rem', width: '11vw', mb: '5px', mt: '40px' }}
           >
             <Grid container direction="row" justifyContent="space-between" alignItems="center">
               <BusinessIcon />
               기업
-              {companyList === false ? <KeyboardArrowDownIcon /> : <KeyboardArrowUpIcon />}
+              {companyMenuList === false ? <KeyboardArrowDownIcon /> : <KeyboardArrowUpIcon />}
             </Grid>
           </Button>
-          {companyList === false ? null : (
+
+          {/* 기업 메뉴 */}
+          {companyMenuList === false ? null : (
             <div>
               {companyMenu.map(function (eachdata, index) {
                 return (
-                  <Button
-                    key={eachdata}
-                    onClick={() => goToLink(companyUrl[index], index, 'company')}
-                    sx={[
-                      selectedMenu === index ? { backgroundColor: '#F1A239' } : { opacity: 0.5 },
-                      { color: 'white', width: '11vw', fontWeight: 600 },
-                    ]}
-                  >
-                    {eachdata}
-                  </Button>
+                  <div key={eachdata}>
+                    <Button
+                      onClick={
+                        index === selectedCompanyMenu
+                          ? closeSelectedCompanyMenu
+                          : () => openSelectedCompanyMenu(index)
+                      }
+                      sx={[
+                        selectedCompanyMenu === index ? null : { opacity: 0.6 },
+                        { color: 'white', width: '11vw', fontWeight: 400, fontSize: '1.05rem' },
+                      ]}
+                    >
+                      <Grid
+                        container
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                      >
+                        <Box />
+                        {eachdata}
+                        {selectedCompanyMenu === index ? (
+                          <KeyboardArrowUpIcon />
+                        ) : (
+                          <KeyboardArrowDownIcon />
+                        )}
+                      </Grid>
+                    </Button>
+
+                    {/* 하위 메뉴들 */}
+                    {selectedCompanyMenu === index ? (
+                      <div>
+                        {companyMenuArray[index].map(function (eachdata2, index2) {
+                          return (
+                            <Button
+                              key={eachdata2}
+                              onClick={() => goToLink(companyUrlArray[index][index2], eachdata2)}
+                              sx={[
+                                selectedMenu === eachdata2
+                                  ? { backgroundColor: '#F1A239' }
+                                  : { opacity: 0.5 },
+                                { color: 'white', width: '11vw', fontWeight: 600 },
+                              ]}
+                            >
+                              {eachdata2}
+                            </Button>
+                          );
+                        })}
+                      </div>
+                    ) : null}
+                  </div>
                 );
               })}
             </div>
           )}
+
+          {/* 유저 메뉴 */}
           <Button
             onClick={userList === false ? openUserList : closeUserList}
             sx={{ color: 'white', fontSize: '1.15rem', width: '11vw', mt: '10px', mb: '5px' }}
@@ -145,11 +212,9 @@ export default function NavBar() {
                 return (
                   <Button
                     key={eachdata}
-                    onClick={() => goToLink(userUrl[index], index, 'user')}
+                    onClick={() => goToLink(userUrl[index], eachdata)}
                     sx={[
-                      selectedMenu === index + 100
-                        ? { backgroundColor: '#F1A239' }
-                        : { opacity: 0.5 },
+                      selectedMenu === eachdata ? { backgroundColor: '#F1A239' } : { opacity: 0.5 },
                       { color: 'white', width: '11vw', fontWeight: 600 },
                     ]}
                   >

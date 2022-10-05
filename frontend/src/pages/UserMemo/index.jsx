@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import moment from 'moment';
-import { useInView } from 'react-intersection-observer';
 import 'moment/locale/ko';
 import {
   Table,
@@ -11,14 +10,14 @@ import {
   TableRow,
   Paper,
   Button,
-  Box,
   Grid,
 } from '@mui/material';
 import StyledTableCell from '../../component/UI/StyledTableCell';
 import StyledTableRow from '../../component/UI/StyledTableRow';
 import CustomModal from '../../component/UI/CustomModal';
-import { itemNumber, url } from '../../component/constVariable';
+import { url } from '../../component/constVariable';
 import DropDown from '../../component/UI/DropDown';
+import Pagenation from '../../component/UI/Pagenation';
 
 export default function UserMemo() {
   // 데이터 정렬 기준 선택
@@ -30,11 +29,10 @@ export default function UserMemo() {
   const dataTable = ['순번', '작성일', '갱신일', '기업명', '유저 닉네임', '타입', '메모', '삭제'];
   const [memoData, setMemoData] = useState([]);
 
-  // 무한 스크롤 (ref가 화면에 나타나면 inView는 true, 아니면 false를 반환)
-  const [ref, inView] = useInView();
-  const [loading, setLoading] = useState(false);
+  // 페이지네이션
+  const itemNumber = 12;
   const [page, setPage] = useState(1);
-  const [maxPage, setMaxPage] = useState(100);
+  const [totalItem, setTotalItem] = useState(100);
 
   // 삭제 모달 스위치 및 삭제 ID 트래킹
   const [deleteModal, setDeleteModal] = useState(false);
@@ -46,8 +44,7 @@ export default function UserMemo() {
       .get(`${url}/admin/user/userMemo/getData/all/${page}/${sortField}/${sortType}`)
       .then(result => {
         // console.log(result.data);
-        setMemoData([...memoData, ...result.data]);
-        setLoading(false);
+        setMemoData(result.data);
       })
       .catch(() => {
         console.log('실패했습니다');
@@ -59,23 +56,13 @@ export default function UserMemo() {
     axios
       .get(`${url}/admin/user/userMemo/getTotalNum/all`)
       .then(result => {
-        // console.log(result.data);
-        setMaxPage(Math.ceil(result.data.totalnum / itemNumber));
+        console.log(result.data.totalnum);
+        setTotalItem(result.data.totalnum);
       })
       .catch(() => {
         console.log('실패했습니다');
       });
   }, []);
-
-  // 무한 스크롤 훅 (하단 도달 시 페이지 갱신(+1))
-  useEffect(() => {
-    if (inView && !loading && page < maxPage && memoData.length !== 0) {
-      setLoading(true);
-      if (page < maxPage) {
-        setPage(page + 1);
-      }
-    }
-  }, [inView, loading]);
 
   // 데이터 정렬 타입 선택
   const selectField = e => {
@@ -174,7 +161,7 @@ export default function UserMemo() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Box ref={ref} sx={{ height: '10px', mt: '30px' }} />
+      <Pagenation page={page} totalItem={totalItem} setPage={setPage} itemNumber={itemNumber} />
 
       {/* 삭제 모달 영역 */}
       {deleteModal === false ? null : (
