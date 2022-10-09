@@ -1,13 +1,11 @@
 import mysql from 'mysql';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import config from './config.js';
 
 const connection = mysql.createConnection({
-    host : process.env.MYSQL_HOST,
-    user : 'butler_d',
+    host : config['MYSQL_HOST'],
+    user : config['MYSQL_USERNAME'],
     password : process.env.MYSQL_PASSWORD,
-    database : 'butler',
+    database : config['MYSQL_DATABASE'],
     charset: 'utf8mb4',
 });
 
