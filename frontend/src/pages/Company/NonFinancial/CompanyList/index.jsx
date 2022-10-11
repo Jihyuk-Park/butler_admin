@@ -19,10 +19,10 @@ import {
   Box,
   Stack,
 } from '@mui/material';
-import OutLinedBox from '../../component/UI/OutLinedBox';
-import { itemNumber, url } from '../../component/constVariable';
-import StyledTableCell from '../../component/UI/StyledTableCell';
-import StyledTableRow from '../../component/UI/StyledTableRow';
+import OutLinedBox from '../../../../component/UI/OutLinedBox';
+import { itemNumber, url } from '../../../../component/constVariable';
+import StyledTableCell from '../../../../component/UI/StyledTableCell';
+import StyledTableRow from '../../../../component/UI/StyledTableRow';
 
 export default function CompanyList() {
   // 데이터 정렬 기준 선택
@@ -275,7 +275,7 @@ export default function CompanyList() {
                     <StyledTableCell align="center" component="th" scope="row">
                       <Button color="secondary">{eachdata.corp_name}</Button>
                     </StyledTableCell>
-                    <StyledTableCell align="center">{eachdata.corp_code}</StyledTableCell>
+                    <StyledTableCell align="center">{eachdata.stock_code}</StyledTableCell>
                     <StyledTableCell align="center">{eachdata.corp_code}</StyledTableCell>
                     <StyledTableCell align="center">{eachdata.market_code}</StyledTableCell>
                     <StyledTableCell align="center">{eachdata.AuthType}</StyledTableCell>

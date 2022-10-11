@@ -4,10 +4,10 @@ import moment from 'moment';
 import 'moment/locale/ko';
 import { Table, TableBody, TableContainer, TableHead, TableRow, Paper, Grid } from '@mui/material';
 
-import StyledTableCell from '../../component/UI/StyledTableCell';
-import StyledTableRow from '../../component/UI/StyledTableRow';
-import { url } from '../../component/constVariable';
-import DropDown from '../../component/UI/DropDown';
+import StyledTableCell from '../../../component/UI/StyledTableCell';
+import StyledTableRow from '../../../component/UI/StyledTableRow';
+import { url } from '../../../component/constVariable';
+import DropDown from '../../../component/UI/DropDown';
 
 export default function UserEntire() {
   // 데이터 정렬 기준 관련

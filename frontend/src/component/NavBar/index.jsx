@@ -24,12 +24,12 @@ export default function NavBar() {
     '메모',
   ];
   const userUrl = [
-    '/UserInfo',
-    '/UserUsage',
-    '/UserEntire',
-    '/UserCompanyUsage',
-    '/UserDailyCompany',
-    '/UserMemo',
+    '/User/UserInfo',
+    '/User/UserUsage',
+    '/User/UserEntire',
+    '/User/UserCompanyUsage',
+    '/User/UserDailyCompany',
+    '/User/UserMemo',
   ];
 
   const companyMenu = ['비재무 데이터', '재무 데이터', 'Raw Data'];
@@ -46,28 +46,32 @@ export default function NavBar() {
     '지역별 실적',
   ];
   const nonFinancialUrl = [
-    '/CompanyList',
-    '/Stock',
-    '/Dividend',
-    '/TreasuryStock',
-    '/Employee',
-    '/Executive',
-    '/IR',
-    '/PerformanceBySector',
-    '/PerformanceByRegion',
+    '/Company/nonFinancial/CompanyList',
+    '/Company/nonFinancial/Stock',
+    '/Company/nonFinancial/Dividend',
+    '/Company/nonFinancial/TreasuryStock',
+    '/Company/nonFinancial/Employee',
+    '/Company/nonFinancial/Executive',
+    '/Company/nonFinancial/IR',
+    '/Company/nonFinancial/PerformanceBySector',
+    '/Company/nonFinancial/PerformanceByRegion',
   ];
 
   const FinancialMenu = ['재무상태표', '손익계산서', '현금흐름표', '분석', '밸류에이션'];
   const FinancialUrl = [
-    '/FinancialStatement',
-    '/IncomeStatement',
-    '/CashFlowStatement',
-    '/Analysis',
-    '/Valuation',
+    '/Compamny/Financial/FinancialStatement',
+    '/Compamny/Financial/IncomeStatement',
+    '/Compamny/Financial/CashFlowStatement',
+    '/Compamny/Financial/Analysis',
+    '/Compamny/Financial/Valuation',
   ];
 
   const RawDataMenu = ['재무상태표(Raw)', '손익계산서(Raw)', '현금흐름표(Raw)'];
-  const RawDataUrl = ['/RawFinancialStatement', '/RawIncomeStatement', '/RawCashFlowStatement'];
+  const RawDataUrl = [
+    '/Company/RawData/RawFinancialStatement',
+    '/Company/RawData/RawIncomeStatement',
+    '/Company/RawData/RawCashFlowStatement',
+  ];
 
   const companyMenuArray = [nonFinancialMenu, FinancialMenu, RawDataMenu];
   const companyUrlArray = [nonFinancialUrl, FinancialUrl, RawDataUrl];

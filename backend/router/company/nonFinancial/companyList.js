@@ -1,8 +1,8 @@
 import express from 'express';
 const router = express.Router();
-import connection from '../../module/database.js';
-import { itemNumber } from '../../module/constVariable.js';
-import { sortTypeReturn, companyListSortField } from '../../module/companyFunction.js'
+import connection from '../../../module/database.js';
+import { itemNumber } from '../../../module/constVariable.js';
+import { sortTypeReturn, companyListSortField } from '../../../module/companyFunction.js'
 
 // getData
 router.get('/getData/all/:page/:sortField/:sortType', function(req,res){
@@ -11,7 +11,7 @@ router.get('/getData/all/:page/:sortField/:sortType', function(req,res){
   sortType = sortTypeReturn(sortType);
   sortField = companyListSortField(sortField);
 
-  let sql = `SELECT corp_code, corp_name, market_code, ir_url FROM CompanyInfo
+  let sql = `SELECT corp_code, corp_name, market_code, stock_code, ir_url FROM CompanyInfo
     ORDER BY ${sortField} ${sortType}, corp_code DESC
     LIMIT ${itemNumber} OFFSET ${itemNumber*(page-1)};`;
 	

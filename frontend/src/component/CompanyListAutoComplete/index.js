@@ -10,6 +10,7 @@ export default function CompanyListAutoComplete({
   onChangeCompanyName,
   onChangeCompanyCode,
   clearSwitch,
+  minWidth,
 }) {
   const [inputText, setInputText] = useState('');
   const [companyListData, setCompnayListData] = useState([]);
@@ -59,6 +60,8 @@ export default function CompanyListAutoComplete({
       onChange={(event, value) => onChangeAutoComplete(event, value)}
       options={companyListData}
       value={autocompleteText}
+      // eslint-disable-next-line object-shorthand
+      sx={{ minWidth: minWidth }}
       renderOption={(props, option) => {
         return (
           // eslint-disable-next-line react/jsx-props-no-spreading
@@ -79,10 +82,12 @@ CompanyListAutoComplete.defaultProps = {
   onChangeCompanyName: () => {},
   onChangeCompanyCode: () => {},
   clearSwitch: 0,
+  minWidth: '100px',
 };
 
 CompanyListAutoComplete.propTypes = {
   onChangeCompanyName: PropTypes.func,
   onChangeCompanyCode: PropTypes.func,
   clearSwitch: PropTypes.number,
+  minWidth: PropTypes.string,
 };

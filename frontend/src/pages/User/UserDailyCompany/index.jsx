@@ -15,12 +15,12 @@ import {
   Box,
   Typography,
 } from '@mui/material';
-import OutLinedBox from '../../component/UI/OutLinedBox';
-import StyledTableCell from '../../component/UI/StyledTableCell';
-import StyledTableRow from '../../component/UI/StyledTableRow';
-import FixedBox from '../../component/UI/FixedBox';
-import { url, itemNumber } from '../../component/constVariable';
-import CompanyListAutoComplete from '../../component/CompanyListAutoComplete';
+import OutLinedBox from '../../../component/UI/OutLinedBox';
+import StyledTableCell from '../../../component/UI/StyledTableCell';
+import StyledTableRow from '../../../component/UI/StyledTableRow';
+import FixedBox from '../../../component/UI/FixedBox';
+import { url, itemNumber } from '../../../component/constVariable';
+import CompanyListAutoComplete from '../../../component/CompanyListAutoComplete';
 
 export default function UserDailyCompany() {
   // 일별 전체 기업 정보 데이터 관련

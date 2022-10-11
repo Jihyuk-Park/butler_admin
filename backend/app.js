@@ -6,9 +6,11 @@ app.use(express.urlencoded( {extended : false } ));
 app.use(express.json());
 
 
-// company
-import companyList from './router/company/companyList.js';
-app.use('/admin/company/companyList', companyList);
+// company/nonFinancial
+import companyList from './router/company/nonFinancial/companyList.js';
+import dividend from './router/company/nonFinancial/dividend.js';
+app.use('/admin/company/nonFinancial/companyList', companyList);
+app.use('/admin/company/nonFinancial/dividend', dividend);
 
 // user
 import userInfo from './router/user/userInfo.js';

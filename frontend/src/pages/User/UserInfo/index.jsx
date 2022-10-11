@@ -15,12 +15,12 @@ import {
   Typography,
   Box,
 } from '@mui/material';
-import OutLinedBox from '../../component/UI/OutLinedBox';
-import FixedBox from '../../component/UI/FixedBox';
-import StyledTableCell from '../../component/UI/StyledTableCell';
-import StyledTableRow from '../../component/UI/StyledTableRow';
-import { itemNumber, url } from '../../component/constVariable';
-import DropDown from '../../component/UI/DropDown';
+import OutLinedBox from '../../../component/UI/OutLinedBox';
+import FixedBox from '../../../component/UI/FixedBox';
+import StyledTableCell from '../../../component/UI/StyledTableCell';
+import StyledTableRow from '../../../component/UI/StyledTableRow';
+import { itemNumber, url } from '../../../component/constVariable';
+import DropDown from '../../../component/UI/DropDown';
 
 export default function UserInfo() {
   // 유저 정보 데이터 관련

@@ -12,12 +12,12 @@ import {
   Button,
   Grid,
 } from '@mui/material';
-import StyledTableCell from '../../component/UI/StyledTableCell';
-import StyledTableRow from '../../component/UI/StyledTableRow';
-import CustomModal from '../../component/UI/CustomModal';
-import { url } from '../../component/constVariable';
-import DropDown from '../../component/UI/DropDown';
-import Pagenation from '../../component/UI/Pagenation';
+import StyledTableCell from '../../../component/UI/StyledTableCell';
+import StyledTableRow from '../../../component/UI/StyledTableRow';
+import CustomModal from '../../../component/UI/CustomModal';
+import { url } from '../../../component/constVariable';
+import DropDown from '../../../component/UI/DropDown';
+import Pagenation from '../../../component/UI/Pagenation';
 
 export default function UserMemo() {
   // 데이터 정렬 기준 선택
@@ -56,7 +56,7 @@ export default function UserMemo() {
     axios
       .get(`${url}/admin/user/userMemo/getTotalNum/all`)
       .then(result => {
-        console.log(result.data.totalnum);
+        // console.log(result.data.totalnum);
         setTotalItem(result.data.totalnum);
       })
       .catch(() => {

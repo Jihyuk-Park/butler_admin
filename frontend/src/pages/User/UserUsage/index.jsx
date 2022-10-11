@@ -16,12 +16,12 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { itemNumber, url } from '../../component/constVariable';
-import OutLinedBox from '../../component/UI/OutLinedBox';
-import StyledTableCell from '../../component/UI/StyledTableCell';
-import StyledTableRow from '../../component/UI/StyledTableRow';
-import FixedBox from '../../component/UI/FixedBox';
-import DropDown from '../../component/UI/DropDown';
+import { itemNumber, url } from '../../../component/constVariable';
+import OutLinedBox from '../../../component/UI/OutLinedBox';
+import StyledTableCell from '../../../component/UI/StyledTableCell';
+import StyledTableRow from '../../../component/UI/StyledTableRow';
+import FixedBox from '../../../component/UI/FixedBox';
+import DropDown from '../../../component/UI/DropDown';
 
 export default function UserUsage() {
   // 데이터 정렬 기준 선택
