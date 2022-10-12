@@ -241,8 +241,8 @@ export default function UserUsage() {
       <Grid container columnSpacing={2}>
         {/* UserUsage 데이터 영역 */}
         <Grid item xs={8}>
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 700 }}>
+          <TableContainer component={Paper} sx={{ maxHeight: { md: '545px', xl: '885px' } }}>
+            <Table stickyHeader>
               <TableHead>
                 <TableRow>
                   {dataTable.map(function (eachdata) {

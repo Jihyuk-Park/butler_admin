@@ -123,8 +123,8 @@ export default function UserMemo() {
       </Grid>
 
       {/* 메모 데이터 영역 */}
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 700 }}>
+      <TableContainer component={Paper} sx={{ maxHeight: { md: '545px', xl: '885px' } }}>
+        <Table stickyHeader>
           <TableHead>
             <TableRow>
               {dataTable.map(function (eachdata) {
@@ -142,9 +142,18 @@ export default function UserMemo() {
                 <StyledTableCell align="center">{eachdata.id}</StyledTableCell>
                 <StyledTableCell align="center">{changeDate(eachdata.created_at)}</StyledTableCell>
                 <StyledTableCell align="center">{changeDate(eachdata.updated_at)}</StyledTableCell>
-                <StyledTableCell align="center">{eachdata.corp_name}</StyledTableCell>
-                <StyledTableCell align="center">{eachdata.NickName}</StyledTableCell>
-                <StyledTableCell align="center">{eachdata.type}</StyledTableCell>
+                <StyledTableCell align="center" sx={{ minWidth: 90, maxWidth: 90 }}>
+                  {eachdata.corp_name}
+                </StyledTableCell>
+                <StyledTableCell align="center" sx={{ minWidth: 90, maxWidth: 90 }}>
+                  {eachdata.NickName}
+                </StyledTableCell>
+                <StyledTableCell
+                  align="center"
+                  sx={{ minWidth: 100, maxWidth: 100, wordBreak: 'break-all' }}
+                >
+                  {eachdata.type}
+                </StyledTableCell>
                 <StyledTableCell align="center">{eachdata.memo}</StyledTableCell>
                 <StyledTableCell align="center">
                   <Button

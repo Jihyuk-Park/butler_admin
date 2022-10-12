@@ -308,7 +308,7 @@ export default function UserInfo() {
     <Grid container columnSpacing={1}>
       {/* userInfo 표 영역 */}
       <Grid item xs={8}>
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} sx={{ maxHeight: { md: '610px', xl: '885px' } }}>
           <Table stickyHeader>
             <TableHead>
               <TableRow>

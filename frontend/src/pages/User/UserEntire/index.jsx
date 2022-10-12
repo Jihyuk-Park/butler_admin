@@ -58,8 +58,8 @@ export default function UserEntire() {
       </Grid>
 
       {/* 전체 유저 정보 영역 */}
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 700 }}>
+      <TableContainer component={Paper} sx={{ maxHeight: { md: '630px', xl: '940px' } }}>
+        <Table stickyHeader>
           <TableHead>
             <TableRow>
               {dataTable.map(function (eachdata) {
