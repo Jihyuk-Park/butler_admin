@@ -2,7 +2,7 @@ import express from 'express';
 const router = express.Router();
 import connection from '../module/database.js';
 
-// getDataList
+// getCompanyList (기업 검색 자동완성)
 router.get('/getCompanyList/:inputText', function(req,res){
   let inputText = req.params.inputText;
 

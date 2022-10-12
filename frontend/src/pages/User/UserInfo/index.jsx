@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useInView } from 'react-intersection-observer';
 import {
   Table,
   Grid,
@@ -13,25 +12,19 @@ import {
   TextField,
   Stack,
   Typography,
-  Box,
 } from '@mui/material';
 import OutLinedBox from '../../../component/UI/OutLinedBox';
 import FixedBox from '../../../component/UI/FixedBox';
 import StyledTableCell from '../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../component/UI/StyledTableRow';
-import { itemNumber, url } from '../../../component/constVariable';
+import { url } from '../../../component/constVariable';
 import DropDown from '../../../component/UI/DropDown';
+import Pagination from '../../../component/UI/Pagination';
 
 export default function UserInfo() {
   // 유저 정보 데이터 관련
   const dataTable = ['닉네임', '이름', '전화번호', '이메일', '로그인 방식', 'Grade', 'Type', 'Uid'];
   const [userInfoData, setUserInfoData] = useState([]);
-
-  // 무한 스크롤 (ref가 화면에 나타나면 inView는 true, 아니면 false를 반환)
-  const [ref, inView] = useInView();
-  const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);
-  const [maxPage, setMaxPage] = useState(100);
 
   // 검색 관련
   const searchTypeList = ['닉네임', '이름', '로그인 방식', 'Grade', 'Type', 'Uid'];
@@ -103,6 +96,10 @@ export default function UserInfo() {
     false,
   ]);
 
+  // 페이지네이션
+  const [page, setPage] = useState(1);
+  const [totalItem, setTotalItem] = useState(100);
+
   // 유저 정보 데이터를 받아오는 Hook
   // 검색 유무에 따라 전체 데이터 혹은 일치하는 데이터
   useEffect(() => {
@@ -111,8 +108,7 @@ export default function UserInfo() {
         .get(`${url}/admin/user/userInfo/getData/all/${page}`)
         .then(result => {
           // console.log(result.data);
-          setUserInfoData([...userInfoData, ...result.data]);
-          setLoading(false);
+          setUserInfoData(result.data);
           setIsSearch(false);
         })
         .catch(() => {
@@ -123,8 +119,7 @@ export default function UserInfo() {
         .get(`${url}/admin/user/userInfo/getData/search/${page}/${searchType}/${searchInput}`)
         .then(result => {
           // console.log(result.data);
-          setUserInfoData([...userInfoData, ...result.data]);
-          setLoading(false);
+          setUserInfoData(result.data);
         })
         .catch(() => {
           console.log('실패했습니다');
@@ -139,7 +134,7 @@ export default function UserInfo() {
         .get(`${url}/admin/user/userInfo/getTotalNum/all`)
         .then(result => {
           // console.log(result.data);
-          setMaxPage(Math.ceil(result.data.totalnum / itemNumber));
+          setTotalItem(result.data.totalnum);
         })
         .catch(() => {
           console.log('실패했습니다');
@@ -149,23 +144,13 @@ export default function UserInfo() {
         .get(`${url}/admin/user/userInfo/getTotalNum/search/${searchType}/${searchInput}`)
         .then(result => {
           // console.log(result.data);
-          setMaxPage(Math.ceil(result.data.totalnum / itemNumber));
+          setTotalItem(result.data.totalnum);
         })
         .catch(() => {
           console.log('실패했습니다');
         });
     }
   }, [isSearch, refreshSwitch]);
-
-  // 무한 스크롤 훅 (하단 도달 시 페이지 갱신(+1))
-  useEffect(() => {
-    if (inView && !loading && page < maxPage && userInfoData.length !== 0) {
-      setLoading(true);
-      if (page < maxPage) {
-        setPage(page + 1);
-      }
-    }
-  }, [inView, loading]);
 
   // 검색 타입 설정
   const selectType = e => {
@@ -356,7 +341,6 @@ export default function UserInfo() {
             </TableBody>
           </Table>
         </TableContainer>
-        <Box ref={ref} sx={{ height: '10px', mt: '30px' }} />
       </Grid>
 
       <Grid item xs={4} sx={{ width: 10 / 36 }}>
@@ -433,6 +417,9 @@ export default function UserInfo() {
             </Button>
           </OutLinedBox>
         </FixedBox>
+      </Grid>
+      <Grid item xs={12}>
+        <Pagination page={page} totalItem={totalItem} setPage={setPage} />
       </Grid>
     </Grid>
   );

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useInView } from 'react-intersection-observer';
 import moment from 'moment';
 import {
   Table,
@@ -12,15 +11,15 @@ import {
   Paper,
   Button,
   TextField,
-  Box,
   Typography,
 } from '@mui/material';
 import OutLinedBox from '../../../component/UI/OutLinedBox';
 import StyledTableCell from '../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../component/UI/StyledTableRow';
 import FixedBox from '../../../component/UI/FixedBox';
-import { url, itemNumber } from '../../../component/constVariable';
+import { url } from '../../../component/constVariable';
 import CompanyListAutoComplete from '../../../component/CompanyListAutoComplete';
+import Pagination from '../../../component/UI/Pagination';
 
 export default function UserDailyCompany() {
   // 일별 전체 기업 정보 데이터 관련
@@ -33,12 +32,6 @@ export default function UserDailyCompany() {
     '관심목록 누적 유저 수',
   ];
   const [userDailyCompanyData, setUserDailyCompanyData] = useState([]);
-
-  // 무한 스크롤 관련
-  const [ref, inView] = useInView();
-  const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);
-  const [maxPage, setMaxPage] = useState(100);
 
   // 노출 조건 설정
   const searchField = ['기업명', '검색 횟수', '관심 목록 유저 수'];
@@ -66,6 +59,10 @@ export default function UserDailyCompany() {
     ['searchUserCountingStart', 'searchUserCountingEnd'],
   ];
 
+  // 페이지네이션
+  const [page, setPage] = useState(1);
+  const [totalItem, setTotalItem] = useState(100);
+
   // 유저 정보 데이터를 받아오는 Hook
   // 검색 유무에 따라 전체 데이터 혹은 일치하는 데이터
   useEffect(() => {
@@ -74,8 +71,7 @@ export default function UserDailyCompany() {
         .get(`${url}/admin/user/userDailyCompany/getData/all/${page}`)
         .then(result => {
           // console.log(result.data);
-          setUserDailyCompanyData([...userDailyCompanyData, ...result.data]);
-          setLoading(false);
+          setUserDailyCompanyData(result.data);
           setIsSearch(false);
         })
         .catch(() => {
@@ -90,8 +86,7 @@ export default function UserDailyCompany() {
         })
         .then(result => {
           // console.log(result.data);
-          setUserDailyCompanyData([...userDailyCompanyData, ...result.data]);
-          setLoading(false);
+          setUserDailyCompanyData(result.data);
         })
         .catch(() => {
           console.log('실패했습니다');
@@ -105,7 +100,7 @@ export default function UserDailyCompany() {
       axios
         .get(`${url}/admin/user/userDailyCompany/getTotalNum/all`)
         .then(result => {
-          setMaxPage(Math.ceil(result.data.totalnum / itemNumber));
+          setTotalItem(result.data.totalnum);
         })
         .catch(() => {
           console.log('실패했습니다');
@@ -119,23 +114,13 @@ export default function UserDailyCompany() {
         })
         .then(result => {
           // console.log(result.data);
-          setMaxPage(Math.ceil(result.data.totalnum / itemNumber));
+          setTotalItem(result.data.totalnum);
         })
         .catch(() => {
           console.log('실패했습니다');
         });
     }
   }, [isSearch, refreshSwitch]);
-
-  // 무한 스크롤 훅 (하단 도달 시 페이지 갱신(+1))
-  useEffect(() => {
-    if (inView && !loading && page < maxPage && userDailyCompanyData.length !== 0) {
-      setLoading(true);
-      if (page < maxPage) {
-        setPage(page + 1);
-      }
-    }
-  }, [inView, loading]);
 
   // 노출 조건 입력 input
   const onChangeSearchInput = e => {
@@ -231,7 +216,6 @@ export default function UserDailyCompany() {
             </TableBody>
           </Table>
         </TableContainer>
-        <Box ref={ref} sx={{ height: '10px', mt: '30px' }} />
       </Grid>
       {/* 필터 검색 영역 */}
       <Grid item xs={4}>
@@ -301,6 +285,9 @@ export default function UserDailyCompany() {
             </Button>
           </OutLinedBox>
         </FixedBox>
+      </Grid>
+      <Grid item xs={12}>
+        <Pagination page={page} totalItem={totalItem} setPage={setPage} />
       </Grid>
     </Grid>
   );

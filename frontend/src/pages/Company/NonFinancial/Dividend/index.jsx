@@ -136,6 +136,22 @@ export default function Dividend() {
               return (
                 <StyledTableRow key={eachdata}>
                   <StyledTableCell align="center">{eachdata}</StyledTableCell>
+                  <StyledTableCell align="center">{temp.Q115}</StyledTableCell>
+                  <StyledTableCell align="center">{temp.Q215}</StyledTableCell>
+                  <StyledTableCell align="center">{temp.Q315}</StyledTableCell>
+                  <StyledTableCell align="center">{temp.Q415}</StyledTableCell>
+                  <StyledTableCell align="center">{temp.Q116}</StyledTableCell>
+                  <StyledTableCell align="center">{temp.Q216}</StyledTableCell>
+                  <StyledTableCell align="center">{temp.Q316}</StyledTableCell>
+                  <StyledTableCell align="center">{temp.Q416}</StyledTableCell>
+                  <StyledTableCell align="center">{temp.Q117}</StyledTableCell>
+                  <StyledTableCell align="center">{temp.Q217}</StyledTableCell>
+                  <StyledTableCell align="center">{temp.Q317}</StyledTableCell>
+                  <StyledTableCell align="center">{temp.Q417}</StyledTableCell>
+                  <StyledTableCell align="center">{temp.Q118}</StyledTableCell>
+                  <StyledTableCell align="center">{temp.Q218}</StyledTableCell>
+                  <StyledTableCell align="center">{temp.Q318}</StyledTableCell>
+                  <StyledTableCell align="center">{temp.Q418}</StyledTableCell>
                   <StyledTableCell align="center">{temp.Q119}</StyledTableCell>
                   <StyledTableCell align="center">{temp.Q219}</StyledTableCell>
                   <StyledTableCell align="center">{temp.Q319}</StyledTableCell>
@@ -160,6 +176,22 @@ export default function Dividend() {
               return (
                 <StyledTableRow key={eachdata}>
                   <StyledTableCell align="center">{eachdata}</StyledTableCell>
+                  <StyledTableCell align="center">{eachdata.Q115}</StyledTableCell>
+                  <StyledTableCell align="center">{eachdata.Q215}</StyledTableCell>
+                  <StyledTableCell align="center">{eachdata.Q315}</StyledTableCell>
+                  <StyledTableCell align="center">{eachdata.Q415}</StyledTableCell>
+                  <StyledTableCell align="center">{eachdata.Q116}</StyledTableCell>
+                  <StyledTableCell align="center">{eachdata.Q216}</StyledTableCell>
+                  <StyledTableCell align="center">{eachdata.Q316}</StyledTableCell>
+                  <StyledTableCell align="center">{eachdata.Q416}</StyledTableCell>
+                  <StyledTableCell align="center">{eachdata.Q117}</StyledTableCell>
+                  <StyledTableCell align="center">{eachdata.Q217}</StyledTableCell>
+                  <StyledTableCell align="center">{eachdata.Q317}</StyledTableCell>
+                  <StyledTableCell align="center">{eachdata.Q417}</StyledTableCell>
+                  <StyledTableCell align="center">{eachdata.Q118}</StyledTableCell>
+                  <StyledTableCell align="center">{eachdata.Q218}</StyledTableCell>
+                  <StyledTableCell align="center">{eachdata.Q318}</StyledTableCell>
+                  <StyledTableCell align="center">{eachdata.Q418}</StyledTableCell>
                   <StyledTableCell align="center">{eachdata.Q119}</StyledTableCell>
                   <StyledTableCell align="center">{eachdata.Q219}</StyledTableCell>
                   <StyledTableCell align="center">{eachdata.Q319}</StyledTableCell>

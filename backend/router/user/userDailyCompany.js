@@ -118,7 +118,10 @@ router.get(`/getData/search/:page`, function(req,res){
 // getTotalNum
 router.get('/getTotalNum/all', function(req,res){
 
-  let sql = `SELECT COUNT(*) as totalnum FROM (SELECT Date(created_at) as date, COUNT(*) FROM SearchHistory GROUP BY date) A;`;
+  let sql = `SELECT count(*) as totalnum FROM
+    (SELECT Date(created_at) as date, COUNT(*) FROM SearchHistory GROUP BY date
+    UNION
+    SELECT Date(created_at) as date, COUNT(*) FROM Watch GROUP BY date) A;`;
 
   connection.query(sql, function(err, rows, fields){
     if (err){

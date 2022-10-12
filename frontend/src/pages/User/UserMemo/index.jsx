@@ -17,7 +17,7 @@ import StyledTableRow from '../../../component/UI/StyledTableRow';
 import CustomModal from '../../../component/UI/CustomModal';
 import { url } from '../../../component/constVariable';
 import DropDown from '../../../component/UI/DropDown';
-import Pagenation from '../../../component/UI/Pagenation';
+import Pagination from '../../../component/UI/Pagination';
 
 export default function UserMemo() {
   // 데이터 정렬 기준 선택
@@ -30,7 +30,6 @@ export default function UserMemo() {
   const [memoData, setMemoData] = useState([]);
 
   // 페이지네이션
-  const itemNumber = 12;
   const [page, setPage] = useState(1);
   const [totalItem, setTotalItem] = useState(100);
 
@@ -51,7 +50,7 @@ export default function UserMemo() {
       });
   }, [page, sortField, sortType]);
 
-  // 전체 페이지 수 계산을 위한 Hook (무한 스크롤)
+  // 전체 페이지 수 계산을 위한 Hook
   useEffect(() => {
     axios
       .get(`${url}/admin/user/userMemo/getTotalNum/all`)
@@ -161,7 +160,7 @@ export default function UserMemo() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Pagenation page={page} totalItem={totalItem} setPage={setPage} itemNumber={itemNumber} />
+      <Pagination page={page} totalItem={totalItem} setPage={setPage} />
 
       {/* 삭제 모달 영역 */}
       {deleteModal === false ? null : (

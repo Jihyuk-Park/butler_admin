@@ -1,37 +1,37 @@
 import React from 'react';
-import Pagination from 'react-js-pagination';
+import ReactPagination from 'react-js-pagination';
 import PropTypes from 'prop-types';
+import { Box } from '@mui/material';
+import { itemNumber } from '../constVariable';
 import './Pagenation.css';
 
-export default function Pagenation({ page, totalItem, setPage, itemNumber }) {
+export default function Pagination({ page, totalItem, setPage }) {
   return (
-    <div>
-      현재 : {page}, 전체 : {totalItem}, 아이템 개수 : {itemNumber}, 전체 페이지 :
-      {Math.ceil(totalItem / itemNumber)}
-      <Pagination
+    <Box sx={{ mt: '25px' }}>
+      <ReactPagination
         activePage={page}
         itemsCountPerPage={itemNumber}
         totalItemsCount={totalItem}
-        hideFirstLastPages
         pageRangeDisplayed={5}
         prevPageText="‹"
+        firstPageText="‹‹"
         nextPageText="›"
+        lastPageText="››"
         onChange={setPage}
       />
-    </div>
+      <b>전체 {totalItem}</b> ({page} / {Math.ceil(totalItem / itemNumber)})
+    </Box>
   );
 }
 
-Pagenation.defaultProps = {
+Pagination.defaultProps = {
   page: 1,
   totalItem: 100,
   setPage: () => {},
-  itemNumber: 12,
 };
 
-Pagenation.propTypes = {
+Pagination.propTypes = {
   page: PropTypes.number,
   totalItem: PropTypes.number,
   setPage: PropTypes.func,
-  itemNumber: PropTypes.number,
 };

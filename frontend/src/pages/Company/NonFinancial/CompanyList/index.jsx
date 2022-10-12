@@ -105,9 +105,11 @@ export default function CompanyList() {
   useEffect(() => {
     if (isSearch === false) {
       axios
-        .get(`${url}/admin/company/companyList/getData/all/${page}/${sortField}/${sortType}`)
+        .get(
+          `${url}/admin/company/nonFinancial/companyList/getData/all/${page}/${sortField}/${sortType}`,
+        )
         .then(result => {
-          // console.log(result.data);
+          console.log(result.data);
           setCompanyListData([...companyListData, ...result.data]);
           setLoading(false);
           setIsSearch(false);
@@ -119,9 +121,12 @@ export default function CompanyList() {
       // 임시용 삭제 예정
       setRefreshSwitch(refreshSwitch);
       axios
-        .get(`${url}/admin/company/companyList/getData/search/${page}/${sortField}/${sortType}`, {
-          params: searchInput,
-        })
+        .get(
+          `${url}/admin/company/nonFinancial/companyList/getData/search/${page}/${sortField}/${sortType}`,
+          {
+            params: searchInput,
+          },
+        )
         .then(result => {
           // console.log(result.data);
           setCompanyListData([...companyListData, ...result.data]);
@@ -137,7 +142,7 @@ export default function CompanyList() {
   useEffect(() => {
     if (isSearch === false) {
       axios
-        .get(`${url}/admin/company/companyList/getTotalNum/all`)
+        .get(`${url}/admin/company/nonFinancial/companyList/getTotalNum/all`)
         .then(result => {
           setMaxPage(Math.ceil(result.data.totalnum / itemNumber));
         })
