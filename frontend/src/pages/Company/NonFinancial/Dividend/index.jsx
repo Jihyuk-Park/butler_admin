@@ -13,10 +13,12 @@ import {
   TableContainer,
 } from '@mui/material';
 import CompanyListAutoComplete from '../../../../component/CompanyListAutoComplete';
+import PeriodTableCell from '../../../../component/UI/PeriodTableCell';
 import StyledTableCell from '../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../component/UI/StyledTableRow';
-import { periodArray } from '../../../../component/constVariable';
-import { url } from '../../../../component/constVariable';
+import { periodArray } from '../../../../component/commonVariable';
+import { url } from '../../../../component/commonVariable';
+import { scrollRight } from '../../../../component/commonFunction';
 import CompanyEditModal from '../../../../component/UI/CompanyEditModal';
 
 export default function Dividend() {
@@ -71,6 +73,8 @@ export default function Dividend() {
     '우선주 배당수익율(%)',
   ];
 
+  scrollRight();
+
   const searchData = () => {
     axios
       .get(`${url}/admin/company/nonFinancial/dividend/getData/all/${searchCompanyCode}`)
@@ -110,13 +114,25 @@ export default function Dividend() {
           편집
         </Button>
       </Grid>
-      <TableContainer component={Paper} sx={{ mt: '10px' }}>
-        <Table sx={{ minWidth: 700 }}>
+      <TableContainer
+        id="table"
+        component={Paper}
+        sx={{ maxHeight: { md: '635px', xl: '935px' }, mt: '10px' }}
+      >
+        <Table stickyHeader>
           <TableHead>
             <TableRow>
-              {['배당', ...periodArray].map(function (eachdata) {
+              {['배당', ...periodArray].map(function (eachdata, index) {
                 return (
-                  <StyledTableCell key={eachdata} align="center">
+                  <StyledTableCell
+                    key={eachdata}
+                    align="center"
+                    sx={[
+                      index === 0
+                        ? { minWidth: 180, position: 'sticky', left: 0, zIndex: 100 }
+                        : null,
+                    ]}
+                  >
                     {eachdata}
                   </StyledTableCell>
                 );
@@ -135,39 +151,48 @@ export default function Dividend() {
 
               return (
                 <StyledTableRow key={eachdata}>
-                  <StyledTableCell align="center">{eachdata}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q115}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q215}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q315}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q415}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q116}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q216}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q316}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q416}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q117}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q217}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q317}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q417}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q118}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q218}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q318}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q418}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q119}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q219}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q319}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q419}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q120}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q220}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q320}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q420}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q121}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q221}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q321}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q421}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q122}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q222}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q322}</StyledTableCell>
-                  <StyledTableCell align="center">{temp.Q422}</StyledTableCell>
+                  <StyledTableCell
+                    align="center"
+                    sx={{
+                      minWidth: 180,
+                      position: 'sticky',
+                      left: 0,
+                    }}
+                  >
+                    {eachdata}
+                  </StyledTableCell>
+                  <PeriodTableCell align="center">{temp.Q115}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q215}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q315}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q415}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q116}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q216}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q316}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q416}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q117}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q217}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q317}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q417}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q118}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q218}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q318}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q418}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q119}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q219}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q319}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q419}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q120}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q220}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q320}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q420}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q121}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q221}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q321}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q421}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q122}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q222}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q322}</PeriodTableCell>
+                  <PeriodTableCell align="center">{temp.Q422}</PeriodTableCell>
                 </StyledTableRow>
               );
             })}
@@ -175,39 +200,48 @@ export default function Dividend() {
             {calculationArray.map(function (eachdata) {
               return (
                 <StyledTableRow key={eachdata}>
-                  <StyledTableCell align="center">{eachdata}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q115}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q215}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q315}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q415}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q116}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q216}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q316}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q416}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q117}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q217}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q317}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q417}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q118}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q218}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q318}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q418}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q119}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q219}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q319}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q419}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q120}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q220}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q320}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q420}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q121}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q221}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q321}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q421}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q122}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q222}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q322}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Q422}</StyledTableCell>
+                  <PeriodTableCell
+                    align="center"
+                    sx={{
+                      minWidth: 180,
+                      position: 'sticky',
+                      left: 0,
+                    }}
+                  >
+                    {eachdata}
+                  </PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q115}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q215}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q315}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q415}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q116}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q216}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q316}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q416}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q117}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q217}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q317}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q417}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q118}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q218}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q318}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q418}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q119}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q219}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q319}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q419}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q120}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q220}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q320}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q420}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q121}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q221}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q321}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q421}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q122}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q222}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q322}</PeriodTableCell>
+                  <PeriodTableCell align="center">{eachdata.Q422}</PeriodTableCell>
                 </StyledTableRow>
               );
             })}

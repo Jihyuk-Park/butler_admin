@@ -17,7 +17,7 @@ import OutLinedBox from '../../../component/UI/OutLinedBox';
 import StyledTableCell from '../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../component/UI/StyledTableRow';
 import FixedBox from '../../../component/UI/FixedBox';
-import { url } from '../../../component/constVariable';
+import { url } from '../../../component/commonVariable';
 import CompanyListAutoComplete from '../../../component/CompanyListAutoComplete';
 import Pagination from '../../../component/UI/Pagination';
 

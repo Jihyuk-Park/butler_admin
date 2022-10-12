@@ -14,7 +14,7 @@ import {
 import CompanyListAutoComplete from '../../../../component/CompanyListAutoComplete';
 import StyledTableCell from '../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../component/UI/StyledTableRow';
-import { periodArray } from '../../../../component/constVariable';
+import { periodArray } from '../../../../component/commonVariable';
 
 export default function Stock() {
   // AutoComplete 회사 corp_code

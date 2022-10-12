@@ -7,7 +7,7 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
-import { url } from '../constVariable';
+import { url } from '../commonVariable';
 
 export default function CompanyEditModal({
   editModalSwtich,

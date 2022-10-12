@@ -2,7 +2,7 @@ import React from 'react';
 import ReactPagination from 'react-js-pagination';
 import PropTypes from 'prop-types';
 import { Box } from '@mui/material';
-import { itemNumber } from '../constVariable';
+import { itemNumber } from '../commonVariable';
 import './Pagenation.css';
 
 export default function Pagination({ page, totalItem, setPage }) {

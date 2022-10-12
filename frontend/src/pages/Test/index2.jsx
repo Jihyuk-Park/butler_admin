@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Autocomplete from '@mui/material/Autocomplete';
-import { url } from '../../component/constVariable';
+import { url } from '../../component/commonVariable';
 
 export default function CompanyListAutoComplete() {
   const [inputText, setInputText] = useState('');

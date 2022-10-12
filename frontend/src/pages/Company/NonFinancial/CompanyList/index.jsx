@@ -20,7 +20,7 @@ import {
   Stack,
 } from '@mui/material';
 import OutLinedBox from '../../../../component/UI/OutLinedBox';
-import { itemNumber, url } from '../../../../component/constVariable';
+import { itemNumber, url } from '../../../../component/commonVariable';
 import StyledTableCell from '../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../component/UI/StyledTableRow';
 

@@ -13,7 +13,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { url } from '../../../component/constVariable';
+import { url } from '../../../component/commonVariable';
 import OutLinedBox from '../../../component/UI/OutLinedBox';
 import StyledTableCell from '../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../component/UI/StyledTableRow';

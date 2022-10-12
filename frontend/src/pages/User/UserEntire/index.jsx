@@ -6,7 +6,7 @@ import { Table, TableBody, TableContainer, TableHead, TableRow, Paper, Grid } fr
 
 import StyledTableCell from '../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../component/UI/StyledTableRow';
-import { url } from '../../../component/constVariable';
+import { url } from '../../../component/commonVariable';
 import DropDown from '../../../component/UI/DropDown';
 
 export default function UserEntire() {

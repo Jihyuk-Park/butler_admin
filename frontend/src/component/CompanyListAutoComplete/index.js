@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Autocomplete from '@mui/material/Autocomplete';
-import { url } from '../constVariable';
+import { url } from '../commonVariable';
 
 export default function CompanyListAutoComplete({
   onChangeCompanyName,

@@ -15,7 +15,7 @@ import {
 import StyledTableCell from '../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../component/UI/StyledTableRow';
 import CustomModal from '../../../component/UI/CustomModal';
-import { url } from '../../../component/constVariable';
+import { url } from '../../../component/commonVariable';
 import DropDown from '../../../component/UI/DropDown';
 import Pagination from '../../../component/UI/Pagination';
 

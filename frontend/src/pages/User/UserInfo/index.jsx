@@ -17,7 +17,7 @@ import OutLinedBox from '../../../component/UI/OutLinedBox';
 import FixedBox from '../../../component/UI/FixedBox';
 import StyledTableCell from '../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../component/UI/StyledTableRow';
-import { url } from '../../../component/constVariable';
+import { url } from '../../../component/commonVariable';
 import DropDown from '../../../component/UI/DropDown';
 import Pagination from '../../../component/UI/Pagination';
 
@@ -249,7 +249,17 @@ export default function UserInfo() {
     const tempArray = [...editableSwitch];
     tempArray[ind] = !tempArray[ind];
     setEditableSwitch(tempArray);
-    if (editInputArray[ind] === originalData[ind]) {
+
+    let differenceNum = 0;
+    editInputArray.map(function (each, index) {
+      // console.log(each, originalData[index]);
+      if (each !== originalData[index]) {
+        differenceNum += 1;
+      }
+      return null;
+    });
+
+    if (differenceNum === 0) {
       setIsChange(false);
     } else {
       setIsChange(true);
