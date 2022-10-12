@@ -19,7 +19,7 @@ import StyledTableCell from '../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../component/UI/StyledTableRow';
 import { url } from '../../../component/commonVariable';
 import DropDown from '../../../component/UI/DropDown';
-import Pagination from '../../../component/UI/Pagination';
+import Pagination from '../../../component/Pagination/index';
 
 export default function UserInfo() {
   // 유저 정보 데이터 관련

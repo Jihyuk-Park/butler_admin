@@ -13,7 +13,7 @@ export default function CompanyListAutoComplete({
   minWidth,
 }) {
   const [inputText, setInputText] = useState('');
-  const [companyListData, setCompnayListData] = useState([]);
+  const [companyListData, setCompanyListData] = useState([]);
   const [autocompleteText, setAutoCompleteText] = useState('');
 
   // 부모 컴포넌트에서 초기화를 위한 훅
@@ -27,7 +27,7 @@ export default function CompanyListAutoComplete({
         .get(`${url}/admin/common/getCompanyList/${inputText}`)
         .then(result => {
           // console.log(result.data);
-          setCompnayListData(result.data);
+          setCompanyListData(result.data);
         })
         .catch(() => {
           console.log('실패했습니다');

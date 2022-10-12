@@ -19,7 +19,7 @@ import StyledTableRow from '../../../component/UI/StyledTableRow';
 import FixedBox from '../../../component/UI/FixedBox';
 import { url } from '../../../component/commonVariable';
 import CompanyListAutoComplete from '../../../component/CompanyListAutoComplete';
-import Pagination from '../../../component/UI/Pagination';
+import Pagination from '../../../component/Pagination/index';
 
 export default function UserDailyCompany() {
   // 일별 전체 기업 정보 데이터 관련

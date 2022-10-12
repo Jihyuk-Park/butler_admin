@@ -17,7 +17,7 @@ import StyledTableRow from '../../../component/UI/StyledTableRow';
 import CustomModal from '../../../component/UI/CustomModal';
 import { url } from '../../../component/commonVariable';
 import DropDown from '../../../component/UI/DropDown';
-import Pagination from '../../../component/UI/Pagination';
+import Pagination from '../../../component/Pagination/index';
 
 export default function UserMemo() {
   // 데이터 정렬 기준 선택

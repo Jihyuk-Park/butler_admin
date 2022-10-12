@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Grid, Stack, Typography, Button } from '@mui/material';
 import CompanyListAutoComplete from '../CompanyListAutoComplete';
 
-export default function DropDown({ setSearchCompanyCode, searchData }) {
+export default function CompanySearchEditMenu({ setSearchCompanyCode, searchData }) {
   return (
     <Grid container direction="row" justifyContent="space-between" alignItems="center">
       <Stack direction="row" spacing={2} alignItems="center">
@@ -22,7 +22,7 @@ export default function DropDown({ setSearchCompanyCode, searchData }) {
   );
 }
 
-DropDown.defaultProps = {
+CompanySearchEditMenu.defaultProps = {
   label: '라벨을 입력해주세요',
   selectList: [],
   value: '라벨을 입력해주세요',
@@ -30,7 +30,7 @@ DropDown.defaultProps = {
   p: '10px 50px 10px 15px',
 };
 
-DropDown.propTypes = {
+CompanySearchEditMenu.propTypes = {
   label: PropTypes.string,
   selectList: PropTypes.arrayOf(PropTypes.string),
   value: PropTypes.string,

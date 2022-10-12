@@ -21,7 +21,7 @@ import StyledTableCell from '../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../component/UI/StyledTableRow';
 import FixedBox from '../../../component/UI/FixedBox';
 import DropDown from '../../../component/UI/DropDown';
-import Pagination from '../../../component/UI/Pagination';
+import Pagination from '../../../component/Pagination/index';
 
 export default function UserUsage() {
   // 데이터 정렬 기준 선택
