@@ -9,19 +9,21 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 export default function NavBar() {
   const navigate = useNavigate();
 
+  // 기업 메뉴 드롭다운
   const [companyMenuList, setCompanyMenuList] = useState(false);
   const [selectedCompanyMenu, setSelectedCompanyMenu] = useState(100);
+  // 유저 메뉴 드롭다운
   const [userList, setUserList] = useState(false);
 
   const [selectedMenu, setSelectedMenu] = useState('');
 
   const userMenu = [
-    '유저 정보',
-    '유저 사용 정보',
-    '전체 유저 정보',
-    '기업 사용 정보',
-    '일별 전체 기업',
-    '메모',
+    '유저 기본 정보',
+    '유저 활동 정보',
+    '가입자 통계',
+    '기업별 통계',
+    '일별 기업 통계',
+    '토론실',
   ];
   const userUrl = [
     '/User/UserInfo',
@@ -32,49 +34,60 @@ export default function NavBar() {
     '/User/UserMemo',
   ];
 
-  const companyMenu = ['비재무 데이터', '재무 데이터', 'Raw Data'];
-
-  const nonFinancialMenu = [
-    '기업 목록',
-    '주식',
-    '배당',
-    '자사주',
-    '직원',
-    '임원보수',
-    'IR',
-    '부문별 실적',
-    '지역별 실적',
-  ];
-  const nonFinancialUrl = [
-    '/Company/nonFinancial/CompanyList',
-    '/Company/nonFinancial/Stock',
-    '/Company/nonFinancial/Dividend',
-    '/Company/nonFinancial/TreasuryStock',
-    '/Company/nonFinancial/Employee',
-    '/Company/nonFinancial/Executive',
-    '/Company/nonFinancial/IR',
-    '/Company/nonFinancial/PerformanceBySector',
-    '/Company/nonFinancial/PerformanceByRegion',
+  // 2depth 메뉴 - 1. 기업목록 ~ 3.개별기업
+  const companyMenuSingle = ['기업목록', '기업탐색', '개별기업'];
+  const companyMenuSingleURL = [
+    '/Company/CompanyList',
+    '/Company/CompanySearch',
+    '/Company/IndividualCompany',
   ];
 
-  const FinancialMenu = ['재무상태표', '손익계산서', '현금흐름표', '분석', '밸류에이션'];
-  const FinancialUrl = [
-    '/Compamny/Financial/FinancialStatement',
+  // 3depth 이상 - 4. 재무제표 ~ 8. 지역별
+  const companyMenuMutlple = ['재무제표', '기타정보', 'IR', '부문별', '지역별'];
+
+  // 하위 메뉴 목록
+  // 4. 재무제표 ~ 8. 지역별
+  const financialMenu = [
+    '손익계산서',
+    '현금흐름표',
+    '분석',
+    '밸류',
+    'DART API',
+    '크롤링',
+    '재무상태표',
+  ];
+  const financialUrl = [
     '/Compamny/Financial/IncomeStatement',
     '/Compamny/Financial/CashFlowStatement',
     '/Compamny/Financial/Analysis',
     '/Compamny/Financial/Valuation',
+    '/Compamny/Financial/DartAPI',
+    '/Compamny/Financial/Crawling',
+    '/Compamny/Financial/FinancialStatement',
   ];
 
-  const RawDataMenu = ['재무상태표(Raw)', '손익계산서(Raw)', '현금흐름표(Raw)'];
-  const RawDataUrl = [
-    '/Company/RawData/RawFinancialStatement',
-    '/Company/RawData/RawIncomeStatement',
-    '/Company/RawData/RawCashFlowStatement',
+  const otherInfoMenu = ['공시 목록', '주식', '배당', '자사주', '직원', '임원', '소액주주'];
+  const otherInfoUrl = [
+    '/Company/OtherInfo/Disclosure',
+    '/Company/OtherInfo/Stock',
+    '/Company/OtherInfo/Dividend',
+    '/Company/OtherInfo/TreasuryStock',
+    '/Company/OtherInfo/Employee',
+    '/Company/OtherInfo/Executive',
+    '/Company/OtherInfo/MinorityShareHolders',
   ];
 
-  const companyMenuArray = [nonFinancialMenu, FinancialMenu, RawDataMenu];
-  const companyUrlArray = [nonFinancialUrl, FinancialUrl, RawDataUrl];
+  const irMenu = ['목록(IR)', '개별기업(IR)'];
+  const irUrl = ['/Company/IR/List', '/Company/IR/Individual'];
+
+  const sectorMenu = ['목록(부문별)', '개별기업(부문별)'];
+  const sectorUrl = ['/Company/Sector/List', '/Company/Sector/Individual'];
+
+  const regionMenu = ['목록(지역별)', '개별기업(지역별)'];
+  const regionUrl = ['/Company/Region/List', '/Company/Region/Individual'];
+
+  const companyMenuArray = [financialMenu, otherInfoMenu, irMenu, sectorMenu, regionMenu];
+  const companyUrlArray = [financialUrl, otherInfoUrl, irUrl, sectorUrl, regionUrl];
 
   const openCompanyMenuList = () => {
     setCompanyMenuList(true);
@@ -142,7 +155,28 @@ export default function NavBar() {
           {/* 기업 메뉴 */}
           {companyMenuList === false ? null : (
             <div>
-              {companyMenu.map(function (eachdata, index) {
+              {/* 2depth 메뉴 */}
+              {companyMenuSingle.map(function (eachdata, index) {
+                return (
+                  <div key={eachdata}>
+                    <Button
+                      onClick={() => {
+                        goToLink(companyMenuSingleURL[index], eachdata);
+                        openSelectedCompanyMenu(index + 50);
+                      }}
+                      sx={[
+                        selectedCompanyMenu === index + 50 ? null : { opacity: 0.6 },
+                        { color: 'white', width: '11vw', fontWeight: 400, fontSize: '1.05rem' },
+                      ]}
+                    >
+                      {eachdata}
+                    </Button>
+                  </div>
+                );
+              })}
+
+              {/* 3depth 메뉴 */}
+              {companyMenuMutlple.map(function (eachdata, index) {
                 return (
                   <div key={eachdata}>
                     <Button

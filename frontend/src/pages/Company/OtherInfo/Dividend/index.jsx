@@ -4,7 +4,6 @@ import {
   Grid,
   Button,
   Stack,
-  Typography,
   Paper,
   Table,
   TableHead,
@@ -77,7 +76,7 @@ export default function Dividend() {
 
   const searchData = () => {
     axios
-      .get(`${url}/admin/company/nonFinancial/dividend/getData/all/${searchCompanyCode}`)
+      .get(`${url}/admin/company/otherInfo/dividend/getData/all/${searchCompanyCode}`)
       .then(result => {
         // console.log(result.data);
         setDividendData(result.data);
@@ -96,9 +95,6 @@ export default function Dividend() {
     <div>
       <Grid container direction="row" justifyContent="space-between" alignItems="center">
         <Stack direction="row" spacing={2} alignItems="center">
-          <Typography variant="body" sx={{ ml: '10px' }}>
-            기업명
-          </Typography>
           <CompanyListAutoComplete onChangeCompanyCode={setSearchCompanyCode} minWidth="300px" />
           <Button variant="contained" color="secondary" onClick={searchData}>
             검색
@@ -253,8 +249,9 @@ export default function Dividend() {
           editModalSwtich={editModalSwtich}
           setEditModalSwitch={setEditModalSwitch}
           editAccountArray={dividendAccountArray}
-          where="admin/company/nonFinancial/dividend"
+          where="admin/company/otherInfo/dividend"
           searchCompanyCode={searchCompanyCode}
+          // 데이터 리프레시를 위한 검색 함수 (수정완료 후 자동으로 호출 할)
           refreshFunction={searchData}
         />
       )}

@@ -12,7 +12,7 @@ export default function Pagination({ page, totalItem, setPage }) {
         activePage={page}
         itemsCountPerPage={itemNumber}
         totalItemsCount={totalItem}
-        pageRangeDisplayed={5}
+        pageRangeDisplayed={10}
         prevPageText="‹"
         firstPageText="‹‹"
         nextPageText="›"

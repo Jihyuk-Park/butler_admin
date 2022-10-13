@@ -335,7 +335,7 @@ export default function UserInfo() {
               {userInfoData.map(eachdata => (
                 <StyledTableRow key={eachdata.id}>
                   <StyledTableCell align="center" component="th" scope="row">
-                    <Button onClick={() => setEditData(eachdata)} color="secondary">
+                    <Button onClick={() => setEditData(eachdata)} color="secondary" sx={{ p: 0 }}>
                       {eachdata.NickName}
                     </Button>
                   </StyledTableCell>

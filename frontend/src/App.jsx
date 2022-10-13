@@ -9,10 +9,10 @@ import UserUsage from './pages/User/UserUsage';
 import UserEntire from './pages/User/UserEntire';
 import UserCompanyUsage from './pages/User/UserCompanyUsage';
 import UserDailyCompany from './pages/User/UserDailyCompany';
-import CompanyList from './pages/Company/NonFinancial/CompanyList';
+import CompanyList from './pages/Company/CompanyList';
+import Stock from './pages/Company/OtherInfo/Stock';
+import Dividend from './pages/Company/OtherInfo/Dividend';
 import Test from './pages/Test/index2';
-import Stock from './pages/Company/NonFinancial/Stock';
-import Dividend from './pages/Company/NonFinancial/Dividend';
 
 function App() {
   return (
@@ -32,9 +32,9 @@ function App() {
             <Route path="/User/UserCompanyUsage" element={<UserCompanyUsage />} />
             <Route path="/User/UserDailyCompany" element={<UserDailyCompany />} />
 
-            <Route path="/Company/nonFinancial/CompanyList" element={<CompanyList />} />
-            <Route path="/Company/nonFinancial/Stock" element={<Stock />} />
-            <Route path="/Company/nonFinancial/Dividend" element={<Dividend />} />
+            <Route path="/Company/CompanyList" element={<CompanyList />} />
+            <Route path="/Company/OtherInfo/Stock" element={<Stock />} />
+            <Route path="/Company/OtherInfo/Dividend" element={<Dividend />} />
           </Routes>
         </Grid>
       </Grid>

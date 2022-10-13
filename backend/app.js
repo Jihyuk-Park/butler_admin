@@ -6,11 +6,9 @@ app.use(express.urlencoded( {extended : false } ));
 app.use(express.json());
 
 
-// company/nonFinancial
-import companyList from './router/company/nonFinancial/companyList.js';
-import dividend from './router/company/nonFinancial/dividend.js';
-app.use('/admin/company/nonFinancial/companyList', companyList);
-app.use('/admin/company/nonFinancial/dividend', dividend);
+// common
+import common from './router/common.js';
+app.use('/admin/common', common);
 
 // user
 import userInfo from './router/user/userInfo.js';
@@ -26,9 +24,14 @@ app.use('/admin/user/userUsage', userUsage);
 app.use('/admin/user/userCompanyUsage', userCompanyUsage);
 app.use('/admin/user/userDailyCompany', userDailyCompany);
 
-// common
-import common from './router/common.js';
-app.use('/admin/common', common);
+// company
+// companyList
+import companyList from './router/company/companyList.js';
+app.use('/admin/company/companyList', companyList);
+
+// otherInfo
+import dividend from './router/company/otherInfo/dividend.js';
+app.use('/admin/company/otherInfo/dividend', dividend);
 
 
 app.listen(port, () => {
