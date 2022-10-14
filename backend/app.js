@@ -30,7 +30,9 @@ import companyList from './router/company/companyList.js';
 app.use('/admin/company/companyList', companyList);
 
 // otherInfo
+import disclosure from './router/company/otherInfo/disclosure.js';
 import dividend from './router/company/otherInfo/dividend.js';
+app.use('/admin/company/otherInfo/disclosure', disclosure);
 app.use('/admin/company/otherInfo/dividend', dividend);
 
 

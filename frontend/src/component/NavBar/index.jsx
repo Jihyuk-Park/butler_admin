@@ -38,7 +38,7 @@ export default function NavBar() {
   const companyMenuSingle = ['기업목록', '기업탐색', '개별기업'];
   const companyMenuSingleURL = [
     '/Company/CompanyList',
-    '/Company/CompanySearch',
+    '/Company/SearchCompany',
     '/Company/IndividualCompany',
   ];
 

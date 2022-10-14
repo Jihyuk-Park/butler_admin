@@ -4,7 +4,7 @@ import connection from '../../module/database.js';
 import { itemNumber } from '../../module/constVariable.js';
 import { sortTypeReturn, companyListSortField } from '../../module/companyFunction.js'
 
-// getData 전체 기업 (* stock_code 있는 기업만)
+// 전체 기업 - getData (* stock_code 있는 기업만)
 router.get('/getData/all/:page/:sortField/:sortType', function(req,res){
   let [page, sortField, sortType] = [req.params.page, req.params.sortField, req.params.sortType];
 
@@ -28,7 +28,24 @@ router.get('/getData/all/:page/:sortField/:sortType', function(req,res){
   })
 });
 
-// getData 검색 기업
+// 전체 기업 - getTotalNum (* stock_code 있는 기업만)
+router.get('/getTotalNum/all', function(req,res){
+
+  let sql = `SELECT COUNT(*) as totalnum FROM CompanyInfo
+    WHERE stock_code NOT IN ("")`;
+
+  connection.query(sql, function(err, rows, fields){
+    if (err){
+      console.log(err);
+    } else {
+      res.send(rows[0]);
+      // console.log('전체-페이지네이션 CompanyInfo 개수 카운트 완료', rows[0]);
+    }
+  })
+});
+
+
+// 검색 기업 - getData
 router.get('/getData/search/:searchCompanyCode', function(req,res){
   let searchCompanyCode = req.params.searchCompanyCode;
 
@@ -43,23 +60,6 @@ router.get('/getData/search/:searchCompanyCode', function(req,res){
       console.log(err);
     } else {
       res.send(rows);
-    }
-  })
-});
-
-
-// getTotalNum (* stock_code 있는 기업만)
-router.get('/getTotalNum/all', function(req,res){
-
-  let sql = `SELECT COUNT(*) as totalnum FROM CompanyInfo
-    WHERE stock_code NOT IN ("")`;
-
-  connection.query(sql, function(err, rows, fields){
-    if (err){
-      console.log(err);
-    } else {
-      res.send(rows[0]);
-      // console.log('전체-페이지네이션 CompanyInfo 개수 카운트 완료', rows[0]);
     }
   })
 });

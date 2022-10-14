@@ -13,6 +13,8 @@ import CompanyList from './pages/Company/CompanyList';
 import Stock from './pages/Company/OtherInfo/Stock';
 import Dividend from './pages/Company/OtherInfo/Dividend';
 import Test from './pages/Test/index2';
+import SearchCompany from './pages/Company/SearchCompany';
+import Disclosure from './pages/Company/OtherInfo/Disclosure';
 
 function App() {
   return (
@@ -33,6 +35,8 @@ function App() {
             <Route path="/User/UserDailyCompany" element={<UserDailyCompany />} />
 
             <Route path="/Company/CompanyList" element={<CompanyList />} />
+            <Route path="/Company/SearchCompany" element={<SearchCompany />} />
+            <Route path="/Company/OtherInfo/Disclosure" element={<Disclosure />} />
             <Route path="/Company/OtherInfo/Stock" element={<Stock />} />
             <Route path="/Company/OtherInfo/Dividend" element={<Dividend />} />
           </Routes>

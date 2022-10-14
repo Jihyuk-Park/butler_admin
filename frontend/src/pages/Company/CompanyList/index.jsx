@@ -115,7 +115,6 @@ export default function CompanyList() {
   const openEditModal = data => {
     setEditData(data);
     setEditModalSwitch(true);
-    console.log('부모 스위치 : ', refreshSwitch);
   };
 
   const goToIR = link => {
