@@ -32,8 +32,12 @@ app.use('/admin/company/companyList', companyList);
 // otherInfo
 import disclosure from './router/company/otherInfo/disclosure.js';
 import dividend from './router/company/otherInfo/dividend.js';
+import executive from './router/company/otherInfo/executive.js';
+import minorityShareHolders from './router/company/otherInfo/minorityShareHolders.js';
 app.use('/admin/company/otherInfo/disclosure', disclosure);
 app.use('/admin/company/otherInfo/dividend', dividend);
+app.use('/admin/company/otherInfo/executive', executive);
+app.use('/admin/company/otherInfo/minorityShareHolders', minorityShareHolders);
 
 
 app.listen(port, () => {

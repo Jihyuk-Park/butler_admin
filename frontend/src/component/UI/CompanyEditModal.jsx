@@ -16,6 +16,9 @@ export default function CompanyEditModal({
   editAccountArray,
   searchCompanyCode,
   refreshFunction,
+  // dividend의 se와 같이 account가 따로 존재하는 필드의 경우
+  // executive와 같이 따로 존재하지 않는 경우
+  isAccountFieldExist,
 }) {
   // 기간 목록 및 선택된 버튼 & 기간 state 관리
   const [periodList, setPeriodList] = useState([]);
@@ -56,14 +59,21 @@ export default function CompanyEditModal({
     axios
       .get(`${url}/${where}/getData/period/${searchCompanyCode}/${year}/${quarter}`)
       .then(result => {
-        const tempMap = { ...editInput };
-        result.data.map(function (each) {
-          tempMap[each.name] = each.value;
-          return null;
-        });
-        // console.log(tempMap);
-        setLoadData(result.data);
-        setEditInput(tempMap);
+        // dividend의 se와 같이 account가 따로 존재하는 필드의 경우
+        if (isAccountFieldExist) {
+          const tempMap = { ...editInput };
+          result.data.map(function (each) {
+            tempMap[each.name] = each.value;
+            return null;
+          });
+          // console.log(tempMap);
+          setLoadData(result.data);
+          setEditInput(tempMap);
+          // executive와 같이 따로 존재하지 않는 경우
+        } else {
+          setEditInput(result.data[0]);
+          setLoadData(result.data[0]);
+        }
       })
       .catch(() => {
         console.log('실패했습니다');
@@ -80,21 +90,26 @@ export default function CompanyEditModal({
   };
 
   const saveData = () => {
-    const body = [];
-    Object.entries(editInput).map(function (each) {
-      // 새로운 계정 insert (불러온 loadData에는 계정명이 없으면서 값이 기본 값인 ''이 아닌 것)
-      const temp1 = loadData.filter(data => data.name === each[0]);
-      if (temp1.length === 0 && each[1] !== '') {
-        body.push({ name: each[0], value: each[1], type: 'INSERT' });
-      }
+    let body;
+    if (isAccountFieldExist) {
+      body = [];
+      Object.entries(editInput).map(function (each) {
+        // 새로운 계정 insert (불러온 loadData에는 계정명이 없으면서 값이 기본 값인 ''이 아닌 것)
+        const temp1 = loadData.filter(data => data.name === each[0]);
+        if (temp1.length === 0 && each[1] !== '') {
+          body.push({ name: each[0], value: each[1], type: 'INSERT' });
+        }
+        // 기존 자료 update (계정명, 이름은 있는데 값이 달라진 것)
+        const temp2 = loadData.filter(data => data.name === each[0] && data.value !== each[1]);
+        if (temp2.length !== 0) {
+          body.push({ name: each[0], value: each[1], type: 'UPDATE' });
+        }
+        return null;
+      });
+    } else {
+      body = { ...editInput };
+    }
 
-      // 기존 자료 update (계정명, 이름은 있는데 값이 달라진 것)
-      const temp2 = loadData.filter(data => data.name === each[0] && data.value !== each[1]);
-      if (temp2.length !== 0) {
-        body.push({ name: each[0], value: each[1], type: 'UPDATE' });
-      }
-      return null;
-    });
     // console.log(body);
 
     const year = `20${selectedPeriod.substring(1, 3)}`;
@@ -172,12 +187,16 @@ export default function CompanyEditModal({
             <Grid item xs={9} sx={{ mt: '10px' }}>
               {editAccountArray.map(function (eachdata, index) {
                 let temp = {};
-                loadData.forEach(val => {
-                  if (val.name === eachdata) {
-                    temp = val;
-                    // console.log(val.name);
-                  }
-                });
+                if (isAccountFieldExist) {
+                  loadData.forEach(val => {
+                    if (val.name === eachdata) {
+                      temp = val;
+                      // console.log(val.name);
+                    }
+                  });
+                } else {
+                  temp = { ...loadData };
+                }
                 return (
                   <Grid
                     container
@@ -190,7 +209,11 @@ export default function CompanyEditModal({
                   >
                     <Typography sx={{ mt: '5px' }}>{eachdata}</Typography>
                     <Box>
-                      <TextField value={temp.value || ''} disabled sx={{ mr: '10px' }} />
+                      {isAccountFieldExist === true ? (
+                        <TextField value={temp.value || ''} disabled sx={{ mr: '10px' }} />
+                      ) : (
+                        <TextField value={temp[eachdata] || ''} disabled sx={{ mr: '10px' }} />
+                      )}
                       <TextField
                         value={editInput[eachdata] || ''}
                         disabled={selectedPeriod === ''}
@@ -220,6 +243,7 @@ export default function CompanyEditModal({
 
 CompanyEditModal.defaultProps = {
   editModalSwtich: true,
+  isAccountFieldExist: true,
   where: '',
   searchCompanyCode: '',
   setEditModalSwitch: () => {},
@@ -229,6 +253,7 @@ CompanyEditModal.defaultProps = {
 
 CompanyEditModal.propTypes = {
   editModalSwtich: PropTypes.bool,
+  isAccountFieldExist: PropTypes.bool,
   where: PropTypes.string,
   searchCompanyCode: PropTypes.string,
   setEditModalSwitch: PropTypes.func,

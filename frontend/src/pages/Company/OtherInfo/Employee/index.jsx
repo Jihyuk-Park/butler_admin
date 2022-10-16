@@ -24,7 +24,7 @@ import {
 } from '../../../../component/commonFunction';
 import CompanyEditModal from '../../../../component/UI/CompanyEditModal';
 
-export default function Dividend() {
+export default function Employee() {
   // 기업명 검색 corp_code 관리
   const [searchCompanyCode, setSearchCompanyCode] = useState('');
 
@@ -32,47 +32,29 @@ export default function Dividend() {
   const [editButtonSwitch, setEditButtonSwtich] = useState(false);
   const [editModalSwtich, setEditModalSwitch] = useState(false);
 
-  // dividnedData
-  const [dividendData, setDividendData] = useState([{}]);
-  const dividendAccountArray = [
-    '주당액면가액(원)',
-    '(연결)당기순이익(백만원)',
-    '(별도)당기순이익(백만원)',
-    '(연결)주당순이익(원)',
-    '현금배당금총액(백만원)',
-    '주식배당금총액(백만원)',
-    '(연결)현금배당성향(%)',
-    '보통주 주당 현금배당금(원)',
-    '보통주 수정주당배당금',
-    '보통주 현금배당수익률(%)',
-    '보통주 주당 주식배당(주)',
-    '보통주 주식배당수익률(%)',
-    '우선주 주당 현금배당금(원)',
-    '우선주 수정주당배당금',
-    '우선주 현금배당수익률(%)',
-    '우선주 주당 주식배당(주)',
-    '우선주 주식배당수익률(%)',
+  // buybackData
+  const [employeeData, setEmployeeData] = useState([{}]);
+  const employeeAccountArray = [
+    '남',
+    '근속연수',
+    '급여총액(십억)',
+    '1인평균(백만)',
+    '여',
+    '근속연수',
+    '급여총액',
+    '1인평균',
+    '합계',
+    '근속연수',
+    '급여총액',
+    '1인평균',
   ];
-  const quarterDividendArray = [
-    '현금배당금',
-    '분기 배당금',
-    '분기 배당수익율',
-    '배당금총액(보고)',
-    '분기EPS',
-    '배당성향',
-    '우선주 주당배당금(원)',
-    '우선주 수정주당배당금',
-    '우선주 현금배당수익율(%)',
-    '배당(최근4분기)',
-    '1년 배당금',
-    '1년 배당수익율',
-    '현금배당금총액',
-    '1년 EPS',
-    '1년 배당성향(순이익대비)',
-    '1년 FCFPS',
-    '배당성향(FCF대비)',
-    '우선주 수정주당배당금',
-    '우선주 배당수익율(%)',
+  const employeeAccountArrayQuarter = [
+    '임직원(분기)',
+    '인원수변화(남)',
+    '급여총액(남)',
+    '1인평균(남)',
+    '인원수변화(여)',
+    '......',
   ];
   const periodArray = periodArrayAuto();
 
@@ -80,10 +62,10 @@ export default function Dividend() {
 
   const searchData = () => {
     axios
-      .get(`${url}/admin/company/otherInfo/dividend/getData/search/${searchCompanyCode}`)
+      .get(`${url}/admin/company/otherInfo/employee/getData/search/${searchCompanyCode}`)
       .then(result => {
         // console.log(result.data);
-        setDividendData(result.data);
+        setEmployeeData(result.data);
         setEditButtonSwtich(true);
       })
       .catch(() => {
@@ -122,7 +104,7 @@ export default function Dividend() {
         <Table stickyHeader>
           <TableHead>
             <TableRow>
-              {['배당(연간누적)', ...periodArray].map(function (eachdata, index) {
+              {['직원 내역', ...periodArray].map(function (eachdata, index) {
                 return (
                   <StyledTableCell
                     key={eachdata}
@@ -140,10 +122,10 @@ export default function Dividend() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {dividendAccountArray.map(function (eachdata) {
+            {employeeAccountArray.map(function (eachdata) {
               // 이름이 대응되는 곳에 값 대입
               let temp = {};
-              dividendData.forEach(val => {
+              employeeData.forEach(val => {
                 if (val.name === eachdata) {
                   temp = val;
                   // console.log(val.name);
@@ -173,7 +155,7 @@ export default function Dividend() {
               );
             })}
 
-            {quarterDividendArray.map(function (eachdata) {
+            {employeeAccountArrayQuarter.map(function (eachdata) {
               return (
                 <StyledTableRow key={`Quarter_${eachdata}`}>
                   <PeriodTableCell
@@ -228,9 +210,8 @@ export default function Dividend() {
         <CompanyEditModal
           editModalSwtich={editModalSwtich}
           setEditModalSwitch={setEditModalSwitch}
-          isAccountFieldExist
-          editAccountArray={dividendAccountArray}
-          where="admin/company/otherInfo/dividend"
+          editAccountArray={employeeAccountArray}
+          where="admin/company/otherInfo/buyback"
           searchCompanyCode={searchCompanyCode}
           // 데이터 리프레시를 위한 검색 함수 (수정완료 후 자동으로 호출 할)
           refreshFunction={searchData}

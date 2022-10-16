@@ -15,6 +15,10 @@ import Dividend from './pages/Company/OtherInfo/Dividend';
 import Test from './pages/Test/index2';
 import SearchCompany from './pages/Company/SearchCompany';
 import Disclosure from './pages/Company/OtherInfo/Disclosure';
+import Buyback from './pages/Company/OtherInfo/Buyback';
+import Employee from './pages/Company/OtherInfo/Employee';
+import Executive from './pages/Company/OtherInfo/Executive';
+import MinorityShareHolders from './pages/Company/OtherInfo/MinorityShareHolders';
 
 function App() {
   return (
@@ -39,6 +43,13 @@ function App() {
             <Route path="/Company/OtherInfo/Disclosure" element={<Disclosure />} />
             <Route path="/Company/OtherInfo/Stock" element={<Stock />} />
             <Route path="/Company/OtherInfo/Dividend" element={<Dividend />} />
+            <Route path="/Company/OtherInfo/Buyback" element={<Buyback />} />
+            <Route path="/Company/OtherInfo/Employee" element={<Employee />} />
+            <Route path="/Company/OtherInfo/Executive" element={<Executive />} />
+            <Route
+              path="/Company/OtherInfo/MinorityShareHolders"
+              element={<MinorityShareHolders />}
+            />
           </Routes>
         </Grid>
       </Grid>

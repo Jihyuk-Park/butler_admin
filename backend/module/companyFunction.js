@@ -39,7 +39,18 @@ function companyListSortField (input) {
   return result;
 }
 
+/** 2015년부터 현재년도까지 년도를 반환하는 함수 */
+const periodYearArrayAuto = () => {
+  const thisYear = new Date().getFullYear() - 2000;
+  const yearArr = [];
+  for (let year = 15; year <= thisYear; year += 1) {
+    yearArr.push(year);
+  }
+  return yearArr;
+};
+
 export { 
   sortTypeReturn,
   companyListSortField,
+  periodYearArrayAuto,
 }

@@ -71,7 +71,7 @@ export default function NavBar() {
     '/Company/OtherInfo/Disclosure',
     '/Company/OtherInfo/Stock',
     '/Company/OtherInfo/Dividend',
-    '/Company/OtherInfo/TreasuryStock',
+    '/Company/OtherInfo/Buyback',
     '/Company/OtherInfo/Employee',
     '/Company/OtherInfo/Executive',
     '/Company/OtherInfo/MinorityShareHolders',

@@ -24,7 +24,7 @@ import {
 } from '../../../../component/commonFunction';
 import CompanyEditModal from '../../../../component/UI/CompanyEditModal';
 
-export default function Dividend() {
+export default function Buyback() {
   // 기업명 검색 corp_code 관리
   const [searchCompanyCode, setSearchCompanyCode] = useState('');
 
@@ -32,47 +32,49 @@ export default function Dividend() {
   const [editButtonSwitch, setEditButtonSwtich] = useState(false);
   const [editModalSwtich, setEditModalSwitch] = useState(false);
 
-  // dividnedData
-  const [dividendData, setDividendData] = useState([{}]);
-  const dividendAccountArray = [
-    '주당액면가액(원)',
-    '(연결)당기순이익(백만원)',
-    '(별도)당기순이익(백만원)',
-    '(연결)주당순이익(원)',
-    '현금배당금총액(백만원)',
-    '주식배당금총액(백만원)',
-    '(연결)현금배당성향(%)',
-    '보통주 주당 현금배당금(원)',
-    '보통주 수정주당배당금',
-    '보통주 현금배당수익률(%)',
-    '보통주 주당 주식배당(주)',
-    '보통주 주식배당수익률(%)',
-    '우선주 주당 현금배당금(원)',
-    '우선주 수정주당배당금',
-    '우선주 현금배당수익률(%)',
-    '우선주 주당 주식배당(주)',
-    '우선주 주식배당수익률(%)',
+  // buybackData
+  const [buybackData, setBuybackData] = useState([{}]);
+  const buybackAccountArrayOrdinary = [
+    '직접취득',
+    '기초',
+    '변동',
+    '기말',
+    '신탁계약',
+    '기초',
+    '변동',
+    '기말',
+    '기타',
+    '기초',
+    '변동',
+    '기말',
+    '합계',
+    '기초',
+    '취득',
+    '처분',
+    '소각',
+    '변동',
+    '기말',
   ];
-  const quarterDividendArray = [
-    '현금배당금',
-    '분기 배당금',
-    '분기 배당수익율',
-    '배당금총액(보고)',
-    '분기EPS',
-    '배당성향',
-    '우선주 주당배당금(원)',
-    '우선주 수정주당배당금',
-    '우선주 현금배당수익율(%)',
-    '배당(최근4분기)',
-    '1년 배당금',
-    '1년 배당수익율',
-    '현금배당금총액',
-    '1년 EPS',
-    '1년 배당성향(순이익대비)',
-    '1년 FCFPS',
-    '배당성향(FCF대비)',
-    '우선주 수정주당배당금',
-    '우선주 배당수익율(%)',
+  const buybackAccountArrayPreferred = [
+    '직접취득',
+    '기초',
+    '변동',
+    '기말',
+    '신탁계약',
+    '기초',
+    '변동',
+    '기말',
+    '기타',
+    '기초',
+    '변동',
+    '기말',
+    '합계',
+    '기초',
+    '취득',
+    '처분',
+    '소각',
+    '변동',
+    '기말',
   ];
   const periodArray = periodArrayAuto();
 
@@ -80,10 +82,10 @@ export default function Dividend() {
 
   const searchData = () => {
     axios
-      .get(`${url}/admin/company/otherInfo/dividend/getData/search/${searchCompanyCode}`)
+      .get(`${url}/admin/company/otherInfo/buyback/getData/all/${searchCompanyCode}`)
       .then(result => {
         // console.log(result.data);
-        setDividendData(result.data);
+        setBuybackData(result.data);
         setEditButtonSwtich(true);
       })
       .catch(() => {
@@ -122,7 +124,7 @@ export default function Dividend() {
         <Table stickyHeader>
           <TableHead>
             <TableRow>
-              {['배당(연간누적)', ...periodArray].map(function (eachdata, index) {
+              {['자사주 내역(보통주)', ...periodArray].map(function (eachdata, index) {
                 return (
                   <StyledTableCell
                     key={eachdata}
@@ -140,10 +142,10 @@ export default function Dividend() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {dividendAccountArray.map(function (eachdata) {
+            {buybackAccountArrayOrdinary.map(function (eachdata) {
               // 이름이 대응되는 곳에 값 대입
               let temp = {};
-              dividendData.forEach(val => {
+              buybackData.forEach(val => {
                 if (val.name === eachdata) {
                   temp = val;
                   // console.log(val.name);
@@ -173,7 +175,7 @@ export default function Dividend() {
               );
             })}
 
-            {quarterDividendArray.map(function (eachdata) {
+            {buybackAccountArrayPreferred.map(function (eachdata) {
               return (
                 <StyledTableRow key={`Quarter_${eachdata}`}>
                   <PeriodTableCell
@@ -228,9 +230,8 @@ export default function Dividend() {
         <CompanyEditModal
           editModalSwtich={editModalSwtich}
           setEditModalSwitch={setEditModalSwitch}
-          isAccountFieldExist
-          editAccountArray={dividendAccountArray}
-          where="admin/company/otherInfo/dividend"
+          editAccountArray={[...buybackAccountArrayOrdinary, ...buybackAccountArrayPreferred]}
+          where="admin/company/otherInfo/buyback"
           searchCompanyCode={searchCompanyCode}
           // 데이터 리프레시를 위한 검색 함수 (수정완료 후 자동으로 호출 할)
           refreshFunction={searchData}
