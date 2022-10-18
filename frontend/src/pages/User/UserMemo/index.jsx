@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import moment from 'moment';
-import 'moment/locale/ko';
 import {
   Table,
   TableBody,
@@ -16,6 +14,7 @@ import StyledTableCell from '../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../component/UI/StyledTableRow';
 import CustomModal from '../../../component/UI/CustomModal';
 import { url } from '../../../component/commonVariable';
+import { changeDateDot } from '../../../component/commonFunction';
 import DropDown from '../../../component/UI/DropDown';
 import Pagination from '../../../component/Pagination/index';
 
@@ -140,8 +139,12 @@ export default function UserMemo() {
             {memoData.map(eachdata => (
               <StyledTableRow key={eachdata.id}>
                 <StyledTableCell align="center">{eachdata.id}</StyledTableCell>
-                <StyledTableCell align="center">{changeDate(eachdata.created_at)}</StyledTableCell>
-                <StyledTableCell align="center">{changeDate(eachdata.updated_at)}</StyledTableCell>
+                <StyledTableCell align="center">
+                  {changeDateDot(eachdata.created_at)}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  {changeDateDot(eachdata.updated_at)}
+                </StyledTableCell>
                 <StyledTableCell align="center" sx={{ minWidth: 90, maxWidth: 90 }}>
                   {eachdata.corp_name}
                 </StyledTableCell>
@@ -182,9 +185,4 @@ export default function UserMemo() {
       )}
     </div>
   );
-}
-
-function changeDate(date) {
-  const publishDate = moment(date).format('YYYY.MM.DD');
-  return publishDate;
 }

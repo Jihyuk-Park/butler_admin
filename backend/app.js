@@ -39,6 +39,12 @@ app.use('/admin/company/otherInfo/dividend', dividend);
 app.use('/admin/company/otherInfo/executive', executive);
 app.use('/admin/company/otherInfo/minorityShareHolders', minorityShareHolders);
 
+// IR
+import irList from './router/company/ir/list.js';
+import irIndividual from './router/company/ir/individual.js';
+app.use('/admin/company/ir/list', irList);
+app.use('/admin/company/ir/individual', irIndividual);
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Box, Typography, Button, Grid } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import BusinessIcon from '@mui/icons-material/Business';
@@ -8,6 +8,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 export default function NavBar() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   // 기업 메뉴 드롭다운
   const [companyMenuList, setCompanyMenuList] = useState(false);
@@ -78,7 +79,7 @@ export default function NavBar() {
   ];
 
   const irMenu = ['목록(IR)', '개별기업(IR)'];
-  const irUrl = ['/Company/IR/List', '/Company/IR/Individual'];
+  const irUrl = ['/Company/IR/List', '/Company/IR/Individual/main'];
 
   const sectorMenu = ['목록(부문별)', '개별기업(부문별)'];
   const sectorUrl = ['/Company/Sector/List', '/Company/Sector/Individual'];
@@ -88,6 +89,13 @@ export default function NavBar() {
 
   const companyMenuArray = [financialMenu, otherInfoMenu, irMenu, sectorMenu, regionMenu];
   const companyUrlArray = [financialUrl, otherInfoUrl, irUrl, sectorUrl, regionUrl];
+
+  // navBar 외에서 이동하는 것 보정
+  useEffect(() => {
+    if (location.pathname.includes('IR/Individual')) {
+      setSelectedMenu('개별기업(IR)');
+    }
+  }, [location.pathname]);
 
   const openCompanyMenuList = () => {
     setCompanyMenuList(true);

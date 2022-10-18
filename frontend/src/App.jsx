@@ -19,6 +19,8 @@ import Buyback from './pages/Company/OtherInfo/Buyback';
 import Employee from './pages/Company/OtherInfo/Employee';
 import Executive from './pages/Company/OtherInfo/Executive';
 import MinorityShareHolders from './pages/Company/OtherInfo/MinorityShareHolders';
+import IRList from './pages/Company/IR/List';
+import IRIndividual from './pages/Company/IR/Individual';
 
 function App() {
   return (
@@ -40,6 +42,7 @@ function App() {
 
             <Route path="/Company/CompanyList" element={<CompanyList />} />
             <Route path="/Company/SearchCompany" element={<SearchCompany />} />
+
             <Route path="/Company/OtherInfo/Disclosure" element={<Disclosure />} />
             <Route path="/Company/OtherInfo/Stock" element={<Stock />} />
             <Route path="/Company/OtherInfo/Dividend" element={<Dividend />} />
@@ -50,6 +53,9 @@ function App() {
               path="/Company/OtherInfo/MinorityShareHolders"
               element={<MinorityShareHolders />}
             />
+
+            <Route path="/Company/IR/List" element={<IRList />} />
+            <Route path="/Company/IR/Individual/:searchStockCode" element={<IRIndividual />} />
           </Routes>
         </Grid>
       </Grid>

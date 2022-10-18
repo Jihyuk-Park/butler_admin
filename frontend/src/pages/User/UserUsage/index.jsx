@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import moment from 'moment';
-import 'moment/locale/ko';
 import {
   Table,
   Grid,
@@ -16,6 +14,7 @@ import {
   Typography,
 } from '@mui/material';
 import { url } from '../../../component/commonVariable';
+import { changeDateDot } from '../../../component/commonFunction';
 import OutLinedBox from '../../../component/UI/OutLinedBox';
 import StyledTableCell from '../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../component/UI/StyledTableRow';
@@ -261,10 +260,10 @@ export default function UserUsage() {
                       {eachdata.NickName}
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      {changeDate(eachdata.createdAt)}
+                      {changeDateDot(eachdata.createdAt)}
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      {changeDate(eachdata.updatedAt)}
+                      {changeDateDot(eachdata.updatedAt)}
                     </StyledTableCell>
                     <StyledTableCell align="center">{eachdata.searchCounting || 0}</StyledTableCell>
                     <StyledTableCell align="center">
@@ -404,9 +403,4 @@ export default function UserUsage() {
       <Pagination page={page} totalItem={totalItem} setPage={setPage} />
     </div>
   );
-}
-
-function changeDate(date) {
-  const publishDate = moment(date).format('YYYY.MM.DD');
-  return publishDate;
 }

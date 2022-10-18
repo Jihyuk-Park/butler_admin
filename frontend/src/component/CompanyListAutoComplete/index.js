@@ -9,6 +9,7 @@ import { url } from '../commonVariable';
 export default function CompanyListAutoComplete({
   onChangeCompanyName,
   onChangeCompanyCode,
+  onChangeStockCode,
   clearSwitch,
   minWidth,
 }) {
@@ -44,6 +45,7 @@ export default function CompanyListAutoComplete({
     if (value) {
       onChangeCompanyName(value.corp_name);
       onChangeCompanyCode(value.corp_code);
+      onChangeStockCode(value.stock_code);
     }
   };
 
@@ -81,6 +83,7 @@ export default function CompanyListAutoComplete({
 CompanyListAutoComplete.defaultProps = {
   onChangeCompanyName: () => {},
   onChangeCompanyCode: () => {},
+  onChangeStockCode: () => {},
   clearSwitch: 0,
   minWidth: '100px',
 };
@@ -88,6 +91,7 @@ CompanyListAutoComplete.defaultProps = {
 CompanyListAutoComplete.propTypes = {
   onChangeCompanyName: PropTypes.func,
   onChangeCompanyCode: PropTypes.func,
+  onChangeStockCode: PropTypes.func,
   clearSwitch: PropTypes.number,
   minWidth: PropTypes.string,
 };

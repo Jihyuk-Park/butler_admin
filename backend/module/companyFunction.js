@@ -39,6 +39,27 @@ function companyListSortField (input) {
   return result;
 }
 
+/** (irList) 검색 타입에 따라 필드명을 반환 */
+function irListSortField (input) {
+  let result;
+  // console.log(input);
+
+  if (input === "기업명") {
+    result = 'corp_name';
+  } else if (input === "주식코드") {
+    result = 'stock_code';
+  } else if (input === "최근 작업일") {
+    result = 'recent';
+  } else if (input === "분기실적") {
+    result = 'earning';
+  } else if (input === "프레젠테이션") {
+    result = 'presentation';
+  } else {
+    result = 'ir_url';
+  } 
+  return result;
+}
+
 /** 2015년부터 현재년도까지 년도를 반환하는 함수 */
 const periodYearArrayAuto = () => {
   const thisYear = new Date().getFullYear() - 2000;
@@ -52,5 +73,6 @@ const periodYearArrayAuto = () => {
 export { 
   sortTypeReturn,
   companyListSortField,
+  irListSortField,
   periodYearArrayAuto,
 }

@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import moment from 'moment';
-import 'moment/locale/ko';
 import DatePicker from 'react-datepicker';
 import { ko } from 'date-fns/esm/locale';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -20,6 +18,7 @@ import {
 import StyledTableCell from '../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../component/UI/StyledTableRow';
 import { url } from '../../../../component/commonVariable';
+import { changeDateDot, changeDateNoDot } from '../../../../component/commonFunction';
 import Pagination from '../../../../component/Pagination/index';
 import CompanyListAutoComplete from '../../../../component/CompanyListAutoComplete';
 
@@ -59,9 +58,9 @@ export default function Disclosure() {
     if (isSearch === false) {
       axios
         .get(
-          `${url}/admin/company/otherInfo/disclosure/getData/all/${dbDate(startDate)}/${dbDate(
-            endDate,
-          )}/${page}`,
+          `${url}/admin/company/otherInfo/disclosure/getData/all/${changeDateNoDot(
+            startDate,
+          )}/${changeDateNoDot(endDate)}/${page}`,
         )
         .then(result => {
           // console.log(result.data);
@@ -73,9 +72,9 @@ export default function Disclosure() {
     } else {
       axios
         .get(
-          `${url}/admin/company/otherInfo/disclosure/getData/search/${searchCompanyCode}/${dbDate(
+          `${url}/admin/company/otherInfo/disclosure/getData/search/${searchCompanyCode}/${changeDateNoDot(
             startDate,
-          )}/${dbDate(endDate)}/${page}`,
+          )}/${changeDateNoDot(endDate)}/${page}`,
         )
         .then(result => {
           // console.log(result.data);
@@ -92,9 +91,9 @@ export default function Disclosure() {
     if (isSearch === false) {
       axios
         .get(
-          `${url}/admin/company/otherInfo/disclosure/getTotalNum/all/${dbDate(startDate)}/${dbDate(
-            endDate,
-          )}/`,
+          `${url}/admin/company/otherInfo/disclosure/getTotalNum/all/${changeDateNoDot(
+            startDate,
+          )}/${changeDateNoDot(endDate)}/`,
         )
         .then(result => {
           // console.log(result.data.totalnum);
@@ -106,9 +105,9 @@ export default function Disclosure() {
     } else {
       axios
         .get(
-          `${url}/admin/company/otherInfo/disclosure/getTotalNum/search/${searchCompanyCode}/${dbDate(
+          `${url}/admin/company/otherInfo/disclosure/getTotalNum/search/${searchCompanyCode}/${changeDateNoDot(
             startDate,
-          )}/${dbDate(endDate)}/`,
+          )}/${changeDateNoDot(endDate)}/`,
         )
         .then(result => {
           // console.log(result.data.totalnum);
@@ -258,7 +257,7 @@ export default function Disclosure() {
             {disclosureData.map(eachdata => (
               <StyledTableRow key={eachdata.rcept_no}>
                 <StyledTableCell align="center" sx={{ minWidth: 90, maxWidth: 90 }}>
-                  {changeDate(eachdata.rcept_dt)}
+                  {changeDateDot(eachdata.rcept_dt)}
                 </StyledTableCell>
                 <StyledTableCell
                   align="center"
@@ -289,14 +288,4 @@ export default function Disclosure() {
       <Pagination page={page} totalItem={totalItem} setPage={setPage} />
     </div>
   );
-}
-
-function changeDate(date) {
-  const publishDate = moment(date).format('YYYY.MM.DD');
-  return publishDate;
-}
-
-function dbDate(date) {
-  const publishDate = moment(date).format('YYYYMMDD');
-  return publishDate;
 }

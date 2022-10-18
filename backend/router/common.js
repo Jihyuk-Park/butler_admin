@@ -6,7 +6,7 @@ import connection from '../module/database.js';
 router.get('/getCompanyList/:inputText', function(req,res){
   let inputText = req.params.inputText;
 
-  let sql = `SELECT CONCAT(corp_name, ' ', stock_code) as corp_name, corp_code FROM CompanyInfo WHERE corp_name LIKE "%${inputText}%" || stock_code LIKE "%${inputText}%"`;
+  let sql = `SELECT CONCAT(corp_name, ' ', stock_code) as corp_name, corp_code, stock_code FROM CompanyInfo WHERE corp_name LIKE "%${inputText}%" || stock_code LIKE "%${inputText}%"`;
 
   connection.query(sql, function(err, rows, fields){
     if (err){

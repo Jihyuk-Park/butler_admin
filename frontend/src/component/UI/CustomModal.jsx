@@ -18,8 +18,7 @@ export default function CustomModal({
       <Modal open={customModalSwitch} onClose={modalClose}>
         <Box
           sx={{
-            width: 330,
-            height: 100,
+            width: 350,
             position: 'absolute',
             top: '50%',
             left: '50%',
@@ -27,7 +26,7 @@ export default function CustomModal({
             bgcolor: '#F8F8F8',
             border: '1px solid #B8B8B8;',
             borderRadius: '4px',
-            p: '28px 20px 25px 20px',
+            p: '35px 20px 50px 20px',
             outline: 'none',
           }}
         >
@@ -37,6 +36,7 @@ export default function CustomModal({
             color="#333333"
             fontSize="20px"
             fontWeight={600}
+            whiteSpace="pre-wrap"
           >
             <Box sx={{ mb: '20px' }}>{message}</Box>
           </Typography>

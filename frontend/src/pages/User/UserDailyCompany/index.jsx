@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import moment from 'moment';
 import {
   Table,
   Grid,
@@ -18,6 +17,7 @@ import StyledTableCell from '../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../component/UI/StyledTableRow';
 import FixedBox from '../../../component/UI/FixedBox';
 import { url } from '../../../component/commonVariable';
+import { changeDateDot } from '../../../component/commonFunction';
 import CompanyListAutoComplete from '../../../component/CompanyListAutoComplete';
 import Pagination from '../../../component/Pagination/index';
 
@@ -194,9 +194,9 @@ export default function UserDailyCompany() {
             </TableHead>
             <TableBody>
               {userDailyCompanyData.map(eachdata => (
-                <StyledTableRow key={changeDate(eachdata.date)}>
+                <StyledTableRow key={changeDateDot(eachdata.date)}>
                   <StyledTableCell align="center" component="th" scope="row">
-                    {changeDate(eachdata.date)}
+                    {changeDateDot(eachdata.date)}
                   </StyledTableCell>
                   <StyledTableCell align="center">
                     {eachdata.totalSearchCounting - eachdata.nonMemberSearchCounting || 0}
@@ -291,9 +291,4 @@ export default function UserDailyCompany() {
       </Grid>
     </Grid>
   );
-}
-
-function changeDate(date) {
-  const publishDate = moment(date).format('YYYY.MM.DD');
-  return publishDate;
 }
