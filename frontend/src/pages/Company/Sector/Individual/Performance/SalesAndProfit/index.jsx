@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import {
   Paper,
   Table,
@@ -21,15 +22,16 @@ import {
   addComma,
   changeKeyName,
 } from '../../../../../../component/commonFunction';
-import EditAddSalesModal from './EditAddSalesModal';
+import EditAddSalesAndProfitModal from './EditAddSalesAndProfitModal';
 
-export default function Sales() {
+// * 매출액, 영업이익 공통 컴포넌트 (type에 따라 매출액, 영업이익)
+export default function SalesAndProfit({ type }) {
   // corp_code
   const { searchCorpCode } = useParams();
 
-  // salesData
-  const [salesData, setSalesData] = useState([]);
-  const salesDataArray = ['부문1', '부문2', '부문3'];
+  // salesAndProfitData
+  const [salesAndProfitData, setSalesAndProfitData] = useState([]);
+  const salesAndProfitDataArray = ['부문1', '부문2', '부문3'];
   const periodArray = periodArrayAuto();
   // unit
   const [unit, setUnit] = useState(1);
@@ -43,11 +45,11 @@ export default function Sales() {
   useEffect(() => {
     if (searchCorpCode !== 'main') {
       axios
-        .get(`${url}/admin/company/sector/individual/performance/sales/getData/${searchCorpCode}`)
+        .get(`${url}/admin/company/sector/individual/performance/${type}/getData/${searchCorpCode}`)
         .then(result => {
-          setSalesData(result.data);
+          setSalesAndProfitData(result.data);
           // console.log(result.data);
-          scrollRight();
+          scrollRight(type);
         })
         .catch(() => {
           console.log('실패했습니다');
@@ -62,7 +64,7 @@ export default function Sales() {
         .then(result => {
           // console.log(result.data[0].unit);
           setUnit(result.data[0].unit);
-          scrollRight();
+          scrollRight(type);
         })
         .catch(() => {
           console.log('실패했습니다');
@@ -74,7 +76,7 @@ export default function Sales() {
     setEditModalSwitch(true);
 
     const tempSelectedData = [];
-    const withoutSum = salesData.slice(0, salesData.length - 1);
+    const withoutSum = salesAndProfitData.slice(0, salesAndProfitData.length - 1);
     withoutSum.map(each => {
       tempSelectedData.push({
         id: each.id,
@@ -93,19 +95,20 @@ export default function Sales() {
     <div>
       <Stack direction="row" spacing={2} alignItems="center" sx={{ mt: '20px', pl: '5px' }}>
         <Typography fontSize={20} fontWeight={600}>
-          {salesData.length === 0 ? '매출액 데이터가 없습니다' : '매출액'}
+          {type === 'sales' ? '매출액' : '영업이익'}
+          {salesAndProfitData.length === 0 ? ' 데이터가 없습니다' : null}
         </Typography>
       </Stack>
-      {salesData.length === 0 ? null : (
+      {salesAndProfitData.length === 0 ? null : (
         <TableContainer
-          id="table"
+          id={`table${type}`}
           component={Paper}
           sx={{ maxHeight: { md: '635px', xl: '935px' }, mt: '10px' }}
         >
           <Table stickyHeader>
             <TableHead>
               <TableRow>
-                {[...salesDataArray, ...periodArray].map(function (eachdata, index) {
+                {[...salesAndProfitDataArray, ...periodArray].map(function (eachdata, index) {
                   return (
                     <StyledTableCell
                       key={eachdata}
@@ -135,7 +138,7 @@ export default function Sales() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {salesData.map(function (eachdata, index) {
+              {salesAndProfitData.map(function (eachdata, index) {
                 return (
                   <StyledTableRow
                     key={eachdata.id}
@@ -145,7 +148,7 @@ export default function Sales() {
                       },
                     }}
                   >
-                    {index !== salesData.length - 1 ? (
+                    {index !== salesAndProfitData.length - 1 ? (
                       <>
                         <StyledTableCell
                           align="center"
@@ -230,7 +233,8 @@ export default function Sales() {
       )}
 
       {editModalSwitch === true ? (
-        <EditAddSalesModal
+        <EditAddSalesAndProfitModal
+          type={type}
           editModalSwitch={editModalSwitch}
           setEditModalSwitch={setEditModalSwitch}
           editData={selectedData}
@@ -243,3 +247,11 @@ export default function Sales() {
     </div>
   );
 }
+
+SalesAndProfit.defaultProps = {
+  type: 'sales',
+};
+
+SalesAndProfit.propTypes = {
+  type: PropTypes.string,
+};

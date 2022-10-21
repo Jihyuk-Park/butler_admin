@@ -11,8 +11,8 @@ export const scrollRightUseEffect = () => {
 };
 
 /** 테이블 맨끝으로 이동시키는 함수 */
-export const scrollRight = () => {
-  const scrollTest = document.getElementById('table');
+export const scrollRight = name => {
+  const scrollTest = document.getElementById(`table${name}`);
   scrollTest.scrollTo(4000, 0);
 };
 

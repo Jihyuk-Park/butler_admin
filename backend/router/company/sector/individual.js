@@ -205,8 +205,9 @@ router.post('/info/sector/delete/:id/:searchCompanyCode', function(req,res){
 
 
 // ㅇ 실적
-// 검색 기업 - getData (매출액)
-router.get('/performance/sales/getData/:searchCompanyCode', function(req,res){
+// 검색 기업 - getData (매출액 & 영업이익)
+router.get('/performance/:type/getData/:searchCompanyCode', function(req,res){
+  let type = req.params.type === 'sales' ? '매출액' : '영업이익';
   let searchCompanyCode = req.params.searchCompanyCode;
 
   let periodArray = periodYearArrayAuto();
@@ -238,7 +239,7 @@ router.get('/performance/sales/getData/:searchCompanyCode', function(req,res){
     ${pivotSQL}
     FROM analysis_part_info a
     LEFT JOIN segment_analysis b on a.id = b.analysis_part_info_id
-    WHERE a.corp_code = ${searchCompanyCode} && part_type = "SEGMENT" && title = "매출액"
+    WHERE a.corp_code = ${searchCompanyCode} && part_type = "SEGMENT" && title = "${type}"
     GROUP by a.id
 
     UNION
@@ -247,7 +248,7 @@ router.get('/performance/sales/getData/:searchCompanyCode', function(req,res){
     ${pivotSumSQL}
     FROM analysis_part_info a
     LEFT JOIN segment_analysis b on a.id = b.analysis_part_info_id
-    WHERE a.corp_code = ${searchCompanyCode} && part_type = "SEGMENT" && title = "매출액" && depth2 = "" && depth3 = "";`;
+    WHERE a.corp_code = ${searchCompanyCode} && part_type = "SEGMENT" && title = "${type}" && depth2 = "" && depth3 = "";`;
 	
   connection.query(sql, function(err, rows, fields){
     if (err){
@@ -259,8 +260,9 @@ router.get('/performance/sales/getData/:searchCompanyCode', function(req,res){
 });
 
 
-// 검색 기업 - edit (실적 - 매출액)
-router.post('/performance/sales/edit/:searchCorpCode/:year/:quarter/:unit', function(req, res){
+// 검색 기업 - edit (실적 - 매출액 & 영업이익)
+router.post('/performance/:type/edit/:searchCorpCode/:year/:quarter/:unit', function(req, res){
+  let type = req.params.type === 'sales' ? '매출액' : '영업이익';
   let searchCorpCode = req.params.searchCorpCode;
   let bsns_year = req.params.year;
   let quarter= req.params.quarter;
@@ -276,15 +278,15 @@ router.post('/performance/sales/edit/:searchCorpCode/:year/:quarter/:unit', func
     if (each.isNeed === 1) {
       if (each.type === 'add') {
         sql = `INSERT INTO segment_analysis(corp_code, title_order, title, bsns_year, quarter, value, analysis_part_info_id, created_at, updated_at)
-          VALUES("${searchCorpCode}", "1", "매출액", "${bsns_year}", "${quarter}", ${each.value * unit}, "${each.id}", NOW(), NOW())`;
+          VALUES("${searchCorpCode}", "1", "${type}", "${bsns_year}", "${quarter}", ${each.value * unit}, "${each.id}", NOW(), NOW())`;
       } else {
         // 입력값 모두 지운('') 경우는 null로 표시하기 위해 DELETE  (table 구조 value => NOT NULL)
         if (each.value === '') {
           sql = `DELETE FROM segment_analysis
-            WHERE analysis_part_info_id="${each.id}" && title="매출액" && bsns_year = "${bsns_year}" && quarter = "${quarter}"`;
+            WHERE analysis_part_info_id="${each.id}" && title="${type}" && bsns_year = "${bsns_year}" && quarter = "${quarter}"`;
         } else {
           sql = `UPDATE segment_analysis SET value = ${each.value * unit}, updated_at = NOW()
-            WHERE analysis_part_info_id="${each.id}" && title="매출액" && bsns_year = "${bsns_year}" && quarter = "${quarter}"`;
+            WHERE analysis_part_info_id="${each.id}" && title="${type}" && bsns_year = "${bsns_year}" && quarter = "${quarter}"`;
         }
       }
 

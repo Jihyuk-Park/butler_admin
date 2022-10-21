@@ -20,7 +20,8 @@ import StyledTableCell from '../../../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../../../component/UI/StyledTableRow';
 import { addComma, removeComma } from '../../../../../../component/commonFunction';
 
-export default function EditAddSalesModal({
+export default function EditAddSalesAndProfitModal({
+  type,
   editModalSwitch,
   setEditModalSwitch,
   editData,
@@ -68,7 +69,7 @@ export default function EditAddSalesModal({
     } else {
       axios
         .post(
-          `/admin/company/sector/individual/performance/sales/edit/${searchCorpCode}/${year}/${quarter}/${unit}`,
+          `/admin/company/sector/individual/performance/${type}/edit/${searchCorpCode}/${year}/${quarter}/${unit}`,
           body,
         )
         .then(() => {
@@ -177,7 +178,8 @@ export default function EditAddSalesModal({
   );
 }
 
-EditAddSalesModal.defaultProps = {
+EditAddSalesAndProfitModal.defaultProps = {
+  type: 'sales',
   editModalSwitch: true,
   setEditModalSwitch: () => {},
   editData: [],
@@ -187,7 +189,8 @@ EditAddSalesModal.defaultProps = {
   unit: 1,
 };
 
-EditAddSalesModal.propTypes = {
+EditAddSalesAndProfitModal.propTypes = {
+  type: PropTypes.string,
   editModalSwitch: PropTypes.bool,
   setEditModalSwitch: PropTypes.func,
   // eslint-disable-next-line

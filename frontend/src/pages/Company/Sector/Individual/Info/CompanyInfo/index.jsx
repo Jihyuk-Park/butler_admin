@@ -43,8 +43,9 @@ export default function CompanyInfo() {
       axios
         .get(`${url}/admin/company/sector/individual/info/company/getData/${searchCorpCode}`)
         .then(result => {
-          // console.log(result.data[0]);
-          setCompanyInfoData(result.data[0]);
+          if (result.data[0] !== undefined) {
+            setCompanyInfoData(result.data[0]);
+          }
         })
         .catch(() => {
           console.log('실패했습니다');
