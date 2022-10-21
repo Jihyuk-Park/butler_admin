@@ -17,7 +17,7 @@ import StyledTableCell from '../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../component/UI/StyledTableRow';
 import { url } from '../../../../component/commonVariable';
 import {
-  scrollRight,
+  scrollRightUseEffect,
   periodArrayAuto,
   addComma,
   changeKeyName,
@@ -78,7 +78,7 @@ export default function Buyback() {
   ];
   const periodArray = periodArrayAuto();
 
-  scrollRight();
+  scrollRightUseEffect();
 
   const searchData = () => {
     axios

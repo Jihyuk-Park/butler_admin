@@ -29,6 +29,10 @@ app.use('/admin/user/userDailyCompany', userDailyCompany);
 import companyList from './router/company/companyList.js';
 app.use('/admin/company/companyList', companyList);
 
+// individualCompany
+import individualCompany from './router/company/individualCompany.js';
+app.use('/admin/company/individualCompany', individualCompany);
+
 // otherInfo
 import disclosure from './router/company/otherInfo/disclosure.js';
 import dividend from './router/company/otherInfo/dividend.js';
@@ -39,12 +43,17 @@ app.use('/admin/company/otherInfo/dividend', dividend);
 app.use('/admin/company/otherInfo/executive', executive);
 app.use('/admin/company/otherInfo/minorityShareHolders', minorityShareHolders);
 
-// IR
+// ir
 import irList from './router/company/ir/list.js';
 import irIndividual from './router/company/ir/individual.js';
 app.use('/admin/company/ir/list', irList);
 app.use('/admin/company/ir/individual', irIndividual);
 
+// sector
+import sectorList from './router/company/sector/list.js';
+import sectorIndividual from './router/company/sector/individual.js';
+app.use('/admin/company/sector/list', sectorList);
+app.use('/admin/company/sector/individual', sectorIndividual);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

@@ -17,7 +17,7 @@ import StyledTableCell from '../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../component/UI/StyledTableRow';
 import { url } from '../../../../component/commonVariable';
 import {
-  scrollRight,
+  scrollRightUseEffect,
   periodArrayAuto,
   addComma,
   changeKeyName,
@@ -45,8 +45,7 @@ export default function Executive() {
     '영업이익대비 임원급여 비율',
   ];
   const periodArray = periodArrayAuto();
-
-  scrollRight();
+  scrollRightUseEffect();
 
   const searchData = () => {
     axios

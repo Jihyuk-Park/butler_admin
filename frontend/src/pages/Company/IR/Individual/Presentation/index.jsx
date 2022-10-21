@@ -21,7 +21,7 @@ import StyledTableRow from '../../../../../component/UI/StyledTableRow';
 import DeleteModal from './DeleteModal';
 import AddEditModal from './AddEditModal';
 
-export default function Presentation({ update }) {
+export default function Presentation({ update, refreshSwitch, setRefreshSwitch }) {
   // 기업 stockCode url
   const { searchStockCode } = useParams();
 
@@ -76,6 +76,7 @@ export default function Presentation({ update }) {
             variant="contained"
             color="secondary"
             onClick={openDeleteModal}
+            disabled={searchStockCode === 'main'}
             sx={{ minWidth: '90px' }}
           >
             삭제
@@ -84,6 +85,7 @@ export default function Presentation({ update }) {
             variant="contained"
             color="secondary"
             onClick={openAddEditModal}
+            disabled={searchStockCode === 'main'}
             sx={{ minWidth: '90px' }}
           >
             수정/추가
@@ -134,11 +136,18 @@ export default function Presentation({ update }) {
         <DeleteModal
           deleteModalSwtich={deleteModalSwitch}
           setDeleteModalSwitch={setDeleteModalSwitch}
+          refreshSwitch={refreshSwitch}
+          setRefreshSwitch={setRefreshSwitch}
         />
       ) : null}
 
       {addModalSwitch === true ? (
-        <AddEditModal addModalSwtich={addModalSwitch} setAddModalSwitch={setAddModalSwitch} />
+        <AddEditModal
+          addModalSwtich={addModalSwitch}
+          setAddModalSwitch={setAddModalSwitch}
+          refreshSwitch={refreshSwitch}
+          setRefreshSwitch={setRefreshSwitch}
+        />
       ) : null}
     </div>
   );
@@ -165,8 +174,12 @@ function presentationButton(fileName, searchStockCode) {
 
 Presentation.defaultProps = {
   update: '-',
+  refreshSwitch: true,
+  setRefreshSwitch: () => {},
 };
 
 Presentation.propTypes = {
   update: PropTypes.string,
+  refreshSwitch: PropTypes.bool,
+  setRefreshSwitch: PropTypes.func,
 };

@@ -16,6 +16,9 @@ export default function IRIndividual() {
   const [stockCode, setStockCode] = useState('');
   const [recentData, setRecentData] = useState([]);
 
+  // 리프레시
+  const [refreshSwitch, setRefreshSwitch] = useState(false);
+
   // 최근 작업일과 업데이트 정보를 받아오는 Hook
   useEffect(() => {
     if (searchStockCode !== 'main') {
@@ -29,7 +32,7 @@ export default function IRIndividual() {
           console.log('실패했습니다');
         });
     }
-  }, [searchStockCode]);
+  }, [searchStockCode, refreshSwitch]);
 
   const searchData = () => {
     if (stockCode) {
@@ -54,8 +57,16 @@ export default function IRIndividual() {
         </Stack>
       </Grid>
 
-      <Earning update={changeDateDash(recentData.earning)} />
-      <Presentation update={changeDateDash(recentData.presentation)} />
+      <Earning
+        update={changeDateDash(recentData.earning)}
+        refreshSwitch={refreshSwitch}
+        setRefreshSwitch={setRefreshSwitch}
+      />
+      <Presentation
+        update={changeDateDash(recentData.presentation)}
+        refreshSwitch={refreshSwitch}
+        setRefreshSwitch={setRefreshSwitch}
+      />
     </div>
   );
 }

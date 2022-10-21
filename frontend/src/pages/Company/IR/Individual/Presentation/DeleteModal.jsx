@@ -20,7 +20,12 @@ import StyledTableCell from '../../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../../component/UI/StyledTableRow';
 import CustomModal from '../../../../../component/UI/CustomModal';
 
-export default function DeleteModal({ deleteModalSwtich, setDeleteModalSwitch }) {
+export default function DeleteModal({
+  deleteModalSwtich,
+  setDeleteModalSwitch,
+  refreshSwitch,
+  setRefreshSwitch,
+}) {
   const { searchStockCode } = useParams();
 
   // 프레젠테이션 데이터
@@ -55,7 +60,10 @@ export default function DeleteModal({ deleteModalSwtich, setDeleteModalSwitch })
     setConfirmAllModalSwitch(true);
   };
 
-  const modalClose = () => setDeleteModalSwitch(false);
+  const modalClose = () => {
+    setDeleteModalSwitch(false);
+    setRefreshSwitch(!refreshSwitch);
+  };
 
   return (
     <div>
@@ -174,9 +182,13 @@ export default function DeleteModal({ deleteModalSwtich, setDeleteModalSwitch })
 DeleteModal.defaultProps = {
   deleteModalSwtich: true,
   setDeleteModalSwitch: () => {},
+  refreshSwitch: true,
+  setRefreshSwitch: () => {},
 };
 
 DeleteModal.propTypes = {
   deleteModalSwtich: PropTypes.bool,
   setDeleteModalSwitch: PropTypes.func,
+  refreshSwitch: PropTypes.bool,
+  setRefreshSwitch: PropTypes.func,
 };

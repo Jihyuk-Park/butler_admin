@@ -14,7 +14,7 @@ import CompanyListAutoComplete from '../../../../component/CompanyListAutoComple
 import PeriodTableCell from '../../../../component/UI/PeriodTableCell';
 import StyledTableCell from '../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../component/UI/StyledTableRow';
-import { scrollRight, periodArrayAuto } from '../../../../component/commonFunction';
+import { periodArrayAuto, scrollRightUseEffect } from '../../../../component/commonFunction';
 
 export default function Stock() {
   // 기업명 검색 corp_code 관리
@@ -32,7 +32,7 @@ export default function Stock() {
   ];
   const periodArray = periodArrayAuto();
 
-  scrollRight();
+  scrollRightUseEffect();
 
   const searchData = () => {
     console.log(searchCompanyCode);

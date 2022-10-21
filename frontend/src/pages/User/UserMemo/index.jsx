@@ -88,7 +88,7 @@ export default function UserMemo() {
 
   // 삭제 확인 시, 데이터 삭제
   const deleteMemo = () => {
-    axios.post(`${process.env.REACT_APP_APIURL}/admin/user/userMemo/delete/${memoId}`).then(() => {
+    axios.post(`${url}/admin/user/userMemo/delete/${memoId}`).then(() => {
       setDeleteModal(false);
       memoData.map((eachdata, index) => {
         if (eachdata.id === memoId) {

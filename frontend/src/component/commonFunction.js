@@ -2,12 +2,18 @@ import { useEffect } from 'react';
 import moment from 'moment';
 import 'moment/locale/ko';
 
-/** 테이블 맨끝으로 이동시키는 함수 */
-export const scrollRight = () => {
+/** 테이블 맨끝으로 이동시키는 함수 (useEffect Hook) */
+export const scrollRightUseEffect = () => {
   useEffect(() => {
     const scrollTest = document.getElementById('table');
-    scrollTest.scrollTo(2000, 0);
+    scrollTest.scrollTo(4000, 0);
   }, []);
+};
+
+/** 테이블 맨끝으로 이동시키는 함수 */
+export const scrollRight = () => {
+  const scrollTest = document.getElementById('table');
+  scrollTest.scrollTo(4000, 0);
 };
 
 /** 날짜 형 변환 YYYY-MM-DD */
@@ -37,6 +43,14 @@ export const changeDateNoDot = date => {
   return publishDate;
 };
 
+/** 0,1을 O,X로 변환 */
+export const transOX = input => {
+  if (input === 1) {
+    return 'O';
+  }
+  return 'X';
+};
+
 /** 연도&분기 - 15년 ~ 현재 년도까지 분기별 자동 */
 export const periodArrayAuto = () => {
   const thisYear = new Date().getFullYear() - 2000;
@@ -64,7 +78,15 @@ export const YearArrayAuto = () => {
 export const addComma = input => {
   let newInput = input;
   if (input) {
-    newInput = input.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    newInput = input.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+  return newInput;
+};
+
+export const removeComma = input => {
+  let newInput = input;
+  if (input) {
+    newInput = input.replace(/,/g, '');
   }
   return newInput;
 };

@@ -21,6 +21,9 @@ import Executive from './pages/Company/OtherInfo/Executive';
 import MinorityShareHolders from './pages/Company/OtherInfo/MinorityShareHolders';
 import IRList from './pages/Company/IR/List';
 import IRIndividual from './pages/Company/IR/Individual';
+import SectorList from './pages/Company/Sector/List';
+import SectorIndividual from './pages/Company/Sector/Individual';
+import IndividualCompany from './pages/Company/IndividualCompany';
 
 function App() {
   return (
@@ -32,7 +35,7 @@ function App() {
         <Grid item xs={10.2}>
           <Routes>
             <Route path="Test" element={<Test />} />
-
+            {/* 유저 메뉴 */}
             <Route path="/User/UserInfo" element={<UserInfo />} />
             <Route path="/User/UserEntire" element={<UserEntire />} />
             <Route path="/User/UserMemo" element={<UserMemo />} />
@@ -40,9 +43,14 @@ function App() {
             <Route path="/User/UserCompanyUsage" element={<UserCompanyUsage />} />
             <Route path="/User/UserDailyCompany" element={<UserDailyCompany />} />
 
+            {/* 기업 목록 */}
             <Route path="/Company/CompanyList" element={<CompanyList />} />
+            {/* 기업 탐색 */}
             <Route path="/Company/SearchCompany" element={<SearchCompany />} />
+            {/* 개별 기업 */}
+            <Route path="/Company/IndividualCompany" element={<IndividualCompany />} />
 
+            {/* 기타 정보 */}
             <Route path="/Company/OtherInfo/Disclosure" element={<Disclosure />} />
             <Route path="/Company/OtherInfo/Stock" element={<Stock />} />
             <Route path="/Company/OtherInfo/Dividend" element={<Dividend />} />
@@ -54,8 +62,16 @@ function App() {
               element={<MinorityShareHolders />}
             />
 
+            {/* IR */}
             <Route path="/Company/IR/List" element={<IRList />} />
             <Route path="/Company/IR/Individual/:searchStockCode" element={<IRIndividual />} />
+
+            {/* 부문별 */}
+            <Route path="/Company/Sector/List" element={<SectorList />} />
+            <Route
+              path="/Company/Sector/Individual/:searchCorpCode"
+              element={<SectorIndividual />}
+            />
           </Routes>
         </Grid>
       </Grid>

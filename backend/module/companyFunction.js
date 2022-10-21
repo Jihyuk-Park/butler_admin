@@ -1,3 +1,6 @@
+import connection from './database.js';
+
+// ㅇ 공통
 /** 내림차순/오름차순 타입을 반환 */
 function sortTypeReturn (sortType) {
   if (sortType === "▲") {
@@ -8,6 +11,40 @@ function sortTypeReturn (sortType) {
   return sortType;
 }
 
+/** 2015년부터 현재년도까지 년도를 반환하는 함수 */
+const periodYearArrayAuto = () => {
+  const thisYear = new Date().getFullYear() - 2000;
+  const yearArr = [];
+  for (let year = 15; year <= thisYear; year += 1) {
+    yearArr.push(year);
+  }
+  return yearArr;
+};
+
+/** company_last_commit을 업데이트하는 함수 */
+const updateCommit = (searchCompanyCode, type) => {
+
+  let updateSql = `SELECT COUNT(*) as commit FROM company_last_commit WHERE corp_code='${searchCompanyCode}' && commit_type='${type}'`;
+  connection.query(updateSql, function(err, rows, fields){
+    if (err){
+      console.log(err);
+    } else {
+      if (rows[0].commit === 0){
+        updateSql = `INSERT INTO company_last_commit(corp_code, commit_type, last_commit_date, created_at, updated_at)
+          VALUES('${searchCompanyCode}', '${type}', NOW(), NOW(), NOW())`;
+      } else {
+        updateSql = `UPDATE company_last_commit SET last_commit_date = NOW() WHERE corp_code='${searchCompanyCode}' && commit_type='${type}'`;
+      }
+      connection.query(updateSql, function(err, rows, fields){
+        if (err){
+          console.log(err);
+        } 
+      })
+    }
+  })
+};
+
+// ㅇ 개별
 /** (companyList) 검색 타입에 따라 필드명을 반환 */
 function companyListSortField (input) {
   let result;
@@ -60,19 +97,41 @@ function irListSortField (input) {
   return result;
 }
 
-/** 2015년부터 현재년도까지 년도를 반환하는 함수 */
-const periodYearArrayAuto = () => {
-  const thisYear = new Date().getFullYear() - 2000;
-  const yearArr = [];
-  for (let year = 15; year <= thisYear; year += 1) {
-    yearArr.push(year);
-  }
-  return yearArr;
-};
+
+/** (sectorList) 검색 타입에 따라 필드명을 반환 */
+function sectorListSortField (input) {
+  let result;
+  // console.log(input);
+
+  if (input === "기업명") {
+    result = 'corp_name';
+  } else if (input === "주식코드") {
+    result = 'stock_code';
+  } else if (input === "최근 작업일") {
+    result = 'recent';
+  } else if (input === "최근파일") {
+    result = 'segment_last_updated';
+  } else if (input === "정보1") {
+    result = 'segment_title1';
+  } else if (input === "정보2") {
+    result = 'segment_title2';
+  } else if (input === "소스") {
+    result = 'segment_source';
+  } else if (input === "통화") {
+    result = 'currency';
+  } else if (input === "단위") {
+    result = 'unit';
+  } else {
+    result = 'is_available';
+  } 
+  return result;
+}
 
 export { 
   sortTypeReturn,
   companyListSortField,
   irListSortField,
+  sectorListSortField,
   periodYearArrayAuto,
+  updateCommit,
 }

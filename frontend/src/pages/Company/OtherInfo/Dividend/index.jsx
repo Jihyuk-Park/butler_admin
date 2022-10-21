@@ -17,10 +17,10 @@ import StyledTableCell from '../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../component/UI/StyledTableRow';
 import { url } from '../../../../component/commonVariable';
 import {
-  scrollRight,
   periodArrayAuto,
   addComma,
   changeKeyName,
+  scrollRightUseEffect,
 } from '../../../../component/commonFunction';
 import CompanyEditModal from '../../../../component/UI/CompanyEditModal';
 
@@ -76,7 +76,7 @@ export default function Dividend() {
   ];
   const periodArray = periodArrayAuto();
 
-  scrollRight();
+  scrollRightUseEffect();
 
   const searchData = () => {
     axios

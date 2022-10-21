@@ -7,7 +7,7 @@ import { periodYearArrayAuto } from '../../../module/companyFunction.js'
 router.get('/getData/search/:searchCompanyCode', function(req,res){
   let searchCompanyCode = req.params.searchCompanyCode;
   
-  const periodArray = periodYearArrayAuto();
+  let periodArray = periodYearArrayAuto();
   
   let pivotSQL = '';
   periodArray.map(function (year, index){

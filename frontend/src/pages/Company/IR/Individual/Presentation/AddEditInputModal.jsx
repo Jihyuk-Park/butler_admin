@@ -14,8 +14,8 @@ export default function AddEditInputModal({
   addEditModalSwitch,
   setAddEditModalSwitch,
   editData,
-  refreshSwtich,
-  setRefreshSwtich,
+  refreshSwitch,
+  setRefreshSwitch,
   isEditModal,
   presentationData,
 }) {
@@ -48,6 +48,7 @@ export default function AddEditInputModal({
   const saveData = () => {
     const body = {
       id: editData.id,
+      corp_code: editData.corp_code,
       published_date: editDate,
       conference_name: editConferenceName,
       title: editTitle,
@@ -56,7 +57,7 @@ export default function AddEditInputModal({
     if (isEditModal) {
       axios.post(`/admin/company/ir/individual/edit/presentation`, body).then(() => {
         alert('수정이 완료되었습니다');
-        setRefreshSwtich(!refreshSwtich);
+        setRefreshSwitch(!refreshSwitch);
         modalClose();
       });
     } else {
@@ -85,7 +86,7 @@ export default function AddEditInputModal({
 
         axios.post(`/admin/company/ir/individual/add/presentation`, formData).then(() => {
           alert('추가가 완료되었습니다');
-          setRefreshSwtich(!refreshSwtich);
+          setRefreshSwitch(!refreshSwitch);
           modalClose();
         });
       }
@@ -151,7 +152,6 @@ export default function AddEditInputModal({
                 ) : (
                   <TextField
                     fullWidth
-                    label={each}
                     value={editArray[index - 1][0]}
                     onChange={editArray[index - 1][1]}
                   />
@@ -193,8 +193,8 @@ AddEditInputModal.defaultProps = {
   addEditModalSwitch: true,
   setAddEditModalSwitch: () => {},
   editData: {},
-  refreshSwtich: true,
-  setRefreshSwtich: () => {},
+  refreshSwitch: true,
+  setRefreshSwitch: () => {},
   presentationData: [],
 };
 
@@ -204,8 +204,8 @@ AddEditInputModal.propTypes = {
   setAddEditModalSwitch: PropTypes.func,
   // eslint-disable-next-line
   editData: PropTypes.object,
-  refreshSwtich: PropTypes.bool,
-  setRefreshSwtich: PropTypes.func,
+  refreshSwitch: PropTypes.bool,
+  setRefreshSwitch: PropTypes.func,
   // eslint-disable-next-line
   presentationData: PropTypes.array,
 };

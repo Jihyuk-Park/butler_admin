@@ -19,7 +19,12 @@ import StyledTableCell from '../../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../../component/UI/StyledTableRow';
 import AddEditInputModal from './AddEditInputModal';
 
-export default function AddEditModal({ addModalSwtich, setAddModalSwitch }) {
+export default function AddEditModal({
+  addModalSwtich,
+  setAddModalSwitch,
+  refreshSwitch,
+  setRefreshSwitch,
+}) {
   const { searchStockCode } = useParams();
 
   // 실적발표 데이터
@@ -32,7 +37,7 @@ export default function AddEditModal({ addModalSwtich, setAddModalSwitch }) {
   const [selectedData, setSelectedData] = useState({});
 
   // 수정 / 추가 후 데이터 갱신
-  const [refreshSwtich, setRefreshSwtich] = useState(true);
+  const [refreshSwitch2Depth, setRefreshSwitch2Depth] = useState(true);
 
   useEffect(() => {
     axios
@@ -44,7 +49,7 @@ export default function AddEditModal({ addModalSwtich, setAddModalSwitch }) {
       .catch(() => {
         console.log('실패했습니다');
       });
-  }, [refreshSwtich]);
+  }, [refreshSwitch2Depth]);
 
   const editSelectData = each => {
     setSelectedData(each);
@@ -57,7 +62,10 @@ export default function AddEditModal({ addModalSwtich, setAddModalSwitch }) {
     setAddEditModalSwitch(true);
   };
 
-  const modalClose = () => setAddModalSwitch(false);
+  const modalClose = () => {
+    setAddModalSwitch(false);
+    setRefreshSwitch(!refreshSwitch);
+  };
 
   return (
     <div>
@@ -146,8 +154,8 @@ export default function AddEditModal({ addModalSwtich, setAddModalSwitch }) {
           editData={selectedData}
           addEditModalSwitch={addEditModalSwitch}
           setAddEditModalSwitch={setAddEditModalSwitch}
-          refreshSwtich={refreshSwtich}
-          setRefreshSwtich={setRefreshSwtich}
+          refreshSwitch={refreshSwitch2Depth}
+          setRefreshSwitch={setRefreshSwitch2Depth}
           isEditModal={isEditModal}
           earningData={earningData}
         />
@@ -159,9 +167,13 @@ export default function AddEditModal({ addModalSwtich, setAddModalSwitch }) {
 AddEditModal.defaultProps = {
   addModalSwtich: true,
   setAddModalSwitch: () => {},
+  refreshSwitch: true,
+  setRefreshSwitch: () => {},
 };
 
 AddEditModal.propTypes = {
   addModalSwtich: PropTypes.bool,
   setAddModalSwitch: PropTypes.func,
+  refreshSwitch: PropTypes.bool,
+  setRefreshSwitch: PropTypes.func,
 };

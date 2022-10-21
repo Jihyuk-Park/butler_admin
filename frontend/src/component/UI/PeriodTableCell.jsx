@@ -7,11 +7,11 @@ export default styled(TableCell)(({ theme }) => ({
     color: theme.palette.common.white,
     fontSize: 15,
     padding: '10px 0px',
-    minWidth: 45,
+    minWidth: 40,
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 13,
     padding: '10px 10px',
-    minWidth: 45,
+    minWidth: 40,
   },
 }));

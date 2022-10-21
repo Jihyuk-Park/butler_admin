@@ -17,7 +17,7 @@ export default function SearchCompany() {
 
   return (
     <div>
-      <Box sx={{ height: '95vh' }}>
+      <Box sx={{ height: '92vh', pt: '20px' }}>
         최종 업데이트 <b>2022/10/06 14:00</b>
         <Button variant="contained" color="secondary" onClick={searchComapny} sx={{ ml: '10px' }}>
           기업 탐색 업데이트

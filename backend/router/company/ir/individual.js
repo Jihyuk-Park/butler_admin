@@ -3,6 +3,7 @@ const router = express.Router();
 import multer from 'multer';
 const upload= multer();
 import connection from '../../../module/database.js';
+import { updateCommit } from '../../../module/companyFunction.js'
 
 // ㅇ 공통
 // 검색 기업 - getData (공통 - 기업명, 업데이트 날짜)
@@ -48,11 +49,11 @@ router.get('/getData/search/earning/:searchStockCode', function(req,res){
   })
 });
 
-// 검색 기업 - getData (실적 목록 - deleteModal)
+// 검색 기업 - getData (실적 목록 - deleteModal, addEditModal)
 router.get('/getData/search/earningList/:searchStockCode', function(req,res){
   let searchStockCode = req.params.searchStockCode;
 
-  let sql = `SELECT b.corp_name, a.id, bsns_year, quarter_id, file_name FROM ir_quarter_earning a 
+  let sql = `SELECT b.corp_name, b.corp_code, a.id, bsns_year, quarter_id, file_name FROM ir_quarter_earning a 
     LEFT JOIN CompanyInfo b ON a.stock_code = b.stock_code
     WHERE a.stock_code = ${searchStockCode}
     ORDER BY bsns_year ASC, quarter_id ASC;`;
@@ -73,9 +74,10 @@ router.post('/edit/earning', function(req, res){
   let bsns_year = req.body.bsns_year;
   let quarter_id = req.body.quarter_id;
 
-  // console.log(id, bsns_year, quarter_id);
+  let corp_code = req.body.corp_code;
+  // console.log(id, bsns_year, quarter_id, corp_code);
 
-  var sql = `UPDATE ir_quarter_earning SET bsns_year=?, quarter_id=? WHERE id = ?`;
+  var sql = `UPDATE ir_quarter_earning SET bsns_year=?, quarter_id=?, updated_at=NOW() WHERE id = ?`;
   connection.query(sql, [bsns_year, quarter_id, id], function(err, result, fields){
       if(err){
           console.log(err);
@@ -84,6 +86,9 @@ router.post('/edit/earning', function(req, res){
           return res.json("수정 성공");
       }
   })
+
+  // last commit 업데이트
+  updateCommit(corp_code, 'IR');
 })
 
 // 검색 기업 - add (실적 - 파일, 연도, 분기)
@@ -120,11 +125,11 @@ router.get('/getData/search/presentation/:searchStockCode', function(req,res){
   })
 });
 
-// 검색 기업 - getData (프리젠테이션 목록 - deleteModal)
+// 검색 기업 - getData (프리젠테이션 목록 - deleteModal, addEditModal)
 router.get('/getData/search/presentationList/:searchStockCode', function(req,res){
   let searchStockCode = req.params.searchStockCode;
 
-  let sql = `SELECT b.corp_name, a.id, published_date, conference_name, title, file_name FROM ir_presentation a
+  let sql = `SELECT b.corp_name, b.corp_code, a.id, published_date, conference_name, title, file_name FROM ir_presentation a
     LEFT JOIN CompanyInfo b On a.stock_code = b.stock_code
     WHERE a.stock_code = ${searchStockCode}
     ORDER BY published_date ASC;`;
@@ -146,9 +151,10 @@ router.post('/edit/presentation', function(req, res){
   let conference_name = req.body.conference_name;
   let title = req.body.title;
 
-  // console.log(id, published_date, conference_name, title);
+  let corp_code = req.body.corp_code;
+  // console.log(id, published_date, conference_name, title, corp_code);
 
-  var sql = `UPDATE ir_presentation SET published_date=?, conference_name=?, title=? WHERE id = ?`;
+  var sql = `UPDATE ir_presentation SET published_date=?, conference_name=?, title=?, updated_at=NOW() WHERE id = ?`;
   connection.query(sql, [published_date, conference_name, title, id], function(err, result, fields){
       if(err){
           console.log(err);
@@ -157,6 +163,9 @@ router.post('/edit/presentation', function(req, res){
           return res.json("수정 성공");
       }
   })
+
+  // last commit 업데이트
+  updateCommit(corp_code, 'IR');
 })
 
 // 검색 기업 - add (프리젠테이션 - 파일, 날짜, 행사명, 제목)

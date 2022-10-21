@@ -20,7 +20,7 @@ import StyledTableRow from '../../../../../component/UI/StyledTableRow';
 import DeleteModal from './DeleteModal';
 import AddEditModal from './AddEditModal';
 
-export default function Earning({ update }) {
+export default function Earning({ update, refreshSwitch, setRefreshSwitch }) {
   // 기업 stockCode url
   const { searchStockCode } = useParams();
 
@@ -74,6 +74,7 @@ export default function Earning({ update }) {
           <Button
             variant="contained"
             color="secondary"
+            disabled={searchStockCode === 'main'}
             onClick={openDeleteModal}
             sx={{ minWidth: '90px' }}
           >
@@ -82,6 +83,7 @@ export default function Earning({ update }) {
           <Button
             variant="contained"
             color="secondary"
+            disabled={searchStockCode === 'main'}
             onClick={openAddEditModal}
             sx={{ minWidth: '90px' }}
           >
@@ -140,10 +142,17 @@ export default function Earning({ update }) {
         <DeleteModal
           deleteModalSwtich={deleteModalSwitch}
           setDeleteModalSwitch={setDeleteModalSwitch}
+          refreshSwitch={refreshSwitch}
+          setRefreshSwitch={setRefreshSwitch}
         />
       ) : null}
       {addModalSwitch === true ? (
-        <AddEditModal addModalSwtich={addModalSwitch} setAddModalSwitch={setAddModalSwitch} />
+        <AddEditModal
+          addModalSwtich={addModalSwitch}
+          setAddModalSwitch={setAddModalSwitch}
+          refreshSwitch={refreshSwitch}
+          setRefreshSwitch={setRefreshSwitch}
+        />
       ) : null}
     </div>
   );
@@ -171,8 +180,12 @@ function earningButton(fileName, year, quarter, searchStockCode) {
 
 Earning.defaultProps = {
   update: '-',
+  refreshSwitch: true,
+  setRefreshSwitch: () => {},
 };
 
 Earning.propTypes = {
   update: PropTypes.string,
+  refreshSwitch: PropTypes.bool,
+  setRefreshSwitch: PropTypes.func,
 };

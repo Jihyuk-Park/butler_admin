@@ -82,10 +82,10 @@ export default function NavBar() {
   const irUrl = ['/Company/IR/List', '/Company/IR/Individual/main'];
 
   const sectorMenu = ['목록(부문별)', '개별기업(부문별)'];
-  const sectorUrl = ['/Company/Sector/List', '/Company/Sector/Individual'];
+  const sectorUrl = ['/Company/Sector/List', '/Company/Sector/Individual/main'];
 
   const regionMenu = ['목록(지역별)', '개별기업(지역별)'];
-  const regionUrl = ['/Company/Region/List', '/Company/Region/Individual'];
+  const regionUrl = ['/Company/Region/List', '/Company/Region/Individual/main'];
 
   const companyMenuArray = [financialMenu, otherInfoMenu, irMenu, sectorMenu, regionMenu];
   const companyUrlArray = [financialUrl, otherInfoUrl, irUrl, sectorUrl, regionUrl];
@@ -94,6 +94,10 @@ export default function NavBar() {
   useEffect(() => {
     if (location.pathname.includes('IR/Individual')) {
       setSelectedMenu('개별기업(IR)');
+    } else if (location.pathname.includes('Sector/Individual')) {
+      setSelectedMenu('개별기업(부문별)');
+    } else if (location.pathname.includes('Region/Individual')) {
+      setSelectedMenu('개별기업(지역별)');
     }
   }, [location.pathname]);
 

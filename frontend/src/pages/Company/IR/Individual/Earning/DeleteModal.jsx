@@ -19,7 +19,12 @@ import StyledTableCell from '../../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../../component/UI/StyledTableRow';
 import CustomModal from '../../../../../component/UI/CustomModal';
 
-export default function DeleteModal({ deleteModalSwtich, setDeleteModalSwitch }) {
+export default function DeleteModal({
+  deleteModalSwtich,
+  setDeleteModalSwitch,
+  refreshSwitch,
+  setRefreshSwitch,
+}) {
   const { searchStockCode } = useParams();
 
   // 실적발표 데이터
@@ -34,15 +39,17 @@ export default function DeleteModal({ deleteModalSwtich, setDeleteModalSwitch })
   const [confirmAllModalSwitch, setConfirmAllModalSwitch] = useState(false);
 
   useEffect(() => {
-    axios
-      .get(`${url}/admin/company/ir/individual/getData/search/earningList/${searchStockCode}`)
-      .then(result => {
-        // console.log(result.data);
-        setEarningData(result.data);
-      })
-      .catch(() => {
-        console.log('실패했습니다');
-      });
+    if (searchStockCode !== 'main') {
+      axios
+        .get(`${url}/admin/company/ir/individual/getData/search/earningList/${searchStockCode}`)
+        .then(result => {
+          // console.log(result.data);
+          setEarningData(result.data);
+        })
+        .catch(() => {
+          console.log('실패했습니다');
+        });
+    }
   }, []);
 
   const deleteSelectConfirm = each => {
@@ -54,7 +61,10 @@ export default function DeleteModal({ deleteModalSwtich, setDeleteModalSwitch })
     setConfirmAllModalSwitch(true);
   };
 
-  const modalClose = () => setDeleteModalSwitch(false);
+  const modalClose = () => {
+    setDeleteModalSwitch(false);
+    setRefreshSwitch(!refreshSwitch);
+  };
 
   return (
     <div>
@@ -169,9 +179,13 @@ export default function DeleteModal({ deleteModalSwtich, setDeleteModalSwitch })
 DeleteModal.defaultProps = {
   deleteModalSwtich: true,
   setDeleteModalSwitch: () => {},
+  refreshSwitch: true,
+  setRefreshSwitch: () => {},
 };
 
 DeleteModal.propTypes = {
   deleteModalSwtich: PropTypes.bool,
   setDeleteModalSwitch: PropTypes.func,
+  refreshSwitch: PropTypes.bool,
+  setRefreshSwitch: PropTypes.func,
 };

@@ -27,11 +27,12 @@ export default function CompanyList() {
   const [clearSwitch, setClearSwitch] = useState(0);
 
   // 데이터 정렬 기준 선택
-  const [sortField, setSortField] = useState('기업명');
+  const [sortField, setSortField] = useState('주식코드');
   const [sortType, setSortType] = useState('▲');
 
   // 기업 목록 데이터 관련
   const dataTable = [
+    '번호',
     '기업명',
     '주식코드',
     '기업코드',
@@ -101,13 +102,16 @@ export default function CompanyList() {
   };
 
   const sortData = field => {
-    if (sortField !== field && totalItem !== 1) {
-      setSortField(field);
-    } else if (sortField === field && totalItem !== 1) {
-      if (sortType === '▲') {
-        setSortType('▼');
-      } else {
-        setSortType('▲');
+    if (field !== '번호') {
+      if (sortField !== field && totalItem !== 1) {
+        setSortField(field);
+      } else if (sortField === field && totalItem !== 1) {
+        if (sortType === '▲') {
+          setSortType('▼');
+        } else {
+          setSortField('주식코드');
+          setSortType('▲');
+        }
       }
     }
   };
@@ -183,13 +187,16 @@ export default function CompanyList() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {companyListData.map(eachdata => (
+            {companyListData.map((eachdata, index) => (
               <StyledTableRow key={eachdata.corp_code}>
+                <StyledTableCell align="center" sx={{ minWidth: 30, maxWidth: 30 }}>
+                  {(page - 1) * 20 + index + 1}
+                </StyledTableCell>
                 <StyledTableCell
                   align="center"
                   component="th"
                   scope="row"
-                  sx={{ minWidth: 110, maxWidth: 110 }}
+                  sx={{ minWidth: 105, maxWidth: 105 }}
                 >
                   <Button
                     color="secondary"
@@ -201,9 +208,13 @@ export default function CompanyList() {
                     <u>{eachdata.corp_name}</u>
                   </Button>
                 </StyledTableCell>
-                <StyledTableCell align="center">{eachdata.stock_code}</StyledTableCell>
-                <StyledTableCell align="center">{eachdata.corp_code}</StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 70, maxWidth: 70 }}>
+                <StyledTableCell align="center" sx={{ minWidth: 60, maxWidth: 60 }}>
+                  {eachdata.stock_code}
+                </StyledTableCell>
+                <StyledTableCell align="center" sx={{ minWidth: 60, maxWidth: 60 }}>
+                  {eachdata.corp_code}
+                </StyledTableCell>
+                <StyledTableCell align="center" sx={{ minWidth: 60, maxWidth: 60 }}>
                   {eachdata.market_code}
                 </StyledTableCell>
                 <StyledTableCell align="left" sx={{ minWidth: 100, maxWidth: 100 }}>
@@ -218,17 +229,17 @@ export default function CompanyList() {
                 <StyledTableCell
                   onClick={() => goToIR(eachdata.ir_url)}
                   align="left"
-                  sx={{ minWidth: 170, maxWidth: 170, wordBreak: 'break-all', cursor: 'pointer' }}
+                  sx={{ minWidth: 160, maxWidth: 160, wordBreak: 'break-all', cursor: 'pointer' }}
                 >
                   <u>{eachdata.ir_url}</u>
                 </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: { lg: 60, xl: 70 } }}>
+                <StyledTableCell align="center" sx={{ minWidth: { lg: 40, xl: 70 } }}>
                   {eachdata.Acc_mt}
                 </StyledTableCell>
-                <StyledTableCell align="left" sx={{ minWidth: { lg: 50, xl: 70 } }}>
+                <StyledTableCell align="left" sx={{ minWidth: { lg: 40, xl: 70 } }}>
                   {eachdata.keyword}
                 </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: { lg: 50, xl: 70 } }}>
+                <StyledTableCell align="center" sx={{ minWidth: { lg: 70, xl: 70 } }}>
                   {eachdata.fs_div === 'CFS' ? '연결' : '개별'}
                 </StyledTableCell>
               </StyledTableRow>
