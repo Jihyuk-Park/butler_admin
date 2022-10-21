@@ -85,7 +85,7 @@ export default function NavBar() {
   const sectorUrl = ['/Company/Sector/List', '/Company/Sector/Individual/main'];
 
   const regionMenu = ['목록(지역별)', '개별기업(지역별)'];
-  const regionUrl = ['/Company/Region/List', '/Company/Region/Individual/main'];
+  const regionUrl = ['/Company/Geography/List', '/Company/Geography/Individual/main'];
 
   const companyMenuArray = [financialMenu, otherInfoMenu, irMenu, sectorMenu, regionMenu];
   const companyUrlArray = [financialUrl, otherInfoUrl, irUrl, sectorUrl, regionUrl];
@@ -96,7 +96,7 @@ export default function NavBar() {
       setSelectedMenu('개별기업(IR)');
     } else if (location.pathname.includes('Sector/Individual')) {
       setSelectedMenu('개별기업(부문별)');
-    } else if (location.pathname.includes('Region/Individual')) {
+    } else if (location.pathname.includes('Geography/Individual')) {
       setSelectedMenu('개별기업(지역별)');
     }
   }, [location.pathname]);

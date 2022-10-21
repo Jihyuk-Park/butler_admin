@@ -55,6 +55,12 @@ import sectorIndividual from './router/company/sector/individual.js';
 app.use('/admin/company/sector/list', sectorList);
 app.use('/admin/company/sector/individual', sectorIndividual);
 
+// region
+import geographyList from './router/company/geography/list.js';
+import geographyIndividual from './router/company/geography/individual.js';
+app.use('/admin/company/geography/list', geographyList);
+app.use('/admin/company/geography/individual', geographyIndividual);
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });

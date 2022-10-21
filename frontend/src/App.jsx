@@ -23,6 +23,8 @@ import IRList from './pages/Company/IR/List';
 import IRIndividual from './pages/Company/IR/Individual';
 import SectorList from './pages/Company/Sector/List';
 import SectorIndividual from './pages/Company/Sector/Individual';
+import GeographyList from './pages/Company/Geography/List';
+import GeographyIndividual from './pages/Company/Geography/Individual';
 import IndividualCompany from './pages/Company/IndividualCompany';
 
 function App() {
@@ -71,6 +73,13 @@ function App() {
             <Route
               path="/Company/Sector/Individual/:searchCorpCode"
               element={<SectorIndividual />}
+            />
+
+            {/* 지역별 */}
+            <Route path="/Company/Geography/List" element={<GeographyList />} />
+            <Route
+              path="/Company/Geography/Individual/:searchCorpCode"
+              element={<GeographyIndividual />}
             />
           </Routes>
         </Grid>

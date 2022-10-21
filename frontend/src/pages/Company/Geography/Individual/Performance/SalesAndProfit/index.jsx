@@ -31,7 +31,7 @@ export default function SalesAndProfit({ type }) {
 
   // salesAndProfitData
   const [salesAndProfitData, setSalesAndProfitData] = useState([]);
-  const salesAndProfitDataArray = ['부문1', '부문2', '부문3'];
+  const salesAndProfitDataArray = ['지역1', '지역2', '지역3'];
   const periodArray = periodArrayAuto();
   // unit
   const [unit, setUnit] = useState(1);
@@ -45,12 +45,14 @@ export default function SalesAndProfit({ type }) {
   useEffect(() => {
     if (searchCorpCode !== 'main') {
       axios
-        .get(`${url}/admin/company/sector/individual/performance/${type}/getData/${searchCorpCode}`)
+        .get(
+          `${url}/admin/company/geography/individual/performance/${type}/getData/${searchCorpCode}`,
+        )
         .then(result => {
           if (result.data.length !== 1) {
             setSalesAndProfitData(result.data);
           }
-          // console.log(type, result.data);
+          // console.log(result.data);
           scrollRight(type);
         })
         .catch(() => {
@@ -62,7 +64,7 @@ export default function SalesAndProfit({ type }) {
   useEffect(() => {
     if (searchCorpCode !== 'main') {
       axios
-        .get(`${url}/admin/company/sector/individual/info/company/getData/${searchCorpCode}`)
+        .get(`${url}/admin/company/geography/individual/info/company/getData/${searchCorpCode}`)
         .then(result => {
           // console.log(result.data[0].unit);
           setUnit(result.data[0].unit);
