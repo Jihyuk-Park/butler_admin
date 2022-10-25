@@ -26,6 +26,7 @@ import SectorIndividual from './pages/Company/Sector/Individual';
 import GeographyList from './pages/Company/Geography/List';
 import GeographyIndividual from './pages/Company/Geography/Individual';
 import IndividualCompany from './pages/Company/IndividualCompany';
+import Crawling from './pages/Company/Financial/Crawling';
 
 function App() {
   return (
@@ -51,6 +52,9 @@ function App() {
             <Route path="/Company/SearchCompany" element={<SearchCompany />} />
             {/* 개별 기업 */}
             <Route path="/Company/IndividualCompany" element={<IndividualCompany />} />
+
+            {/* 재무제표 */}
+            <Route path="/Company/Financial/Crawling" element={<Crawling />} />
 
             {/* 기타 정보 */}
             <Route path="/Company/OtherInfo/Disclosure" element={<Disclosure />} />

@@ -18,6 +18,7 @@ import {
 import PropTypes from 'prop-types';
 import StyledTableCell from '../../../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../../../component/UI/StyledTableRow';
+import { url } from '../../../../../../component/commonVariable';
 import { addComma, removeComma } from '../../../../../../component/commonFunction';
 
 export default function EditAddSalesAndProfitModal({
@@ -69,7 +70,7 @@ export default function EditAddSalesAndProfitModal({
     } else {
       axios
         .post(
-          `/admin/company/sector/individual/performance/${type}/edit/${searchCorpCode}/${year}/${quarter}/${unit}`,
+          `${url}/admin/company/sector/individual/performance/${type}/edit/${searchCorpCode}/${year}/${quarter}/${unit}`,
           body,
         )
         .then(() => {

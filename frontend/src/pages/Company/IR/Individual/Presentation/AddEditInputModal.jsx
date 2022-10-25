@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
@@ -19,8 +20,10 @@ export default function AddEditInputModal({
   isEditModal,
   presentationData,
 }) {
+  const { searchStockCode } = useParams();
+  // 필드
   const editField = ['파일명', '날짜', '행사명', '제목'];
-  // 날짜, 행사명, 제목
+  // 날짜, 행사명, 제목 인풋
   const [editDate, setEditDate] = useState(
     isEditModal === true ? changeDateNoDot(editData.published_date) : '',
   );
@@ -55,34 +58,37 @@ export default function AddEditInputModal({
     };
     // console.log(body);
     if (isEditModal) {
-      axios.post(`/admin/company/ir/individual/edit/presentation`, body).then(() => {
-        alert('수정이 완료되었습니다');
-        setRefreshSwitch(!refreshSwitch);
-        modalClose();
-      });
+      const isPeridDuplicate = checkDuplicatePeriod();
+      if (isPeridDuplicate !== 0) {
+        alert('중복된 기간과 행사명이 있습니다');
+      } else {
+        axios.post(`/admin/company/ir/individual/edit/presentation`, body).then(() => {
+          alert('수정이 완료되었습니다');
+          setRefreshSwitch(!refreshSwitch);
+          modalClose();
+        });
+      }
     } else {
       // eslint-disable-next-line
       if (editDate === '' || editConferenceName === '' || editTitle === '' || newFile.name === '') {
         alert('데이터 혹은 파일을 추가해주세요');
       } else {
         const formData = new FormData();
-        formData.append('file', newFile);
         formData.append('published_date', editDate);
         formData.append('conference_name', editConferenceName);
         formData.append('title', editTitle);
+        formData.append('stock_code', searchStockCode);
+        formData.append('directory', '3. IR Presentation');
 
         // 입력한 날짜, 행사명의 데이터가 있는지 체크
-        const checkDuplicatePeriod = presentationData.filter(
-          data =>
-            changeDateNoDot(data.published_date) === editDate &&
-            data.conference_name === editConferenceName,
-        );
-
-        if (checkDuplicatePeriod.length === 0) {
+        const isPeridDuplicate = checkDuplicatePeriod();
+        if (isPeridDuplicate === 0) {
           formData.append('isDuplicate', 0);
         } else {
-          formData.append('isDuplicate', 1);
+          formData.append('isDuplicate', isPeridDuplicate[0].id);
+          formData.append('deleteFileName', isPeridDuplicate[0].file_name);
         }
+        formData.append('file', newFile);
 
         axios.post(`/admin/company/ir/individual/add/presentation`, formData).then(() => {
           alert('추가가 완료되었습니다');
@@ -110,6 +116,22 @@ export default function AddEditInputModal({
         alert('동일한 파일명이 존재합니다');
       }
     }
+  };
+
+  const checkDuplicatePeriod = () => {
+    let isPeriodDuplicate;
+    const checkDuplicateArray = presentationData.filter(
+      data =>
+        changeDateNoDot(data.published_date) === editDate &&
+        data.conference_name === editConferenceName,
+    );
+
+    if (checkDuplicateArray.length === 0) {
+      isPeriodDuplicate = 0;
+    } else {
+      isPeriodDuplicate = checkDuplicateArray;
+    }
+    return isPeriodDuplicate;
   };
 
   return (

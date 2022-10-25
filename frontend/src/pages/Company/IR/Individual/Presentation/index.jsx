@@ -46,7 +46,7 @@ export default function Presentation({ update, refreshSwitch, setRefreshSwitch }
           console.log('실패했습니다');
         });
     }
-  }, [searchStockCode]);
+  }, [searchStockCode, refreshSwitch]);
 
   const openDeleteModal = () => {
     setDeleteModalSwitch(true);

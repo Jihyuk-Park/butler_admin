@@ -44,6 +44,37 @@ const updateCommit = (searchCompanyCode, type) => {
   })
 };
 
+/** company_last_commit을 업데이트하는 함수. corp_code 모를 시 */
+const updateCommitStockCode = (stock_code, type) => {
+  let sql = `SELECT corp_code FROM CompanyInfo WHERE stock_code = "${stock_code}"`
+  connection.query(sql, function(err, rows, fields){
+    if (err){
+      console.log(err);
+    } else {
+      let searchCompanyCode = rows[0].corp_code;
+
+      let updateSql = `SELECT COUNT(*) as commit FROM company_last_commit WHERE corp_code='${searchCompanyCode}' && commit_type='${type}'`;
+      connection.query(updateSql, function(err, rows, fields){
+        if (err){
+          console.log(err);
+        } else {
+          if (rows[0].commit === 0){
+            updateSql = `INSERT INTO company_last_commit(corp_code, commit_type, last_commit_date, created_at, updated_at)
+              VALUES('${searchCompanyCode}', '${type}', NOW(), NOW(), NOW())`;
+          } else {
+            updateSql = `UPDATE company_last_commit SET last_commit_date = NOW() WHERE corp_code='${searchCompanyCode}' && commit_type='${type}'`;
+          }
+          connection.query(updateSql, function(err, rows, fields){
+            if (err){
+              console.log(err);
+            } 
+          })
+        }
+      })
+    }
+  })
+};
+
 // ㅇ 개별
 /** (companyList) 검색 타입에 따라 필드명을 반환 */
 function companyListSortField (input) {
@@ -134,4 +165,5 @@ export {
   sectorListSortField,
   periodYearArrayAuto,
   updateCommit,
+  updateCommitStockCode,
 }

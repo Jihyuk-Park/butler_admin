@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
@@ -19,9 +20,11 @@ export default function AddEditInputModal({
   isEditModal,
   earningData,
 }) {
+  const { searchStockCode } = useParams();
+  // 필드
   const editField = ['파일명', '사업연도', '분기'];
-  // 연도 및 분기
-  const yearArray = YearArrayAuto();
+  // 연도 및 분기 인풋
+  const yearArray = YearArrayAuto(2000);
   const quarterArray = ['1', '2', '3', '4'];
   const [editYear, setEditYear] = useState(
     isEditModal === true ? editData.bsns_year.toString() : '',
@@ -41,7 +44,10 @@ export default function AddEditInputModal({
   const [newFile, setNewFile] = useState({ name: '' });
   const fileInput = useRef();
 
-  const modalClose = () => setAddEditModalSwitch(false);
+  const modalClose = () => {
+    setAddEditModalSwitch(false);
+    setRefreshSwitch(!refreshSwitch);
+  };
 
   const saveData = () => {
     const body = {
@@ -52,32 +58,37 @@ export default function AddEditInputModal({
     };
     // console.log(body);
     if (isEditModal) {
-      axios.post(`/admin/company/ir/individual/edit/earning`, body).then(() => {
-        alert('수정이 완료되었습니다');
-        setRefreshSwitch(!refreshSwitch);
-        modalClose();
-      });
+      const isPeridDuplicate = checkDuplicatePeriod();
+      if (isPeridDuplicate !== 0) {
+        alert('중복된 기간이 있습니다');
+      } else {
+        axios.post(`/admin/company/ir/individual/edit/earning`, body).then(() => {
+          alert('수정이 완료되었습니다');
+          setRefreshSwitch(!refreshSwitch);
+          modalClose();
+        });
+      }
     } else {
       // eslint-disable-next-line
       if (editYear === '' || editQuarter === '' || newFile.name === '') {
         alert('데이터 혹은 파일을 추가해주세요');
       } else {
         const formData = new FormData();
-        formData.append('file', newFile);
         formData.append('bsns_year', editYear);
         formData.append('quarter_id', editQuarter);
+        formData.append('stock_code', searchStockCode);
+        formData.append('directory', '1. Earnings Release');
 
         // 입력한 연도, 분기에 데이터가 있는지 체크
-        const checkDuplicatePeriod = earningData.filter(
-          data =>
-            data.bsns_year === parseInt(editYear, 10) &&
-            data.quarter_id === parseInt(editQuarter, 10),
-        );
-        if (checkDuplicatePeriod.length === 0) {
+        const isPeridDuplicate = checkDuplicatePeriod();
+        if (isPeridDuplicate === 0) {
           formData.append('isDuplicate', 0);
         } else {
-          formData.append('isDuplicate', 1);
+          formData.append('isDuplicate', isPeridDuplicate[0].id);
+          formData.append('deleteFileName', isPeridDuplicate[0].file_name);
         }
+
+        formData.append('file', newFile);
 
         axios.post(`/admin/company/ir/individual/add/earning`, formData).then(() => {
           alert('추가가 완료되었습니다');
@@ -105,6 +116,21 @@ export default function AddEditInputModal({
         alert('동일한 파일명이 존재합니다');
       }
     }
+  };
+
+  const checkDuplicatePeriod = () => {
+    let isPeriodDuplicate;
+    const checkDuplicateArray = earningData.filter(
+      data =>
+        data.bsns_year === parseInt(editYear, 10) && data.quarter_id === parseInt(editQuarter, 10),
+    );
+
+    if (checkDuplicateArray.length === 0) {
+      isPeriodDuplicate = 0;
+    } else {
+      isPeriodDuplicate = checkDuplicateArray;
+    }
+    return isPeriodDuplicate;
   };
 
   return (

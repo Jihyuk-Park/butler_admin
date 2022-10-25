@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import {
   Grid,
   Button,
@@ -14,6 +15,7 @@ import CompanyListAutoComplete from '../../../../component/CompanyListAutoComple
 import PeriodTableCell from '../../../../component/UI/PeriodTableCell';
 import StyledTableCell from '../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../component/UI/StyledTableRow';
+import { url } from '../../../../component/commonVariable';
 import { periodArrayAuto, scrollRightUseEffect } from '../../../../component/commonFunction';
 
 export default function Stock() {
@@ -35,8 +37,15 @@ export default function Stock() {
   scrollRightUseEffect();
 
   const searchData = () => {
-    console.log(searchCompanyCode);
-    setStockData([{}]);
+    axios
+      .get(`${url}/admin/company/otherInfo/stock/getData/search/${searchCompanyCode}`)
+      .then(result => {
+        // console.log(result.data);
+        setStockData(result.data);
+      })
+      .catch(() => {
+        console.log('실패했습니다');
+      });
   };
 
   return (

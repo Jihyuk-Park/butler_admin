@@ -58,13 +58,13 @@ export default function NavBar() {
     '재무상태표',
   ];
   const financialUrl = [
-    '/Compamny/Financial/IncomeStatement',
-    '/Compamny/Financial/CashFlowStatement',
-    '/Compamny/Financial/Analysis',
-    '/Compamny/Financial/Valuation',
-    '/Compamny/Financial/DartAPI',
-    '/Compamny/Financial/Crawling',
-    '/Compamny/Financial/FinancialStatement',
+    '/Company/Financial/IncomeStatement',
+    '/Company/Financial/CashFlowStatement',
+    '/Company/Financial/Analysis',
+    '/Company/Financial/Valuation',
+    '/Company/Financial/DartAPI',
+    '/Company/Financial/Crawling',
+    '/Company/Financial/FinancialStatement',
   ];
 
   const otherInfoMenu = ['공시 목록', '주식', '배당', '자사주', '직원', '임원', '소액주주'];

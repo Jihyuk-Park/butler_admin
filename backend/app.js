@@ -35,10 +35,12 @@ app.use('/admin/company/individualCompany', individualCompany);
 
 // otherInfo
 import disclosure from './router/company/otherInfo/disclosure.js';
+import stock from './router/company/otherInfo/stock.js';
 import dividend from './router/company/otherInfo/dividend.js';
 import executive from './router/company/otherInfo/executive.js';
 import minorityShareHolders from './router/company/otherInfo/minorityShareHolders.js';
 app.use('/admin/company/otherInfo/disclosure', disclosure);
+app.use('/admin/company/otherInfo/stock', stock);
 app.use('/admin/company/otherInfo/dividend', dividend);
 app.use('/admin/company/otherInfo/executive', executive);
 app.use('/admin/company/otherInfo/minorityShareHolders', minorityShareHolders);

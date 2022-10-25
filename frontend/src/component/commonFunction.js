@@ -63,11 +63,11 @@ export const periodArrayAuto = () => {
   return yearArr;
 };
 
-/** 년 - 2000년 ~ 현재 년도까지 자동 */
-export const YearArrayAuto = () => {
+/** 년 - n년 ~ 현재 년도까지 자동 */
+export const YearArrayAuto = startYear => {
   const thisYear = new Date().getFullYear();
   const yearArr = [];
-  for (let year = 2000; year <= thisYear; year += 1) {
+  for (let year = startYear; year <= thisYear; year += 1) {
     // 문자열
     yearArr.push(`${year}`);
   }

@@ -50,15 +50,36 @@ export default function DeleteModal({
           console.log('실패했습니다');
         });
     }
-  }, []);
+  }, [refreshSwitch]);
 
-  const deleteSelectConfirm = each => {
+  const openDeleteSelectConfirm = each => {
     setSelectedData(each);
     setConfirmSelectModalSwitch(true);
   };
 
-  const deleteAllConfirm = () => {
+  const deleteSelectedData = () => {
+    // console.log(selectedData);
+    const body = { ...selectedData };
+
+    axios.post(`${url}/admin/company/ir/individual/delete/earning/select`, body).then(() => {
+      alert('삭제가 완료되었습니다');
+      setRefreshSwitch(!refreshSwitch);
+      setConfirmSelectModalSwitch(false);
+    });
+  };
+
+  const openDeleteAllConfirm = () => {
     setConfirmAllModalSwitch(true);
+  };
+
+  const deleteAllData = () => {
+    const body = [...earningData];
+
+    axios.post(`${url}/admin/company/ir/individual/delete/earning/all`, body).then(() => {
+      alert('삭제가 완료되었습니다');
+      setConfirmAllModalSwitch(false);
+      setRefreshSwitch(!refreshSwitch);
+    });
   };
 
   const modalClose = () => {
@@ -129,7 +150,7 @@ export default function DeleteModal({
                     <StyledTableCell align="center" sx={{ minWidth: 70, maxWidth: 70 }}>
                       <Button
                         onClick={() => {
-                          deleteSelectConfirm(eachdata);
+                          openDeleteSelectConfirm(eachdata);
                         }}
                         sx={{ py: 0 }}
                       >
@@ -145,7 +166,7 @@ export default function DeleteModal({
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Button
               variant="contained"
-              onClick={deleteAllConfirm}
+              onClick={openDeleteAllConfirm}
               sx={{ color: 'white', mr: '10px' }}
             >
               전체 삭제
@@ -162,6 +183,7 @@ export default function DeleteModal({
           message={`${selectedData.bsns_year}년 ${selectedData.quarter_id}분기 실적발표 자료를\n삭제하시겠습니까?`}
           customModalSwitch={confirmSelectModalSwitch}
           setCustomModalSwitch={setConfirmSelectModalSwitch}
+          customFunction={deleteSelectedData}
         />
       )}
 
@@ -170,6 +192,7 @@ export default function DeleteModal({
           message={`${earningData[0].corp_name}의 모든 실적발표 자료를\n삭제하시겠습니까?`}
           customModalSwitch={confirmAllModalSwitch}
           setCustomModalSwitch={setConfirmAllModalSwitch}
+          customFunction={deleteAllData}
         />
       )}
     </div>

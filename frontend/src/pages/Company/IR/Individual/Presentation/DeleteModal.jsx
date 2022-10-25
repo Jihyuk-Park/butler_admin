@@ -49,15 +49,36 @@ export default function DeleteModal({
       .catch(() => {
         console.log('실패했습니다');
       });
-  }, []);
+  }, [refreshSwitch]);
 
-  const deleteSelectConfirm = each => {
+  const openDeleteSelectConfirm = each => {
     setSelectedData(each);
     setConfirmSelectModalSwitch(true);
   };
 
-  const deleteAllConfirm = () => {
+  const deleteSelectedData = () => {
+    const body = { ...selectedData };
+    // console.log(body);
+
+    axios.post(`${url}/admin/company/ir/individual/delete/presentation/select`, body).then(() => {
+      alert('삭제가 완료되었습니다');
+      setConfirmSelectModalSwitch(false);
+      setRefreshSwitch(!refreshSwitch);
+    });
+  };
+
+  const openDeleteAllConfirm = () => {
     setConfirmAllModalSwitch(true);
+  };
+
+  const deleteAllData = () => {
+    const body = [...presentationData];
+
+    axios.post(`${url}/admin/company/ir/individual/delete/presentation/all`, body).then(() => {
+      alert('삭제가 완료되었습니다');
+      setConfirmAllModalSwitch(false);
+      setRefreshSwitch(!refreshSwitch);
+    });
   };
 
   const modalClose = () => {
@@ -130,7 +151,7 @@ export default function DeleteModal({
                     <StyledTableCell align="center" sx={{ minWidth: 60, maxWidth: 60 }}>
                       <Button
                         onClick={() => {
-                          deleteSelectConfirm(eachdata);
+                          openDeleteSelectConfirm(eachdata);
                         }}
                         sx={{ py: 0 }}
                       >
@@ -146,7 +167,7 @@ export default function DeleteModal({
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Button
               variant="contained"
-              onClick={deleteAllConfirm}
+              onClick={openDeleteAllConfirm}
               sx={{ color: 'white', mr: '10px' }}
             >
               전체 삭제
@@ -165,6 +186,7 @@ export default function DeleteModal({
           )} 프리젠테이션 자료를\n삭제하시겠습니까?`}
           customModalSwitch={confirmSelectModalSwitch}
           setCustomModalSwitch={setConfirmSelectModalSwitch}
+          customFunction={deleteSelectedData}
         />
       )}
 
@@ -173,6 +195,7 @@ export default function DeleteModal({
           message={`${presentationData[0].corp_name}의 모든 프리젠테이션 자료를\n삭제하시겠습니까?`}
           customModalSwitch={confirmAllModalSwitch}
           setCustomModalSwitch={setConfirmAllModalSwitch}
+          customFunction={deleteAllData}
         />
       )}
     </div>
