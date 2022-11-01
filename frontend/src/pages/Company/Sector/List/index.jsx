@@ -115,7 +115,7 @@ export default function SectorList() {
   };
 
   const goToIndividual = code => {
-    navigate(`${url}/Company/Sector/Individual/${code}`);
+    navigate(`/Company/Sector/Individual/${code}`);
   };
 
   return (

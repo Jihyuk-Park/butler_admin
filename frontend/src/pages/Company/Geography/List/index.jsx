@@ -115,7 +115,7 @@ export default function GeographyList() {
   };
 
   const goToIndividual = code => {
-    navigate(`${url}/Company/Geography/Individual/${code}`);
+    navigate(`/Company/Geography/Individual/${code}`);
   };
 
   return (

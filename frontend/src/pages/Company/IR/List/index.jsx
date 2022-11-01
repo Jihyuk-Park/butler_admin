@@ -111,7 +111,7 @@ export default function IRList() {
   };
 
   const goToIndividual = code => {
-    navigate(`${url}/Company/IR/Individual/${code}`);
+    navigate(`/Company/IR/Individual/${code}`);
   };
 
   const goToIR = link => {
