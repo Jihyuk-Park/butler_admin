@@ -5,6 +5,8 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
 
+/** 확인과 취소만 있는 모달을 위한 컴포넌트
+ * 확인 클릭 시 수행 할 함수는 상위 컴포넌트에서 customFunction이라는 custom함수를 주입 */
 export default function CustomModal({
   customModalSwitch,
   setCustomModalSwitch,

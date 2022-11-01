@@ -12,10 +12,13 @@ export default function NavBar() {
 
   // 기업 메뉴 드롭다운
   const [companyMenuList, setCompanyMenuList] = useState(false);
+  // 기업 메뉴 목록들 중 선택한 메뉴의 볼드 처리를 위한 state
   const [selectedCompanyMenu, setSelectedCompanyMenu] = useState(100);
+
   // 유저 메뉴 드롭다운
   const [userList, setUserList] = useState(false);
 
+  // 최종 하위 메뉴의 배경색 및 볼드 처리를 위한 state
   const [selectedMenu, setSelectedMenu] = useState('');
 
   const userMenu = [
@@ -48,34 +51,22 @@ export default function NavBar() {
 
   // 하위 메뉴 목록
   // 4. 재무제표 ~ 8. 지역별
-  const financialMenu = [
-    '손익계산서',
-    '현금흐름표',
-    '분석',
-    '밸류',
-    'DART API',
-    '크롤링',
-    '재무상태표',
-  ];
+  const financialMenu = ['DART', '크롤링', '관리'];
   const financialUrl = [
-    '/Company/Financial/IncomeStatement',
-    '/Company/Financial/CashFlowStatement',
-    '/Company/Financial/Analysis',
-    '/Company/Financial/Valuation',
-    '/Company/Financial/DartAPI',
+    '/Company/Financial/Dart',
     '/Company/Financial/Crawling',
-    '/Company/Financial/FinancialStatement',
+    '/Company/Financial/Management',
   ];
 
   const otherInfoMenu = ['공시 목록', '주식', '배당', '자사주', '직원', '임원', '소액주주'];
   const otherInfoUrl = [
     '/Company/OtherInfo/Disclosure',
-    '/Company/OtherInfo/Stock',
-    '/Company/OtherInfo/Dividend',
-    '/Company/OtherInfo/Buyback',
-    '/Company/OtherInfo/Employee',
-    '/Company/OtherInfo/Executive',
-    '/Company/OtherInfo/MinorityShareHolders',
+    '/Company/OtherInfo/Stock/main',
+    '/Company/OtherInfo/Dividend/main',
+    '/Company/OtherInfo/Buyback/main',
+    '/Company/OtherInfo/Employee/main',
+    '/Company/OtherInfo/Executive/main',
+    '/Company/OtherInfo/MinorityShareHolders/main',
   ];
 
   const irMenu = ['목록(IR)', '개별기업(IR)'];
@@ -90,7 +81,7 @@ export default function NavBar() {
   const companyMenuArray = [financialMenu, otherInfoMenu, irMenu, sectorMenu, regionMenu];
   const companyUrlArray = [financialUrl, otherInfoUrl, irUrl, sectorUrl, regionUrl];
 
-  // navBar 외에서 이동하는 것 보정
+  // navBar 이용하지 않고 이동 시 보정 (ex) 기업 선택 시, 개별 기업 이동 등)
   useEffect(() => {
     if (location.pathname.includes('IR/Individual')) {
       setSelectedMenu('개별기업(IR)');
@@ -101,6 +92,7 @@ export default function NavBar() {
     }
   }, [location.pathname]);
 
+  // 각 메뉴 open & close
   const openCompanyMenuList = () => {
     setCompanyMenuList(true);
   };
@@ -113,6 +105,8 @@ export default function NavBar() {
   const closeUserList = () => {
     setUserList(false);
   };
+
+  // 페이지 이동 및 선택한 메뉴 css 효과 적용을 위한 setState
   const goToLink = (link, eachdata) => {
     navigate(link);
     setSelectedMenu(eachdata);

@@ -6,6 +6,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+// MUI 전체 테마
 const theme = createTheme({
   palette: {
     primary: {

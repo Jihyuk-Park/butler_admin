@@ -1,24 +1,13 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Stack, Button, ButtonGroup, Box } from '@mui/material';
-import { url } from '../../../../component/commonVariable';
-import CompanyListAutoComplete from '../../../../component/CompanyListAutoComplete';
 import SectorIndividualInfo from './Info';
 import SectorIndividualPerformance from './Performance';
+import CompanySearchNMove from '../../../../component/UI/CompanySearchNMove';
 
 export default function SectorIndividual() {
-  const navigate = useNavigate();
-
-  // 기업명 검색 corp_code 관리 (* ir은 stock_code로 연결)
-  const [corpCode, setCorpCode] = useState('');
-
   // 정보, 실적 모드 전환
   const modeList = ['정보', '실적'];
   const [mode, setMode] = useState('정보');
-
-  const searchData = () => {
-    navigate(`${url}/Company/Sector/Individual/${corpCode}`);
-  };
 
   const selectMode = select => {
     setMode(select);
@@ -26,12 +15,8 @@ export default function SectorIndividual() {
 
   return (
     <div>
-      <Stack direction="row" spacing={2} alignItems="center">
-        <CompanyListAutoComplete onChangeCompanyCode={setCorpCode} minWidth="300px" />
-        <Button variant="contained" color="secondary" onClick={searchData} sx={{ mr: '50px' }}>
-          검색
-        </Button>
-      </Stack>
+      <CompanySearchNMove navigateTo="Company/Sector/Individual" />
+
       <Stack direction="row" sx={{ mt: '15px' }}>
         <ButtonGroup variant="contained" color="secondary">
           {modeList.map(function (each) {

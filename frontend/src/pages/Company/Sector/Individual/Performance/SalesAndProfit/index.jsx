@@ -78,6 +78,7 @@ export default function SalesAndProfit({ type }) {
     setEditModalSwitch(true);
 
     const tempSelectedData = [];
+
     const withoutSum = salesAndProfitData.slice(0, salesAndProfitData.length - 1);
     withoutSum.map(each => {
       tempSelectedData.push({

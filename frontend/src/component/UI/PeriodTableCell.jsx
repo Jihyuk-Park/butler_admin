@@ -1,6 +1,7 @@
 import { styled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 
+/** 15Q1 ~ 22Q2까지의 TableCell  */
 export default styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: '#888888',

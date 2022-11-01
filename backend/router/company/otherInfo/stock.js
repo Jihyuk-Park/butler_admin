@@ -1,20 +1,29 @@
 import express from 'express';
 const router = express.Router();
-import { s3 } from '../../../module/aws.js';
+import { getDataS3 } from '../../../module/aws.js';
+import { filterS3Data } from '../../../module/companyFunction.js';
 
 // getData
-router.get('/getData/search/:searchCompanyCode', function(req,res){
+router.get('/getData/search/:reportsType/:searchCompanyCode', async function(req,res){
+
   let searchCompanyCode = req.params.searchCompanyCode;
+  let reportsType = req.params.reportsType;
+  let S3Data = await getDataS3(searchCompanyCode, reportsType);
 
-  let params = {Bucket: 'butler-dev-storage', Key: 'v1/00266961_OFS.json'}
-  // let params = {Bucket: 'butler-dev-storage/v1', Key: '00266961_OFS.json'}
+  if (S3Data === "X"){
+    return res.json("X");
+  }
 
-  s3.getObject(params, function(err, data) {
-    if (err) console.log(err, err.stack); // an error occurred
-    else     console.log(data);           // successful response
-  });
+  let accountArray = [
+    { type_nm: '최종거래일', type: 'date' },
+    { type_nm: '수정주가', type: 'price' },
+    { type_nm: '발행주식수(천주)', type: 'totalStockCount' },
+    { type_nm: '보통주 시가총액', type: 'market_capital' },
+  ];
 
+  const stockData = filterS3Data(accountArray, S3Data, 'stock');
+
+  return res.json(stockData);
 });
-
 
 export default router;

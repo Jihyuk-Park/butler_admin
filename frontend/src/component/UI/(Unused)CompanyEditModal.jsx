@@ -9,6 +9,8 @@ import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
 import { url } from '../commonVariable';
 
+
+// 미사용. 기업 - 기타정보 DB 수정 시 활용예정이던 공통 component
 export default function CompanyEditModal({
   editModalSwtich,
   setEditModalSwitch,
@@ -260,3 +262,5 @@ CompanyEditModal.propTypes = {
   editAccountArray: PropTypes.arrayOf(PropTypes.string),
   refreshFunction: PropTypes.func,
 };
+
+

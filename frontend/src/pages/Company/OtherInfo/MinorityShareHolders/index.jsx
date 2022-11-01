@@ -1,17 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import {
-  Grid,
-  Button,
-  Stack,
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableBody,
-  TableContainer,
-} from '@mui/material';
-import CompanyListAutoComplete from '../../../../component/CompanyListAutoComplete';
+import { Paper, Table, TableHead, TableRow, TableBody, TableContainer } from '@mui/material';
 import PeriodTableCell from '../../../../component/UI/PeriodTableCell';
 import StyledTableCell from '../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../component/UI/StyledTableRow';
@@ -21,69 +11,53 @@ import {
   periodArrayAuto,
   addComma,
   changeKeyName,
+  divideAndComma,
 } from '../../../../component/commonFunction';
-import CompanyEditModal from '../../../../component/UI/CompanyEditModal';
+import CompanySearchNMove from '../../../../component/UI/CompanySearchNMove';
 
 export default function MinorityShareHolders() {
-  // 기업명 검색 corp_code 관리
-  const [searchCompanyCode, setSearchCompanyCode] = useState('');
+  const { searchCorpCode } = useParams();
 
-  // 편집 모달
-  const [editButtonSwitch, setEditButtonSwtich] = useState(false);
-  const [editModalSwtich, setEditModalSwitch] = useState(false);
-
-  // buybackData
-  const [minorityShareHoldersData, setMinorityShareHoldersData] = useState([{}]);
-  const minorityShareHoldersAccountArray = [
+  const minorityShareHoldersArray = [
     '주주 수',
     '전체 주주 수',
     '주주 비율(%)',
-    '보유 주식 수',
-    '총 발행 주식 수',
+    '보유 주식 수(백만주)',
+    '총 발행 주식 수(백만주)',
     '보유 주식 비율(%)',
   ];
+
+  // 소액주주 데이터
+  const [minorityShareHoldersData, setMinorityShareHoldersData] =
+    useState(minorityShareHoldersArray);
   const periodArray = periodArrayAuto();
 
-  scrollRightUseEffect();
+  scrollRightUseEffect(minorityShareHoldersData);
 
-  const searchData = () => {
-    axios
-      .get(
-        `${url}/admin/company/otherInfo/minorityShareHolders/getData/search/${searchCompanyCode}`,
-      )
-      .then(result => {
-        // console.log(result.data);
-        setMinorityShareHoldersData(result.data);
-        setEditButtonSwtich(true);
-      })
-      .catch(() => {
-        console.log('실패했습니다');
-      });
-  };
-
-  const openEditModal = () => {
-    setEditModalSwitch(true);
-  };
+  useEffect(() => {
+    if (searchCorpCode !== 'main') {
+      axios
+        .get(
+          `${url}/admin/company/otherInfo/minorityShareHolders/getData/search/rawReports/${searchCorpCode}`,
+        )
+        .then(result => {
+          // console.log(result.data);
+          if (result.data === 'X') {
+            alert('S3에 JSON 파일이 없습니다');
+          } else {
+            setMinorityShareHoldersData(result.data);
+          }
+        })
+        .catch(() => {
+          console.log('실패했습니다');
+        });
+    }
+  }, [searchCorpCode]);
 
   return (
     <div>
-      <Grid container direction="row" justifyContent="space-between" alignItems="center">
-        <Stack direction="row" spacing={2} alignItems="center">
-          <CompanyListAutoComplete onChangeCompanyCode={setSearchCompanyCode} minWidth="300px" />
-          <Button variant="contained" color="secondary" onClick={searchData}>
-            검색
-          </Button>
-        </Stack>
-        <Button
-          variant="contained"
-          color="secondary"
-          disabled={editButtonSwitch === false}
-          onClick={openEditModal}
-          sx={{ minWidth: '90px', mr: '10px' }}
-        >
-          편집
-        </Button>
-      </Grid>
+      <CompanySearchNMove navigateTo="Company/OtherInfo/MinorityShareHolders" />
+
       <TableContainer
         id="table"
         component={Paper}
@@ -110,53 +84,40 @@ export default function MinorityShareHolders() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {minorityShareHoldersAccountArray.map(function (eachdata) {
-              // 이름이 대응되는 곳에 값 대입
-              let temp = {};
-              minorityShareHoldersData.forEach(val => {
-                if (val.se === eachdata) {
-                  temp = val;
-                  // console.log(val.name);
-                }
-              });
-
+            {minorityShareHoldersData.map(function (eachdata, index) {
               return (
-                <StyledTableRow key={eachdata}>
+                <StyledTableRow key={minorityShareHoldersArray[index]}>
                   <StyledTableCell
                     align="center"
                     sx={{
                       minWidth: 180,
                       position: 'sticky',
                       left: 0,
+                      backgroundColor: '#FFFAFA',
+                      borderRight: '1px solid black',
                     }}
                   >
-                    {eachdata}
+                    {minorityShareHoldersArray[index]}
                   </StyledTableCell>
                   {periodArray.map(function (period) {
                     return (
-                      <PeriodTableCell align="center" key={`${eachdata}${period}`}>
-                        {addComma(temp[changeKeyName(period)])}
+                      <PeriodTableCell align="right" key={`${eachdata}${period}`}>
+                        {index !== 3 && index !== 4
+                          ? addComma(eachdata[changeKeyName(period)])
+                          : null}
+                        {index === 3 || index === 4
+                          ? divideAndComma(eachdata[changeKeyName(period)], 1000000, 1)
+                          : null}
                       </PeriodTableCell>
                     );
                   })}
                 </StyledTableRow>
               );
             })}
+            <StyledTableRow />
           </TableBody>
         </Table>
       </TableContainer>
-      {editModalSwtich === false ? null : (
-        <CompanyEditModal
-          editModalSwtich={editModalSwtich}
-          setEditModalSwitch={setEditModalSwitch}
-          editAccountArray={minorityShareHoldersAccountArray}
-          where="admin/company/otherInfo/minorityShareHolders"
-          isAccountFieldExist={false}
-          searchCompanyCode={searchCompanyCode}
-          // 데이터 리프레시를 위한 검색 함수 (수정완료 후 자동으로 호출 할)
-          refreshFunction={searchData}
-        />
-      )}
     </div>
   );
 }
