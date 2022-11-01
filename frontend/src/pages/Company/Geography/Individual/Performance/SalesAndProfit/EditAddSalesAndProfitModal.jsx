@@ -32,7 +32,7 @@ export default function EditAddSalesAndProfitModal({
 }) {
   const { searchCorpCode } = useParams();
   const dataTable = ['지역1', '지역2', '지역3', '원본 데이터', editDate];
-  // input 관리 (객체 배열이기에[...editData]는 얕은 복사)
+  // input 관리 (deep copy)
   const [editInput, setEditInput] = useState(JSON.parse(JSON.stringify(editData)));
 
   const onChangeEditInput = (e, index) => {
@@ -42,8 +42,6 @@ export default function EditAddSalesAndProfitModal({
   };
 
   const modalClose = () => setEditModalSwitch(false);
-
-  console.log(editData);
 
   const saveData = () => {
     const body = [...editInput];

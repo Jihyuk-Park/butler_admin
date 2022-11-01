@@ -12,7 +12,6 @@ import UserDailyCompany from './pages/User/UserDailyCompany';
 import CompanyList from './pages/Company/CompanyList';
 import Stock from './pages/Company/OtherInfo/Stock';
 import Dividend from './pages/Company/OtherInfo/Dividend';
-import Test from './pages/Test/index2';
 import SearchCompany from './pages/Company/SearchCompany';
 import Disclosure from './pages/Company/OtherInfo/Disclosure';
 import Buyback from './pages/Company/OtherInfo/Buyback';
@@ -27,6 +26,8 @@ import GeographyList from './pages/Company/Geography/List';
 import GeographyIndividual from './pages/Company/Geography/Individual';
 import IndividualCompany from './pages/Company/IndividualCompany';
 import Crawling from './pages/Company/Financial/Crawling';
+import Dart from './pages/Company/Financial/Dart';
+import Management from './pages/Company/Financial/Management';
 
 function App() {
   return (
@@ -37,7 +38,6 @@ function App() {
         </Grid>
         <Grid item xs={10.2}>
           <Routes>
-            <Route path="Test" element={<Test />} />
             {/* 유저 메뉴 */}
             <Route path="/User/UserInfo" element={<UserInfo />} />
             <Route path="/User/UserEntire" element={<UserEntire />} />
@@ -55,16 +55,18 @@ function App() {
 
             {/* 재무제표 */}
             <Route path="/Company/Financial/Crawling" element={<Crawling />} />
+            <Route path="/Company/Financial/Dart" element={<Dart />} />
+            <Route path="/Company/Financial/Management" element={<Management />} />
 
             {/* 기타 정보 */}
             <Route path="/Company/OtherInfo/Disclosure" element={<Disclosure />} />
-            <Route path="/Company/OtherInfo/Stock" element={<Stock />} />
-            <Route path="/Company/OtherInfo/Dividend" element={<Dividend />} />
-            <Route path="/Company/OtherInfo/Buyback" element={<Buyback />} />
-            <Route path="/Company/OtherInfo/Employee" element={<Employee />} />
-            <Route path="/Company/OtherInfo/Executive" element={<Executive />} />
+            <Route path="/Company/OtherInfo/Stock/:searchCorpCode" element={<Stock />} />
+            <Route path="/Company/OtherInfo/Dividend/:searchCorpCode" element={<Dividend />} />
+            <Route path="/Company/OtherInfo/Buyback/:searchCorpCode" element={<Buyback />} />
+            <Route path="/Company/OtherInfo/Employee/:searchCorpCode" element={<Employee />} />
+            <Route path="/Company/OtherInfo/Executive/:searchCorpCode" element={<Executive />} />
             <Route
-              path="/Company/OtherInfo/MinorityShareHolders"
+              path="/Company/OtherInfo/MinorityShareHolders/:searchCorpCode"
               element={<MinorityShareHolders />}
             />
 

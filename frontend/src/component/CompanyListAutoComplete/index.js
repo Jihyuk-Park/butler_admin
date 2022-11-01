@@ -17,13 +17,14 @@ export default function CompanyListAutoComplete({
   const [companyListData, setCompanyListData] = useState([]);
   const [autocompleteText, setAutoCompleteText] = useState('');
 
-  // 부모 컴포넌트에서 초기화를 위한 훅
+  // 상위 컴포넌트에서 초기화를 위한 훅 (!clearSwitch를 통해 초기화)
   useEffect(() => {
     clearAutoComplete();
   }, [clearSwitch]);
 
+  // 자동완성 (n글자 이상 시 검색)
   useEffect(() => {
-    if (inputText.length !== 0) {
+    if (inputText.length >= 2) {
       axios
         .get(`${url}/admin/common/getCompanyList/${inputText}`)
         .then(result => {
@@ -55,7 +56,7 @@ export default function CompanyListAutoComplete({
 
   return (
     <Autocomplete
-      // corp_name을 목록으로
+      // 받은 데이터들 중 corp_name을 목록으로 보여주는 옵션 (default - option.label)
       getOptionLabel={option => option.corp_name || ''}
       // 없으면 warning
       isOptionEqualToValue={(option, value) => option.id === value.id}

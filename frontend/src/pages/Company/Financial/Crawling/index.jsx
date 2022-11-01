@@ -10,13 +10,13 @@ export default function Crawling() {
 
   // 검색 input
   const fsDivArray = ['연결', '개별'];
-  const yearArray = YearArrayAuto(2015);
+  const yearArray = YearArrayAuto(2015, '년');
   const quarterArray = ['1분기', '2분기', '3분기', '4분기'];
   const financialTypeArray = ['재무상태표', '손익계산서', '현금흐름표'];
 
   const [searchInput, setSearchInput] = useState({
     fs_div: '연결',
-    year: '2022',
+    year: '2022년',
     quarter: '1분기',
     financialType: '재무상태표',
   });
@@ -55,6 +55,7 @@ export default function Crawling() {
             <Box sx={{ width: '80px' }}>{each[0]}</Box>
             <DropDown
               label=""
+              fixedWidth={index !== 1 ? '221px' : '70px'}
               selectList={each[1][0]}
               value={searchInput[each[1][1]]}
               onChange={e => {
@@ -64,6 +65,7 @@ export default function Crawling() {
             {index === 1 ? (
               <DropDown
                 label=""
+                fixedWidth="70px"
                 selectList={each[2][0]}
                 value={searchInput[each[2][1]]}
                 onChange={e => {
