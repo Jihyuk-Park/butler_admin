@@ -6,7 +6,7 @@ import BoundaryTableRow from '../../../../component/UI/BoundaryTableRow';
 import CompanySearchNMove from '../../../../component/UI/CompanySearchNMove';
 import RawReportsExecutive from './RawReportsExecutive';
 import QuarterReportsExecutive from './QuarterReportsExecutive';
-import CombineYearReportsExecutive from './CombineYearReportsExecutive';
+import AccumulReportsExecutive from './AccumulReportsExecutive';
 
 export default function Executive() {
   const periodArray = periodArrayAuto();
@@ -45,7 +45,7 @@ export default function Executive() {
             <BoundaryTableRow title="임원 (분기)" />
             <QuarterReportsExecutive />
             <BoundaryTableRow title="임원 (1년)" />
-            <CombineYearReportsExecutive />
+            <AccumulReportsExecutive />
           </TableBody>
         </Table>
       </TableContainer>

@@ -9,38 +9,47 @@ import {
   periodArrayAuto,
   addComma,
   changeKeyName,
+  divideAndComma,
   decimalPercent,
   scrollRightUseEffect,
 } from '../../../../../component/commonFunction';
 
-export default function CombineYearReportsExecutive() {
+export default function AccumulReportsEmployee() {
   const { searchCorpCode } = useParams();
 
   // 계정 array
-  const combineYearReportsExecutiveAccountArray = [
-    '급여총액',
-    '1인 평균',
-    '매출액대비 임원급여 비율',
+  const accumulReportsEmployeeAccountArray = [
+    '직원수(남)',
+    '급여총액(남)',
+    '1인 평균(남)',
+    '직원수(여)',
+    '급여총액(여)',
+    '1인 평균(여)',
+    '직원수(전체)',
+    '급여총액(전체)',
+    '1인 평균(전체)',
+    '매출액 대비 급여 비율',
+    '영업이익대비 급여 비율',
   ];
 
   // 배당 데이터
-  const [combineYearReportsExecutiveData, setCombineYearReportsExecutiveData] = useState(
-    combineYearReportsExecutiveAccountArray,
+  const [accumulReportsEmployeeData, setAccumulReportsEmployeeData] = useState(
+    accumulReportsEmployeeAccountArray,
   );
   const periodArray = periodArrayAuto();
 
-  scrollRightUseEffect(combineYearReportsExecutiveData);
+  scrollRightUseEffect(accumulReportsEmployeeData);
 
   useEffect(() => {
     if (searchCorpCode !== 'main') {
       axios
         .get(
-          `${url}/admin/company/otherInfo/executive/getData/search/combineYearNAccumulate/${searchCorpCode}`,
+          `${url}/admin/company/otherInfo/employee/getData/search/accumulteReports/${searchCorpCode}`,
         )
         .then(result => {
           // console.log(result.data);
           if (result.data !== 'X') {
-            setCombineYearReportsExecutiveData(result.data);
+            setAccumulReportsEmployeeData(result.data);
           }
         })
         .catch(() => {
@@ -51,9 +60,9 @@ export default function CombineYearReportsExecutive() {
 
   return (
     <>
-      {combineYearReportsExecutiveData.map(function (eachdata, index) {
+      {accumulReportsEmployeeData.map(function (eachdata, index) {
         return (
-          <StyledTableRow key={`1년${combineYearReportsExecutiveAccountArray[index]}`}>
+          <StyledTableRow key={`${accumulReportsEmployeeAccountArray[index]}`}>
             <StyledTableCell
               align="center"
               sx={{
@@ -64,13 +73,21 @@ export default function CombineYearReportsExecutive() {
                 borderRight: '1px solid black',
               }}
             >
-              {combineYearReportsExecutiveAccountArray[index]}
+              {accumulReportsEmployeeAccountArray[index]}
             </StyledTableCell>
             {periodArray.map(function (period) {
               return (
                 <PeriodTableCell align="right" key={`${eachdata}${period}`}>
-                  {index === 0 || index === 1 ? addComma(eachdata[changeKeyName(period)]) : null}
-                  {index !== 0 && index !== 1
+                  {index % 3 === 0 && index !== 9
+                    ? addComma(eachdata[changeKeyName(period)])
+                    : null}
+                  {index % 3 === 1 && index !== 10
+                    ? divideAndComma(eachdata[changeKeyName(period)], 1000000000, 1)
+                    : null}
+                  {index % 3 === 2
+                    ? divideAndComma(eachdata[changeKeyName(period)], 1000000, 0)
+                    : null}
+                  {index === 9 || index === 10
                     ? decimalPercent(eachdata[changeKeyName(period)])
                     : null}
                 </PeriodTableCell>

@@ -48,7 +48,7 @@ router.get('/getData/search/:reportsType/:searchCompanyCode', async function(req
       { type_nm: '우선주 수정주당배당금', type: 'fixPreferCashDividend'},
       { type_nm: '우선주 현금배당수익율(%)', type: 'preferCashDividendRatio'},
     ];
-  } else if (reportsType === 'combineYearNAccumulate') {
+  } else if (reportsType === 'accumulteReports') {
     accountArray = [
       { type_nm: '1년 배당금', type: 'fixCommonCashDividend'},
       { type_nm: '1년 배당수익율', type: 'commonCashDividndRatio'},

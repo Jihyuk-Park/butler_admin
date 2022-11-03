@@ -37,10 +37,10 @@ export default function AccumulDividend() {
     if (searchCorpCode !== 'main') {
       axios
         .get(
-          `${url}/admin/company/otherInfo/dividend/getData/search/combineYearNAccumulate/${searchCorpCode}`,
+          `${url}/admin/company/otherInfo/dividend/getData/search/accumulteReports/${searchCorpCode}`,
         )
         .then(result => {
-          // console.log(result.data);
+          console.log(result.data);
           if (result.data === 'X') {
             alert('S3에 JSON 파일이 없습니다');
           } else {
@@ -73,10 +73,15 @@ export default function AccumulDividend() {
             {periodArray.map(function (period) {
               return (
                 <PeriodTableCell align="right" key={`${eachdata}${period}`}>
+                  {index !== 1 && index !== 4 && index !== 6 && index !== 8
+                    ? addComma(eachdata[changeKeyName(period)])
+                    : null}
                   {index === 1 || index === 4 || index === 6
                     ? decimalPercent(eachdata[changeKeyName(period)])
-                    : addComma(eachdata[changeKeyName(period)])}
-                  {index === 8 && eachdata[changeKeyName(period)] ? '%' : null}
+                    : null}
+                  {index === 8 && eachdata[changeKeyName(period)]
+                    ? `${parseFloat(eachdata[changeKeyName(period)]).toFixed(1)}%`
+                    : null}
                 </PeriodTableCell>
               );
             })}

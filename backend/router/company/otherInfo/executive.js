@@ -31,7 +31,7 @@ router.get('/getData/search/:reportsType/:searchCompanyCode', async function(req
       { type_nm: '매출액대비 임원급여비율', type: 'salesRatio'},
       { type_nm: '영업이익대비 임원급여비율', type: 'profitRatio'},
     ];
-  } else if (reportsType === 'combineYearNAccumulate') {
+  } else if (reportsType === 'accumulteReports') {
     accountArray = [
       { type_nm: '급여총액', type: 'totalSalary'},
       { type_nm: '1인평균', type: 'totalSalaryAvg'},
