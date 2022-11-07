@@ -36,7 +36,7 @@ export default function IRIndividual() {
 
   const searchData = () => {
     if (stockCode) {
-      navigate(`${url}/Company/IR/Individual/${stockCode}`);
+      navigate(`/Company/IR/Individual/${stockCode}`);
     } else {
       alert('종목코드가 없는 기업입니다');
     }

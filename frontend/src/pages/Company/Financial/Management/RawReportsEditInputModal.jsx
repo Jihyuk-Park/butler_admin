@@ -15,16 +15,17 @@ import {
   Typography,
   TextField,
 } from '@mui/material';
-import { addComma, removeComma } from '../../../../../component/commonFunction';
-import { url } from '../../../../../component/commonVariable';
-import StyledTableCell from '../../../../../component/UI/StyledTableCell';
-import StyledTableRow from '../../../../../component/UI/StyledTableRow';
-import CustomModal from '../../../../../component/UI/CustomModal';
+import { addComma, removeComma } from '../../../../component/commonFunction';
+import { url } from '../../../../component/commonVariable';
+import StyledTableCell from '../../../../component/UI/StyledTableCell';
+import StyledTableRow from '../../../../component/UI/StyledTableRow';
+import CustomModal from '../../../../component/UI/CustomModal';
 
 export default function EditInputModal({
   editInputModalSwitch,
   setEditInputModalSwitch,
   editData,
+  editDate,
   searchInput,
   searchCompanyCode,
   searchRefreshSwitch,
@@ -33,7 +34,7 @@ export default function EditInputModal({
   // 재무제표 타입 및 기간 텍스트
   const [typeText, dateText] = [
     `${searchInput.financialType}(${searchInput.fs_div})`,
-    `${searchInput.year} ${searchInput.quarter}`,
+    `20${editDate.substring(1, 3)}년 ${editDate.substring(4, 5)}분기`,
   ];
   const dataTable = ['ID', '계정이름', '원본 데이터', '수정 값'];
   // input 관리 (deep copy)
@@ -70,11 +71,13 @@ export default function EditInputModal({
     const conditionArray = {
       ...searchInput,
       searchCompanyCode,
+      bsns_year: `20${editDate.substring(1, 3)}`,
+      quarter_id: editDate.substring(4, 5),
     };
     const body = [conditionArray, ...changedData];
     // console.log(body);
     axios
-      .post(`${url}/admin/company/financial/dart/edit`, body)
+      .post(`${url}/admin/company/financial/management/edit`, body)
       .then(() => {
         // axios.get(`${url}/admin/genearteReprot`).then(() => {
 
@@ -196,9 +199,10 @@ export default function EditInputModal({
 }
 
 EditInputModal.defaultProps = {
-  editData: [],
   editInputModalSwitch: false,
   setEditInputModalSwitch: () => {},
+  editData: [],
+  editDate: '',
   searchInput: {},
   searchCompanyCode: '',
   searchRefreshSwitch: true,
@@ -206,10 +210,11 @@ EditInputModal.defaultProps = {
 };
 
 EditInputModal.propTypes = {
-  // eslint-disable-next-line
-  editData: PropTypes.array,
   editInputModalSwitch: PropTypes.bool,
   setEditInputModalSwitch: PropTypes.func,
+  // eslint-disable-next-line
+  editData: PropTypes.array,
+  editDate: PropTypes.string,
   searchInput: PropTypes.objectOf(PropTypes.string),
   searchCompanyCode: PropTypes.string,
   searchRefreshSwitch: PropTypes.bool,

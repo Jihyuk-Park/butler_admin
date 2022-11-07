@@ -74,19 +74,13 @@ export default function UserEntire() {
             {entireUserData.map(function (eachdata) {
               return (
                 <StyledTableRow key={eachdata.date}>
-                  <StyledTableCell align="center">
-                    {changeDate(eachdata.date, sortType)}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.NAVER}</StyledTableCell>
-                  <StyledTableCell align="center">
-                    {eachdata.daily - eachdata.NAVER}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.daily}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.TOTAL_NAVER}</StyledTableCell>
-                  <StyledTableCell align="center">
-                    {eachdata.TOTAL_Daily - eachdata.TOTAL_NAVER}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.TOTAL_Daily}</StyledTableCell>
+                  <StyledTableCell>{changeDate(eachdata.date, sortType)}</StyledTableCell>
+                  <StyledTableCell>{eachdata.NAVER}</StyledTableCell>
+                  <StyledTableCell>{eachdata.daily - eachdata.NAVER}</StyledTableCell>
+                  <StyledTableCell>{eachdata.daily}</StyledTableCell>
+                  <StyledTableCell>{eachdata.TOTAL_NAVER}</StyledTableCell>
+                  <StyledTableCell>{eachdata.TOTAL_Daily - eachdata.TOTAL_NAVER}</StyledTableCell>
+                  <StyledTableCell>{eachdata.TOTAL_Daily}</StyledTableCell>
                 </StyledTableRow>
               );
             })}

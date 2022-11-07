@@ -156,7 +156,6 @@ export default function SectorList() {
                     onClick={() => {
                       sortData(eachdata);
                     }}
-                    align="center"
                     sx={{ cursor: 'pointer' }}
                   >
                     {eachdata} {sortField === eachdata ? sortType : null}
@@ -168,15 +167,10 @@ export default function SectorList() {
           <TableBody>
             {companyListData.map((eachdata, index) => (
               <StyledTableRow key={eachdata.corp_name}>
-                <StyledTableCell align="center" sx={{ minWidth: 30, maxWidth: 30 }}>
+                <StyledTableCell sx={{ minWidth: 30, maxWidth: 30 }}>
                   {(page - 1) * 20 + index + 1}
                 </StyledTableCell>
-                <StyledTableCell
-                  align="center"
-                  component="th"
-                  scope="row"
-                  sx={{ minWidth: 110, maxWidth: 110 }}
-                >
+                <StyledTableCell sx={{ minWidth: 110, maxWidth: 110 }}>
                   <Button
                     color="secondary"
                     onClick={() => {
@@ -187,30 +181,27 @@ export default function SectorList() {
                     <u>{eachdata.corp_name}</u>
                   </Button>
                 </StyledTableCell>
-                <StyledTableCell align="center">{eachdata.stock_code}</StyledTableCell>
-                <StyledTableCell align="center">{changeDateDash(eachdata.recent)}</StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 70, maxWidth: 70 }}>
+                <StyledTableCell>{eachdata.stock_code}</StyledTableCell>
+                <StyledTableCell>{changeDateDash(eachdata.recent)}</StyledTableCell>
+                <StyledTableCell sx={{ minWidth: 70, maxWidth: 70 }}>
                   {eachdata.segment_last_updated}
                 </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 70, maxWidth: 70 }}>
+                <StyledTableCell sx={{ minWidth: 70, maxWidth: 70 }}>
                   {eachdata.segment_title1}
                 </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 70, maxWidth: 70 }}>
+                <StyledTableCell sx={{ minWidth: 70, maxWidth: 70 }}>
                   {eachdata.segment_title2}
                 </StyledTableCell>
-                <StyledTableCell
-                  align="center"
-                  sx={{ minWidth: 120, maxWidth: 120, wordBreak: 'break-all' }}
-                >
+                <StyledTableCell sx={{ minWidth: 120, maxWidth: 120, wordBreak: 'break-all' }}>
                   {eachdata.segment_source}
                 </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 70, maxWidth: 70 }}>
+                <StyledTableCell sx={{ minWidth: 70, maxWidth: 70 }}>
                   {eachdata.currency}
                 </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 40, maxWidth: 40 }}>
+                <StyledTableCell sx={{ minWidth: 40, maxWidth: 40 }}>
                   {eachdata.unit === null ? '' : addComma(eachdata.unit)}
                 </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 70, maxWidth: 70 }}>
+                <StyledTableCell sx={{ minWidth: 70, maxWidth: 70 }}>
                   {eachdata.is_available === 1 ? 'O' : 'X'}
                 </StyledTableCell>
               </StyledTableRow>
@@ -218,6 +209,7 @@ export default function SectorList() {
           </TableBody>
         </Table>
       </TableContainer>
+
       <Pagination page={page} totalItem={totalItem} setPage={setPage} />
     </div>
   );

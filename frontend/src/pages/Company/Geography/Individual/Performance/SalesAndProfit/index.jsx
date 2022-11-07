@@ -116,7 +116,6 @@ export default function SalesAndProfit({ type }) {
                   return (
                     <StyledTableCell
                       key={eachdata}
-                      align="center"
                       onClick={
                         index === 0 || index === 1 || index === 2
                           ? null
@@ -155,7 +154,6 @@ export default function SalesAndProfit({ type }) {
                     {index !== salesAndProfitData.length - 1 ? (
                       <>
                         <StyledTableCell
-                          align="center"
                           sx={{
                             minWidth: 90,
                             position: 'sticky',
@@ -167,7 +165,6 @@ export default function SalesAndProfit({ type }) {
                           {eachdata.depth1}
                         </StyledTableCell>
                         <StyledTableCell
-                          align="center"
                           sx={{
                             minWidth: 90,
                             position: 'sticky',
@@ -179,7 +176,6 @@ export default function SalesAndProfit({ type }) {
                           {eachdata.depth2}
                         </StyledTableCell>
                         <StyledTableCell
-                          align="center"
                           sx={{
                             minWidth: 90,
                             position: 'sticky',
@@ -193,7 +189,7 @@ export default function SalesAndProfit({ type }) {
                         </StyledTableCell>
                         {periodArray.map(function (period) {
                           return (
-                            <PeriodTableCell align="center" key={`${eachdata}${period}`}>
+                            <PeriodTableCell key={`${eachdata}${period}`}>
                               {eachdata[changeKeyName(period)] === null ||
                               eachdata[changeKeyName(period)] === undefined
                                 ? null
@@ -205,7 +201,6 @@ export default function SalesAndProfit({ type }) {
                     ) : (
                       <>
                         <StyledTableCell
-                          align="center"
                           colSpan={3}
                           sx={{
                             position: 'sticky',
@@ -218,7 +213,7 @@ export default function SalesAndProfit({ type }) {
                         </StyledTableCell>
                         {periodArray.map(function (period) {
                           return (
-                            <PeriodTableCell align="center" key={`${eachdata}${period}`}>
+                            <PeriodTableCell key={`${eachdata}${period}`}>
                               {eachdata[changeKeyName(period)] === null ||
                               eachdata[changeKeyName(period)] === undefined
                                 ? null

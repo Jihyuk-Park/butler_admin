@@ -3,10 +3,15 @@ import moment from 'moment';
 import 'moment/locale/ko';
 
 /** 테이블 맨끝으로 이동시키는 함수 (useEffect Hook) */
-export const scrollRightUseEffect = data => {
+export const scrollRightUseEffect = (data, addName) => {
   useEffect(() => {
-    const scrollTest = document.getElementById('table');
-    scrollTest.scrollTo(4000, 0);
+    if (addName) {
+      const scrollTest = document.getElementById(`table${addName}`);
+      scrollTest.scrollTo(4000, 0);
+    } else {
+      const scrollTest = document.getElementById('table');
+      scrollTest.scrollTo(4000, 0);
+    }
   }, [data]);
 };
 
@@ -97,11 +102,15 @@ export const removeComma = input => {
   return newInput;
 };
 
-/** 소수점 세 자리까지 */
-export const decimalPercent = input => {
+/** 소수점 세 자리까지 혹은 특정 자리수 */
+export const decimalPercent = (input, inputDigit) => {
   let newInput = input;
   if (input && input !== '-') {
-    newInput = `${parseFloat(input * 100).toFixed(2)}%`;
+    if (inputDigit) {
+      newInput = `${parseFloat(input * 100).toFixed(inputDigit)}%`;
+    } else {
+      newInput = `${parseFloat(input * 100).toFixed(2)}%`;
+    }
   }
   // console.log(newInput);
   return newInput;

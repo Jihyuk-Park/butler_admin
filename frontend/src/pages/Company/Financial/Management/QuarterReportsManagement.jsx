@@ -12,27 +12,25 @@ import {
   divideAndComma,
   changeKeyName,
 } from '../../../../component/commonFunction';
-import EditInputModal from './EditInputModal';
 
-export default function ManagementTable({ searchInput, searchCompanyCode, searchRefreshSwitch }) {
+export default function QuarterReportsManagement({
+  searchInput,
+  searchCompanyCode,
+  searchRefreshSwitch,
+}) {
   const periodArray = periodArrayAuto();
   // FinancialData
   const [financialData, setFinancialData] = useState([]);
-  // 데이터 수정 후 리프레시
-  const [refreshSwitch, setRefreshSwitch] = useState(true);
 
-  // editModal
-  const [editModalSwitch, setEditModalSwitch] = useState(false);
-  const [selectedData, setSelectedData] = useState([]);
-  const [selectedDate, setSelectedDate] = useState('');
-
-  scrollRightUseEffect(financialData);
+  scrollRightUseEffect(financialData, 2);
 
   useEffect(() => {
     if (searchCompanyCode !== '') {
       const body = { ...searchInput, corp_code: searchCompanyCode };
       axios
-        .get(`${url}/admin/company/financial/management/getData/search/s3`, { params: body })
+        .get(`${url}/admin/company/financial/management/getData/search/quarterReports/s3`, {
+          params: body,
+        })
         .then(result => {
           // console.log(result.data);
           if (result.data === 'X') {
@@ -45,49 +43,23 @@ export default function ManagementTable({ searchInput, searchCompanyCode, search
           console.log('실패했습니다');
         });
     }
-  }, [searchRefreshSwitch, refreshSwitch]);
-
-  const openEditInputModal = period => {
-    setEditModalSwitch(true);
-
-    const tempSelectedData = [];
-
-    financialData.map(each => {
-      tempSelectedData.push({
-        id: each.id,
-        type_nm: each.type_nm,
-        type: each.type,
-        align: each.align,
-        fontWeight: each.fontWeight,
-        value: each[changeKeyName(period)] || null,
-      });
-      return null;
-    });
-
-    setSelectedData(tempSelectedData);
-    setSelectedDate(period);
-  };
+  }, [searchRefreshSwitch]);
 
   return (
     <div>
       <TableContainer
-        id="table"
+        id="table2"
         component={Paper}
         sx={{ maxHeight: { md: '635px', xl: '935px' }, mt: '10px' }}
       >
         <Table stickyHeader>
           <TableHead>
             <TableRow>
-              {['분기말', 'ID', ...periodArray].map(function (eachdata, index) {
+              {['분기별 (십억)', 'ID', ...periodArray].map(function (eachdata, index) {
                 return (
                   <StyledTableCell
                     key={eachdata}
                     align="center"
-                    onClick={
-                      searchCompanyCode === '' || index === 0 || index === 1
-                        ? null
-                        : () => openEditInputModal(eachdata)
-                    }
                     sx={[
                       index === 0 || index === 1
                         ? {
@@ -96,9 +68,7 @@ export default function ManagementTable({ searchInput, searchCompanyCode, search
                             left: index === 0 ? 0 : 200,
                             zIndex: 100,
                           }
-                        : {
-                            cursor: 'pointer',
-                          },
+                        : null,
                     ]}
                   >
                     {eachdata}
@@ -135,12 +105,12 @@ export default function ManagementTable({ searchInput, searchCompanyCode, search
                       borderRight: '1px solid black',
                     }}
                   >
-                    {eachdata.id}
+                    {null}
                   </StyledTableCell>
                   {periodArray.map(function (period) {
                     return (
                       <PeriodTableCell align="right" key={`${eachdata.field}${period}`}>
-                        {divideAndComma(eachdata[changeKeyName(period)], 1, 0)}
+                        {divideAndComma(eachdata[changeKeyName(period)], 1000000000, 1)}
                       </PeriodTableCell>
                     );
                   })}
@@ -151,29 +121,17 @@ export default function ManagementTable({ searchInput, searchCompanyCode, search
           </TableBody>
         </Table>
       </TableContainer>
-
-      {editModalSwitch === false ? null : (
-        <EditInputModal
-          editModalSwitch={editModalSwitch}
-          setEditModalSwitch={setEditModalSwitch}
-          editData={selectedData}
-          refreshSwitch={refreshSwitch}
-          setRefreshSwitch={setRefreshSwitch}
-          searchInput={searchInput}
-          editDate={selectedDate}
-        />
-      )}
     </div>
   );
 }
 
-ManagementTable.defaultProps = {
+QuarterReportsManagement.defaultProps = {
   searchInput: {},
   searchCompanyCode: '0',
   searchRefreshSwitch: true,
 };
 
-ManagementTable.propTypes = {
+QuarterReportsManagement.propTypes = {
   searchInput: PropTypes.objectOf(PropTypes.string),
   searchCompanyCode: PropTypes.string,
   searchRefreshSwitch: PropTypes.bool,

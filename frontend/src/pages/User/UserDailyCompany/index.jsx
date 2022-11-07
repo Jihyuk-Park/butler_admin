@@ -195,28 +195,23 @@ export default function UserDailyCompany() {
             <TableBody>
               {userDailyCompanyData.map(eachdata => (
                 <StyledTableRow key={changeDateDot(eachdata.date)}>
-                  <StyledTableCell align="center" component="th" scope="row">
+                  <StyledTableCell component="th" scope="row">
                     {changeDateDot(eachdata.date)}
                   </StyledTableCell>
-                  <StyledTableCell align="center">
+                  <StyledTableCell>
                     {eachdata.totalSearchCounting - eachdata.nonMemberSearchCounting || 0}
                   </StyledTableCell>
-                  <StyledTableCell align="center">
-                    {eachdata.nonMemberSearchCounting || 0}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    {eachdata.totalSearchCounting || 0}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.watchCounting || 0}</StyledTableCell>
-                  <StyledTableCell align="center">
-                    {eachdata.totalWatchCounting || 0}
-                  </StyledTableCell>
+                  <StyledTableCell>{eachdata.nonMemberSearchCounting || 0}</StyledTableCell>
+                  <StyledTableCell>{eachdata.totalSearchCounting || 0}</StyledTableCell>
+                  <StyledTableCell>{eachdata.watchCounting || 0}</StyledTableCell>
+                  <StyledTableCell>{eachdata.totalWatchCounting || 0}</StyledTableCell>
                 </StyledTableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
       </Grid>
+
       {/* 필터 검색 영역 */}
       <Grid item xs={4}>
         <FixedBox>
@@ -286,6 +281,7 @@ export default function UserDailyCompany() {
           </OutLinedBox>
         </FixedBox>
       </Grid>
+
       <Grid item xs={12}>
         <Pagination page={page} totalItem={totalItem} setPage={setPage} />
       </Grid>

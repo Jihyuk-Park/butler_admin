@@ -8,6 +8,7 @@ import { url } from '../../../../../component/commonVariable';
 import {
   periodArrayAuto,
   addComma,
+  divideAndComma,
   changeKeyName,
   scrollRightUseEffect,
 } from '../../../../../component/commonFunction';
@@ -15,7 +16,7 @@ import {
 export default function RawReportsExecutive() {
   const { searchCorpCode } = useParams();
 
-  const rawReportsExecutiveAccountArray = ['인원', '보수총액', '1인당 금액'];
+  const rawReportsExecutiveAccountArray = ['인원', '보수총액 (백만)', '1인당 금액 (백만)'];
 
   // 배당 데이터
   const [rawReportsExecutiveData, setRawReportsExecutiveData] = useState(
@@ -63,7 +64,8 @@ export default function RawReportsExecutive() {
             {periodArray.map(function (period) {
               return (
                 <PeriodTableCell align="right" key={`${eachdata}${period}`}>
-                  {addComma(eachdata[changeKeyName(period)])}
+                  {index === 0 ? addComma(eachdata[changeKeyName(period)]) : null}
+                  {index !== 0 ? divideAndComma(eachdata[changeKeyName(period)], 1000000, 0) : null}
                 </PeriodTableCell>
               );
             })}

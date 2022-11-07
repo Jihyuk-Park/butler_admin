@@ -118,6 +118,7 @@ export default function Dart() {
             searchInput={searchInput}
             searchCompanyCode={searchCompanyCode}
             searchRefreshSwitch={searchRefreshSwitch}
+            setSearchRefreshSwitch={setSearchRefreshSwitch}
           />
         </Grid>
       </Grid>

@@ -135,30 +135,24 @@ export default function UserMemo() {
               })}
             </TableRow>
           </TableHead>
+
           <TableBody>
             {memoData.map(eachdata => (
               <StyledTableRow key={eachdata.id}>
-                <StyledTableCell align="center">{eachdata.id}</StyledTableCell>
-                <StyledTableCell align="center">
-                  {changeDateDot(eachdata.created_at)}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {changeDateDot(eachdata.updated_at)}
-                </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 90, maxWidth: 90 }}>
+                <StyledTableCell>{eachdata.id}</StyledTableCell>
+                <StyledTableCell>{changeDateDot(eachdata.created_at)}</StyledTableCell>
+                <StyledTableCell>{changeDateDot(eachdata.updated_at)}</StyledTableCell>
+                <StyledTableCell sx={{ minWidth: 90, maxWidth: 90 }}>
                   {eachdata.corp_name}
                 </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 90, maxWidth: 90 }}>
+                <StyledTableCell sx={{ minWidth: 90, maxWidth: 90 }}>
                   {eachdata.NickName}
                 </StyledTableCell>
-                <StyledTableCell
-                  align="center"
-                  sx={{ minWidth: 100, maxWidth: 100, wordBreak: 'break-all' }}
-                >
+                <StyledTableCell sx={{ minWidth: 100, maxWidth: 100, wordBreak: 'break-all' }}>
                   {eachdata.type}
                 </StyledTableCell>
-                <StyledTableCell align="center">{eachdata.memo}</StyledTableCell>
-                <StyledTableCell align="center">
+                <StyledTableCell>{eachdata.memo}</StyledTableCell>
+                <StyledTableCell>
                   <Button
                     onClick={() => openDeleteModal(eachdata.id)}
                     variant="contained"
@@ -172,6 +166,8 @@ export default function UserMemo() {
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* 페이지네이션 */}
       <Pagination page={page} totalItem={totalItem} setPage={setPage} />
 
       {/* 삭제 모달 영역 */}

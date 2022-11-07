@@ -114,27 +114,23 @@ export default function EditAddSalesAndProfitModal({
               <TableHead>
                 <TableRow>
                   {dataTable.map(function (eachdata) {
-                    return (
-                      <StyledTableCell key={eachdata} align="center">
-                        {eachdata}
-                      </StyledTableCell>
-                    );
+                    return <StyledTableCell key={eachdata}>{eachdata}</StyledTableCell>;
                   })}
                 </TableRow>
               </TableHead>
               <TableBody>
                 {editData.map((eachdata, index) => (
                   <StyledTableRow key={eachdata.id}>
-                    <StyledTableCell align="center" sx={{ minWidth: 40, maxWidth: 40 }}>
+                    <StyledTableCell sx={{ minWidth: 40, maxWidth: 40 }}>
                       {eachdata.depth1}
                     </StyledTableCell>
-                    <StyledTableCell align="center" sx={{ minWidth: 40, maxWidth: 40 }}>
+                    <StyledTableCell sx={{ minWidth: 40, maxWidth: 40 }}>
                       {eachdata.depth2}
                     </StyledTableCell>
-                    <StyledTableCell align="center" sx={{ minWidth: 40, maxWidth: 40 }}>
+                    <StyledTableCell sx={{ minWidth: 40, maxWidth: 40 }}>
                       {eachdata.depth3}
                     </StyledTableCell>
-                    <StyledTableCell align="center">
+                    <StyledTableCell>
                       <TextField
                         disabled
                         variant="standard"
@@ -144,7 +140,7 @@ export default function EditAddSalesAndProfitModal({
                         }}
                       />
                     </StyledTableCell>
-                    <StyledTableCell align="center">
+                    <StyledTableCell>
                       <TextField
                         value={addComma(editInput[index].value) || ''}
                         name={`${index}`}

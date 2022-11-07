@@ -32,40 +32,28 @@ export default function DBTable({ searchInput, searchCompanyCode, searchRefreshS
         <TableHead>
           <TableRow>
             {dataTable.map(function (eachdata) {
-              return (
-                <StyledTableCell key={eachdata} align="center">
-                  {eachdata}
-                </StyledTableCell>
-              );
+              return <StyledTableCell key={eachdata}>{eachdata}</StyledTableCell>;
             })}
           </TableRow>
         </TableHead>
         <TableBody>
           {dbData.map(eachdata => (
             <StyledTableRow key={eachdata.id}>
-              <StyledTableCell align="center" sx={{ minWidth: '60px' }}>
-                {eachdata.type}
-              </StyledTableCell>
-              <StyledTableCell align="center" sx={{ minWidth: '70px' }}>
-                {eachdata.sj_div}
-              </StyledTableCell>
+              <StyledTableCell sx={{ minWidth: '60px' }}>{eachdata.type}</StyledTableCell>
+              <StyledTableCell sx={{ minWidth: '70px' }}>{eachdata.sj_div}</StyledTableCell>
               <StyledTableCell align="left" sx={{ wordBreak: 'break-all', maxWidth: '15vw' }}>
                 {eachdata.account_id}
               </StyledTableCell>
               <StyledTableCell align="left">{eachdata.account_nm}</StyledTableCell>
-              <StyledTableCell align="right" sx={{ minWidth: '150px' }}>
+              <StyledTableCell sx={{ minWidth: '150px' }}>
                 {(eachdata.sj_div === 'IS' || eachdata.sj_div === 'CIS') &&
                 eachdata.type === 'RAW' &&
                 (searchInput.quarter === '2분기' || searchInput.quarter === '3분기')
                   ? addComma(eachdata.thstrm_add_amount)
                   : addComma(eachdata.thstrm_amount)}
               </StyledTableCell>
-              <StyledTableCell align="center" sx={{ minWidth: '50px' }}>
-                {eachdata.type_id}
-              </StyledTableCell>
-              <StyledTableCell align="center" sx={{ minWidth: '80px' }}>
-                {eachdata.type_nm}
-              </StyledTableCell>
+              <StyledTableCell sx={{ minWidth: '50px' }}>{eachdata.type_id}</StyledTableCell>
+              <StyledTableCell sx={{ minWidth: '80px' }}>{eachdata.type_nm}</StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>

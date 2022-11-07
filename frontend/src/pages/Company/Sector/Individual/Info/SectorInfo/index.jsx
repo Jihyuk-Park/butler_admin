@@ -89,38 +89,27 @@ export default function SectorInfo() {
           <TableHead>
             <TableRow>
               {dataTable.map(function (eachdata) {
-                return (
-                  <StyledTableCell key={eachdata} align="center">
-                    {eachdata}
-                  </StyledTableCell>
-                );
+                return <StyledTableCell key={eachdata}>{eachdata}</StyledTableCell>;
               })}
             </TableRow>
           </TableHead>
           <TableBody>
             {sectorInfoData.map((eachdata, index) => (
               <StyledTableRow key={eachdata.id}>
-                <StyledTableCell
-                  align="center"
-                  component="th"
-                  scope="row"
-                  sx={{ minWidth: 30, maxWidth: 30 }}
-                >
-                  {index + 1}
-                </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 60, maxWidth: 60 }}>
+                <StyledTableCell sx={{ minWidth: 30, maxWidth: 30 }}>{index + 1}</StyledTableCell>
+                <StyledTableCell sx={{ minWidth: 60, maxWidth: 60 }}>
                   {eachdata.depth1}
                 </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 60, maxWidth: 60 }}>
+                <StyledTableCell sx={{ minWidth: 60, maxWidth: 60 }}>
                   {eachdata.depth2}
                 </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 60, maxWidth: 60 }}>
+                <StyledTableCell sx={{ minWidth: 60, maxWidth: 60 }}>
                   {eachdata.depth3}
                 </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 30, maxWidth: 30 }}>
+                <StyledTableCell sx={{ minWidth: 30, maxWidth: 30 }}>
                   {eachdata.is_importance}
                 </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 70, maxWidth: 70 }}>
+                <StyledTableCell sx={{ minWidth: 70, maxWidth: 70 }}>
                   {eachdata.description}
                 </StyledTableCell>
               </StyledTableRow>

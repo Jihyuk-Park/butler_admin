@@ -4,7 +4,9 @@ import { Grid, Button, Stack, Box } from '@mui/material';
 import CompanyListAutoComplete from '../../../../component/CompanyListAutoComplete';
 import DropDown from '../../../../component/UI/DropDown';
 import { url } from '../../../../component/commonVariable';
-import ManagementTable from './ManagementTable';
+import RawReportsManagement from './RawReportsManagement';
+import QuarterReportsManagement from './QuarterReportsManagement';
+import AccumulReportsManagement from './AccumulReportsManagement';
 
 export default function Management() {
   // 기업명 검색 corp_code 관리
@@ -88,7 +90,20 @@ export default function Management() {
         );
       })}
 
-      <ManagementTable
+      <RawReportsManagement
+        searchInput={searchInput}
+        searchCompanyCode={searchCompanyCode}
+        searchRefreshSwitch={searchRefreshSwitch}
+        setSearchRefreshSwitch={setSearchRefreshSwitch}
+      />
+
+      <QuarterReportsManagement
+        searchInput={searchInput}
+        searchCompanyCode={searchCompanyCode}
+        searchRefreshSwitch={searchRefreshSwitch}
+      />
+
+      <AccumulReportsManagement
         searchInput={searchInput}
         searchCompanyCode={searchCompanyCode}
         searchRefreshSwitch={searchRefreshSwitch}

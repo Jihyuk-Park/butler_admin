@@ -318,7 +318,7 @@ const filterS3Data = (accountArray, S3Data, whichField) => {
 
 
 /** Management에서 활용되는 filter함수
- * filterS3Data의 확장 (filterS3에 input 하나가 추가된 함수로, 재무제표 종류를 추가하기 위함) */
+ * filterS3Data의 확장 (filterS3에 input 하나가 추가된 함수로, 재무제표 종류(bs, is, cf)를 추가하기 위함) */
  const filterS3DataManagement = (accountArray, S3Data, whichField, financialType) => {
   const yearArray = periodYearArrayAuto();
   let filteredData = [];
@@ -454,11 +454,11 @@ function financialTypeSQL (input) {
   let result;
 
   if (input === "재무상태표") {
-    result = 'sj_div = "BS"';
+    result = '= "BS"';
   } else if (input === "손익계산서") {
-    result = 'sj_div LIKE "%IS"';
+    result = 'LIKE "%IS"';
   } else {
-    result = 'sj_div = "CF"';
+    result = '= "CF"';
   } 
   return result;
 }
@@ -469,8 +469,11 @@ function financialTypeAccountArray (input) {
  
   if (input === "재무상태표") {
     result = statementOfFinancialArray;
+    // 손익 <--> 포괄 손익 id 값은 프론트에서 조정
   } else if (input === "손익계산서") {
     result = comprehensiveIncomeStatementArray;
+  } else if (input === "손익계산서(일반)") {
+    result = incomeStatementArray;
   } else {
     result = cashflowStatementArray;
   } 

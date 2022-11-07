@@ -112,24 +112,19 @@ export default function Earning({ update, refreshSwitch, setRefreshSwitch }) {
           <TableBody>
             {earningData.map(eachdata => (
               <StyledTableRow key={eachdata.bsns_year}>
-                <StyledTableCell
-                  align="center"
-                  component="th"
-                  scope="row"
-                  sx={{ minWidth: 70, maxWidth: 70 }}
-                >
+                <StyledTableCell sx={{ minWidth: 70, maxWidth: 70 }}>
                   {eachdata.bsns_year}
                 </StyledTableCell>
-                <StyledTableCell align="center">
+                <StyledTableCell>
                   {earningButton(eachdata.Q1, eachdata.bsns_year, 1, searchStockCode)}
                 </StyledTableCell>
-                <StyledTableCell align="center">
+                <StyledTableCell>
                   {earningButton(eachdata.Q2, eachdata.bsns_year, 2, searchStockCode)}
                 </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 70, maxWidth: 70 }}>
+                <StyledTableCell sx={{ minWidth: 70, maxWidth: 70 }}>
                   {earningButton(eachdata.Q3, eachdata.bsns_year, 3, searchStockCode)}
                 </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 70, maxWidth: 70 }}>
+                <StyledTableCell sx={{ minWidth: 70, maxWidth: 70 }}>
                   {earningButton(eachdata.Q4, eachdata.bsns_year, 4, searchStockCode)}
                 </StyledTableCell>
               </StyledTableRow>

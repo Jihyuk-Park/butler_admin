@@ -16,7 +16,12 @@ import StyledTableCell from '../../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../../component/UI/StyledTableRow';
 import EditInputModal from './EditInputModal';
 
-export default function S3Table({ searchInput, searchCompanyCode, searchRefreshSwitch }) {
+export default function S3Table({
+  searchInput,
+  searchCompanyCode,
+  searchRefreshSwitch,
+  setSearchRefreshSwitch,
+}) {
   const dataTable = ['ID', '계정이름', '값'];
   const [s3Data, setS3data] = useState([]);
 
@@ -62,20 +67,14 @@ export default function S3Table({ searchInput, searchCompanyCode, searchRefreshS
           <TableHead>
             <TableRow>
               {dataTable.map(function (eachdata) {
-                return (
-                  <StyledTableCell key={eachdata} align="center">
-                    {eachdata}
-                  </StyledTableCell>
-                );
+                return <StyledTableCell key={eachdata}>{eachdata}</StyledTableCell>;
               })}
             </TableRow>
           </TableHead>
           <TableBody>
             {s3Data.map(eachdata => (
               <StyledTableRow key={eachdata.id}>
-                <StyledTableCell align="center" sx={{ minWidth: '50px' }}>
-                  {eachdata.id}
-                </StyledTableCell>
+                <StyledTableCell sx={{ minWidth: '50px' }}>{eachdata.id}</StyledTableCell>
                 <StyledTableCell
                   align={eachdata.align}
                   sx={{ minWidth: '70px', fontWeight: eachdata.fontWeight }}
@@ -100,6 +99,9 @@ export default function S3Table({ searchInput, searchCompanyCode, searchRefreshS
           editInputModalSwitch={editInputModalSwitch}
           setEditInputModalSwitch={setEditInputModalSwitch}
           searchInput={searchInput}
+          searchCompanyCode={searchCompanyCode}
+          searchRefreshSwitch={searchRefreshSwitch}
+          setSearchRefreshSwitch={setSearchRefreshSwitch}
         />
       )}
     </div>
@@ -110,10 +112,12 @@ S3Table.defaultProps = {
   searchInput: {},
   searchCompanyCode: '0',
   searchRefreshSwitch: true,
+  setSearchRefreshSwitch: () => {},
 };
 
 S3Table.propTypes = {
   searchInput: PropTypes.objectOf(PropTypes.string),
   searchCompanyCode: PropTypes.string,
   searchRefreshSwitch: PropTypes.bool,
+  setSearchRefreshSwitch: PropTypes.func,
 };

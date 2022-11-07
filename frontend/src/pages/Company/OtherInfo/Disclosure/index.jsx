@@ -245,22 +245,18 @@ export default function Disclosure() {
           <TableHead>
             <TableRow>
               {dataTable.map(function (eachdata) {
-                return (
-                  <StyledTableCell key={eachdata} align="center">
-                    {eachdata}
-                  </StyledTableCell>
-                );
+                return <StyledTableCell key={eachdata}>{eachdata}</StyledTableCell>;
               })}
             </TableRow>
           </TableHead>
+
           <TableBody>
             {disclosureData.map(eachdata => (
               <StyledTableRow key={eachdata.rcept_no}>
-                <StyledTableCell align="center" sx={{ minWidth: 90, maxWidth: 90 }}>
+                <StyledTableCell sx={{ minWidth: 90, maxWidth: 90 }}>
                   {changeDateDot(eachdata.rcept_dt)}
                 </StyledTableCell>
                 <StyledTableCell
-                  align="center"
                   onClick={() => {
                     goToReport(eachdata.rcept_no);
                   }}
@@ -268,16 +264,10 @@ export default function Disclosure() {
                 >
                   <u>{eachdata.report_nm}</u>
                 </StyledTableCell>
-                <StyledTableCell
-                  align="center"
-                  sx={{ minWidth: 100, maxWidth: 100, wordBreak: 'break-all' }}
-                >
+                <StyledTableCell sx={{ minWidth: 100, maxWidth: 100, wordBreak: 'break-all' }}>
                   {eachdata.flr_nm}
                 </StyledTableCell>
-                <StyledTableCell
-                  align="center"
-                  sx={{ minWidth: 100, maxWidth: 100, wordBreak: 'break-all' }}
-                >
+                <StyledTableCell sx={{ minWidth: 100, maxWidth: 100, wordBreak: 'break-all' }}>
                   {eachdata.corp_name}
                 </StyledTableCell>
               </StyledTableRow>
@@ -285,6 +275,7 @@ export default function Disclosure() {
           </TableBody>
         </Table>
       </TableContainer>
+
       <Pagination page={page} totalItem={totalItem} setPage={setPage} />
     </div>
   );

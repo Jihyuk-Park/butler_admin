@@ -126,28 +126,19 @@ export default function DeleteModal({
               <TableHead>
                 <TableRow>
                   {earningTable.map(function (eachdata) {
-                    return (
-                      <StyledTableCell key={eachdata} align="center">
-                        {eachdata}
-                      </StyledTableCell>
-                    );
+                    return <StyledTableCell key={eachdata}>{eachdata}</StyledTableCell>;
                   })}
                 </TableRow>
               </TableHead>
               <TableBody>
                 {earningData.map(eachdata => (
                   <StyledTableRow key={eachdata.id}>
-                    <StyledTableCell
-                      align="center"
-                      component="th"
-                      scope="row"
-                      sx={{ minWidth: 40, maxWidth: 40 }}
-                    >
+                    <StyledTableCell sx={{ minWidth: 40, maxWidth: 40 }}>
                       {eachdata.bsns_year}
                     </StyledTableCell>
-                    <StyledTableCell align="center">{eachdata.quarter_id}</StyledTableCell>
-                    <StyledTableCell align="center">{eachdata.file_name}</StyledTableCell>
-                    <StyledTableCell align="center" sx={{ minWidth: 70, maxWidth: 70 }}>
+                    <StyledTableCell>{eachdata.quarter_id}</StyledTableCell>
+                    <StyledTableCell>{eachdata.file_name}</StyledTableCell>
+                    <StyledTableCell sx={{ minWidth: 70, maxWidth: 70 }}>
                       <Button
                         onClick={() => {
                           openDeleteSelectConfirm(eachdata);

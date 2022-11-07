@@ -75,7 +75,7 @@ export default function CompanyInfo() {
         <Table stickyHeader>
           <TableHead>
             <TableRow>
-              <StyledTableCell align="center" colSpan={2}>
+              <StyledTableCell colSpan={2}>
                 <b>{companyInfoData.corp_name || '기업정보'}</b>
               </StyledTableCell>
             </TableRow>
@@ -83,15 +83,8 @@ export default function CompanyInfo() {
           <TableBody>
             {companyInfoTable.map((eachdata, index) => (
               <StyledTableRow key={eachdata}>
-                <StyledTableCell
-                  align="center"
-                  component="th"
-                  scope="row"
-                  sx={{ minWidth: 30, maxWidth: 30 }}
-                >
-                  {eachdata[0]}
-                </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 70, maxWidth: 70 }}>
+                <StyledTableCell sx={{ minWidth: 30, maxWidth: 30 }}>{eachdata[0]}</StyledTableCell>
+                <StyledTableCell sx={{ minWidth: 70, maxWidth: 70 }}>
                   {index !== 5 ? companyInfoData[eachdata[1]] : null}
                   {index === 5 ? addComma(companyInfoData[eachdata[1]]) : null}
                 </StyledTableCell>

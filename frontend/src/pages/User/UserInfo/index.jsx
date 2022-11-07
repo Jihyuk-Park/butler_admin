@@ -323,29 +323,25 @@ export default function UserInfo() {
             <TableHead>
               <TableRow>
                 {dataTable.map(function (eachdata) {
-                  return (
-                    <StyledTableCell key={eachdata} align="center">
-                      {eachdata}
-                    </StyledTableCell>
-                  );
+                  return <StyledTableCell key={eachdata}>{eachdata}</StyledTableCell>;
                 })}
               </TableRow>
             </TableHead>
             <TableBody>
               {userInfoData.map(eachdata => (
                 <StyledTableRow key={eachdata.id}>
-                  <StyledTableCell align="center" component="th" scope="row">
+                  <StyledTableCell>
                     <Button onClick={() => setEditData(eachdata)} color="secondary" sx={{ p: 0 }}>
                       {eachdata.NickName}
                     </Button>
                   </StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Name}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.Phone}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.EMail}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.AuthType}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.status}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.type}</StyledTableCell>
-                  <StyledTableCell align="center">{eachdata.id}</StyledTableCell>
+                  <StyledTableCell>{eachdata.Name}</StyledTableCell>
+                  <StyledTableCell>{eachdata.Phone}</StyledTableCell>
+                  <StyledTableCell>{eachdata.EMail}</StyledTableCell>
+                  <StyledTableCell>{eachdata.AuthType}</StyledTableCell>
+                  <StyledTableCell>{eachdata.status}</StyledTableCell>
+                  <StyledTableCell>{eachdata.type}</StyledTableCell>
+                  <StyledTableCell>{eachdata.id}</StyledTableCell>
                 </StyledTableRow>
               ))}
             </TableBody>

@@ -256,23 +256,13 @@ export default function UserUsage() {
               <TableBody>
                 {userUsageData.map(eachdata => (
                   <StyledTableRow key={eachdata.id}>
-                    <StyledTableCell align="center" component="th" scope="row">
-                      {eachdata.NickName}
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
-                      {changeDateDot(eachdata.createdAt)}
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
-                      {changeDateDot(eachdata.updatedAt)}
-                    </StyledTableCell>
-                    <StyledTableCell align="center">{eachdata.searchCounting || 0}</StyledTableCell>
-                    <StyledTableCell align="center">
-                      {eachdata.watchGroupCounting || 0}
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
-                      {eachdata.watchCompanyCounting || 0}
-                    </StyledTableCell>
-                    <StyledTableCell align="center">{eachdata.memoCounting || 0}</StyledTableCell>
+                    <StyledTableCell>{eachdata.NickName}</StyledTableCell>
+                    <StyledTableCell>{changeDateDot(eachdata.createdAt)}</StyledTableCell>
+                    <StyledTableCell>{changeDateDot(eachdata.updatedAt)}</StyledTableCell>
+                    <StyledTableCell>{eachdata.searchCounting || 0}</StyledTableCell>
+                    <StyledTableCell>{eachdata.watchGroupCounting || 0}</StyledTableCell>
+                    <StyledTableCell>{eachdata.watchCompanyCounting || 0}</StyledTableCell>
+                    <StyledTableCell>{eachdata.memoCounting || 0}</StyledTableCell>
                   </StyledTableRow>
                 ))}
               </TableBody>
@@ -400,6 +390,7 @@ export default function UserUsage() {
           </FixedBox>
         </Grid>
       </Grid>
+
       <Pagination page={page} totalItem={totalItem} setPage={setPage} />
     </div>
   );

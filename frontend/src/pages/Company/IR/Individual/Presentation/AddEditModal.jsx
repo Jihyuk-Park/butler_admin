@@ -108,24 +108,18 @@ export default function AddEditModal({
               <TableHead>
                 <TableRow>
                   {presentationTable.map(function (eachdata) {
-                    return (
-                      <StyledTableCell key={eachdata} align="center">
-                        {eachdata}
-                      </StyledTableCell>
-                    );
+                    return <StyledTableCell key={eachdata}>{eachdata}</StyledTableCell>;
                   })}
                 </TableRow>
               </TableHead>
               <TableBody>
                 {presentationData.map(eachdata => (
                   <StyledTableRow key={eachdata.id}>
-                    <StyledTableCell align="center" component="th" scope="row">
-                      {changeDateDot(eachdata.published_date)}
-                    </StyledTableCell>
-                    <StyledTableCell align="center">{eachdata.conference_name}</StyledTableCell>
-                    <StyledTableCell align="center">{eachdata.title}</StyledTableCell>
-                    <StyledTableCell align="center">{eachdata.file_name}</StyledTableCell>
-                    <StyledTableCell align="center" sx={{ minWidth: 60, maxWidth: 60 }}>
+                    <StyledTableCell>{changeDateDot(eachdata.published_date)}</StyledTableCell>
+                    <StyledTableCell>{eachdata.conference_name}</StyledTableCell>
+                    <StyledTableCell>{eachdata.title}</StyledTableCell>
+                    <StyledTableCell>{eachdata.file_name}</StyledTableCell>
+                    <StyledTableCell sx={{ minWidth: 60, maxWidth: 60 }}>
                       <Button
                         onClick={() => {
                           editSelectData(eachdata);

@@ -106,23 +106,17 @@ export default function AddEditModal({
               <TableHead>
                 <TableRow>
                   {earningTable.map(function (eachdata) {
-                    return (
-                      <StyledTableCell key={eachdata} align="center">
-                        {eachdata}
-                      </StyledTableCell>
-                    );
+                    return <StyledTableCell key={eachdata}>{eachdata}</StyledTableCell>;
                   })}
                 </TableRow>
               </TableHead>
               <TableBody>
                 {earningData.map(eachdata => (
                   <StyledTableRow key={eachdata.id}>
-                    <StyledTableCell align="center" component="th" scope="row">
-                      {eachdata.file_name}
-                    </StyledTableCell>
-                    <StyledTableCell align="center">{eachdata.bsns_year}</StyledTableCell>
-                    <StyledTableCell align="center">{eachdata.quarter_id}</StyledTableCell>
-                    <StyledTableCell align="center" sx={{ minWidth: 70, maxWidth: 70 }}>
+                    <StyledTableCell>{eachdata.file_name}</StyledTableCell>
+                    <StyledTableCell>{eachdata.bsns_year}</StyledTableCell>
+                    <StyledTableCell>{eachdata.quarter_id}</StyledTableCell>
+                    <StyledTableCell sx={{ minWidth: 70, maxWidth: 70 }}>
                       <Button
                         onClick={() => {
                           editSelectData(eachdata);

@@ -177,7 +177,6 @@ export default function CompanyList() {
                     onClick={() => {
                       sortData(eachdata);
                     }}
-                    align="center"
                     sx={{ cursor: 'pointer' }}
                   >
                     {eachdata} {sortField === eachdata ? sortType : null}
@@ -192,12 +191,7 @@ export default function CompanyList() {
                 <StyledTableCell align="center" sx={{ minWidth: 30, maxWidth: 30 }}>
                   {(page - 1) * 20 + index + 1}
                 </StyledTableCell>
-                <StyledTableCell
-                  align="center"
-                  component="th"
-                  scope="row"
-                  sx={{ minWidth: 105, maxWidth: 105 }}
-                >
+                <StyledTableCell sx={{ minWidth: 105, maxWidth: 105 }}>
                   <Button
                     color="secondary"
                     onClick={() => {
@@ -208,13 +202,13 @@ export default function CompanyList() {
                     <u>{eachdata.corp_name}</u>
                   </Button>
                 </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 60, maxWidth: 60 }}>
+                <StyledTableCell sx={{ minWidth: 60, maxWidth: 60 }}>
                   {eachdata.stock_code}
                 </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 60, maxWidth: 60 }}>
+                <StyledTableCell sx={{ minWidth: 60, maxWidth: 60 }}>
                   {eachdata.corp_code}
                 </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 60, maxWidth: 60 }}>
+                <StyledTableCell sx={{ minWidth: 60, maxWidth: 60 }}>
                   {eachdata.market_code}
                 </StyledTableCell>
                 <StyledTableCell align="left" sx={{ minWidth: 100, maxWidth: 100 }}>
@@ -233,13 +227,13 @@ export default function CompanyList() {
                 >
                   <u>{eachdata.ir_url}</u>
                 </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: { lg: 40, xl: 70 } }}>
+                <StyledTableCell sx={{ minWidth: { lg: 40, xl: 70 } }}>
                   {eachdata.Acc_mt}
                 </StyledTableCell>
                 <StyledTableCell align="left" sx={{ minWidth: { lg: 40, xl: 70 } }}>
                   {eachdata.keyword}
                 </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: { lg: 70, xl: 70 } }}>
+                <StyledTableCell sx={{ minWidth: { lg: 70, xl: 70 } }}>
                   {eachdata.fs_div === 'CFS' ? '연결' : '개별'}
                 </StyledTableCell>
               </StyledTableRow>
@@ -248,6 +242,7 @@ export default function CompanyList() {
         </Table>
       </TableContainer>
       <Pagination page={page} totalItem={totalItem} setPage={setPage} />
+
       {editModalSwitch === true ? (
         <EditModal
           editModalSwitch={editModalSwitch}

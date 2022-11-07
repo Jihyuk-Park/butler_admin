@@ -7,7 +7,7 @@ import StyledTableRow from '../../../../../component/UI/StyledTableRow';
 import { url } from '../../../../../component/commonVariable';
 import {
   periodArrayAuto,
-  addComma,
+  divideAndComma,
   changeKeyName,
   decimalPercent,
   scrollRightUseEffect,
@@ -17,7 +17,11 @@ export default function AccumulReportsExecutive() {
   const { searchCorpCode } = useParams();
 
   // 계정 array
-  const accumulReportsExecutiveAccountArray = ['급여총액', '1인 평균', '매출액대비 임원급여 비율'];
+  const accumulReportsExecutiveAccountArray = [
+    '급여총액 (백만)',
+    '1인 평균 (백만)',
+    '매출액대비 임원급여 비율',
+  ];
 
   // 배당 데이터
   const [accumulReportsExecutiveData, setAccumulReportsExecutiveData] = useState(
@@ -65,10 +69,10 @@ export default function AccumulReportsExecutive() {
             {periodArray.map(function (period) {
               return (
                 <PeriodTableCell align="right" key={`${eachdata}${period}`}>
-                  {index === 0 || index === 1 ? addComma(eachdata[changeKeyName(period)]) : null}
-                  {index !== 0 && index !== 1
-                    ? decimalPercent(eachdata[changeKeyName(period)])
+                  {index === 0 || index === 1
+                    ? divideAndComma(eachdata[changeKeyName(period)], 1000000, 0)
                     : null}
+                  {index === 2 ? decimalPercent(eachdata[changeKeyName(period)]) : null}
                 </PeriodTableCell>
               );
             })}

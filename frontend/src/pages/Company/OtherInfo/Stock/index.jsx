@@ -20,7 +20,7 @@ export default function Stock() {
   const { searchCorpCode } = useParams();
 
   // StockData
-  const stockAccountArray = ['최종거래일', '수정주가', '발행주식수(천주)', '보통주 시가총액'];
+  const stockAccountArray = ['최종거래일', '수정주가', '발행주식수(천주)', '보통주 시가총액(조)'];
   const [stockData, setStockData] = useState(stockAccountArray);
   const periodArray = periodArrayAuto();
 
@@ -56,11 +56,10 @@ export default function Stock() {
                 return (
                   <StyledTableCell
                     key={eachdata}
-                    align="center"
                     sx={[
                       index === 0
                         ? { minWidth: 180, position: 'sticky', left: 0, zIndex: 100 }
-                        : null,
+                        : { minWidth: 100 },
                     ]}
                   >
                     {eachdata}
@@ -74,7 +73,6 @@ export default function Stock() {
               return (
                 <StyledTableRow key={stockAccountArray[index]}>
                   <StyledTableCell
-                    align="center"
                     sx={{
                       minWidth: 180,
                       position: 'sticky',
@@ -89,11 +87,12 @@ export default function Stock() {
                     return (
                       <PeriodTableCell align="right" key={`${eachdata}${period}`}>
                         {index === 0 ? changeDateDash(eachdata[changeKeyName(period)]) : null}
+                        {index === 1 ? addComma(eachdata[changeKeyName(period)]) : null}
                         {index === 2
                           ? divideAndComma(eachdata[changeKeyName(period)], 1000, 0)
                           : null}
-                        {index === 1 || index === 3
-                          ? addComma(eachdata[changeKeyName(period)])
+                        {index === 3
+                          ? divideAndComma(eachdata[changeKeyName(period)], 1000000000000, 0)
                           : null}
                       </PeriodTableCell>
                     );

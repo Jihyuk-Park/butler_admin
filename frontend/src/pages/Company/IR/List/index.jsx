@@ -162,7 +162,6 @@ export default function IRList() {
                     onClick={() => {
                       sortData(eachdata);
                     }}
-                    align="center"
                     sx={{ cursor: 'pointer' }}
                   >
                     {eachdata} {sortField === eachdata ? sortType : null}
@@ -174,15 +173,10 @@ export default function IRList() {
           <TableBody>
             {companyListData.map((eachdata, index) => (
               <StyledTableRow key={eachdata.corp_code}>
-                <StyledTableCell align="center" sx={{ minWidth: 30, maxWidth: 30 }}>
+                <StyledTableCell sx={{ minWidth: 30, maxWidth: 30 }}>
                   {(page - 1) * 20 + index + 1}
                 </StyledTableCell>
-                <StyledTableCell
-                  align="center"
-                  component="th"
-                  scope="row"
-                  sx={{ minWidth: 110, maxWidth: 110 }}
-                >
+                <StyledTableCell sx={{ minWidth: 110, maxWidth: 110 }}>
                   <Button
                     color="secondary"
                     onClick={() => {
@@ -193,12 +187,12 @@ export default function IRList() {
                     <u>{eachdata.corp_name}</u>
                   </Button>
                 </StyledTableCell>
-                <StyledTableCell align="center">{eachdata.stock_code}</StyledTableCell>
-                <StyledTableCell align="center">{changeDateDash(eachdata.recent)}</StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 70, maxWidth: 70 }}>
+                <StyledTableCell>{eachdata.stock_code}</StyledTableCell>
+                <StyledTableCell>{changeDateDash(eachdata.recent)}</StyledTableCell>
+                <StyledTableCell sx={{ minWidth: 70, maxWidth: 70 }}>
                   {changeDateDash(eachdata.earning)}
                 </StyledTableCell>
-                <StyledTableCell align="center" sx={{ minWidth: 70, maxWidth: 70 }}>
+                <StyledTableCell sx={{ minWidth: 70, maxWidth: 70 }}>
                   {changeDateDash(eachdata.presentation)}
                 </StyledTableCell>
                 <StyledTableCell
@@ -213,6 +207,7 @@ export default function IRList() {
           </TableBody>
         </Table>
       </TableContainer>
+
       <Pagination page={page} totalItem={totalItem} setPage={setPage} />
     </div>
   );

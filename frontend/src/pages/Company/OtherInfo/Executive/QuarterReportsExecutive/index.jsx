@@ -8,6 +8,7 @@ import { url } from '../../../../../component/commonVariable';
 import {
   periodArrayAuto,
   addComma,
+  divideAndComma,
   changeKeyName,
   decimalPercent,
   scrollRightUseEffect,
@@ -19,7 +20,7 @@ export default function QuarterReportsExecutive() {
   // 계정
   const quarterReportsExecutiveAccountArray = [
     '임원수',
-    '급여총액',
+    '급여총액 (백만)',
     '임원수비율',
     '전체급여대비 임원급여 비율',
     '매출액대비 임원급여 비율',
@@ -72,9 +73,10 @@ export default function QuarterReportsExecutive() {
             {periodArray.map(function (period) {
               return (
                 <PeriodTableCell align="right" key={`${eachdata}${period}`}>
-                  {index === 0 || index === 1 ? addComma(eachdata[changeKeyName(period)]) : null}
+                  {index === 0 ? addComma(eachdata[changeKeyName(period)]) : null}
+                  {index === 1 ? divideAndComma(eachdata[changeKeyName(period)], 1000000, 0) : null}
                   {index !== 0 && index !== 1
-                    ? decimalPercent(eachdata[changeKeyName(period)])
+                    ? decimalPercent(eachdata[changeKeyName(period)], 1)
                     : null}
                 </PeriodTableCell>
               );
