@@ -168,7 +168,11 @@ function earningButton(fileName, year, quarter, searchStockCode) {
       </Button>
     );
   } else {
-    answer = fileName;
+    answer = (
+      <Button variant="outlined" color="secondary" disabled sx={{ py: 0 }}>
+        실적발표
+      </Button>
+    );
   }
   return answer;
 }

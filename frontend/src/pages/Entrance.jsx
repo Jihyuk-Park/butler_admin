@@ -14,6 +14,12 @@ export default function Entrance({ setIsLogin }) {
     setInputPassword(e.target.value);
   };
 
+  const onCheckEnter = e => {
+    if (e.key === 'Enter') {
+      login();
+    }
+  };
+
   const login = () => {
     if (inputId === process.env.REACT_APP_ADMINID) {
       if (inputPassword === process.env.REACT_APP_ADMINPASSWORD) {
@@ -52,6 +58,7 @@ export default function Entrance({ setIsLogin }) {
               fullWidth
               value={inputPassword}
               onChange={onChangePassword}
+              onKeyPress={onCheckEnter}
               type="password"
               autoComplete="off"
             />

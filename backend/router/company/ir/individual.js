@@ -9,7 +9,7 @@ import { deleteIRS3, uploadIRS3 } from '../../../module/aws.js';
 router.get('/getData/search/recent/:searchStockCode', function(req,res){
   let searchStockCode = req.params.searchStockCode;
 
-  let sql = `SELECT a.corp_name, a.stock_code, max(b.updated_at) as recent, max(c.updated_at) as earning, max(d.updated_at) as presentation FROM CompanyInfo a
+  let sql = `SELECT a.corp_name, a.stock_code, max(b.last_commit_date) as recent, max(c.updated_at) as earning, max(d.updated_at) as presentation FROM CompanyInfo a
     LEFT JOIN company_last_commit b on a.corp_code = b.corp_code  
     LEFT JOIN ir_quarter_earning c on a.stock_code = c.stock_code
     LEFT JOIN ir_presentation d on a.stock_code = d.stock_code

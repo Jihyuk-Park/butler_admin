@@ -29,9 +29,8 @@ const periodYearArrayAuto = () => {
 
 /** company_last_commit을 업데이트하는 함수 */
 const updateCommit = (searchCompanyCode, type) => {
-
   // company_last_commit 에 값이 있는지 조회 후 INSERT OR UPDATE
-  let updateSql = `SELECT COUNT(*) as commit FROM company_last_commit WHERE corp_code='${searchCompanyCode}' && commit_type='${type}'`;
+  let updateSql = `SELECT COUNT(*) as commit FROM company_last_commit WHERE corp_code="${searchCompanyCode}" && commit_type="${type}"`;
   connection.query(updateSql, function(err, rows, fields){
     if (err){
       console.log(err);
@@ -40,7 +39,7 @@ const updateCommit = (searchCompanyCode, type) => {
         updateSql = `INSERT INTO company_last_commit(corp_code, commit_type, last_commit_date, created_at, updated_at)
           VALUES('${searchCompanyCode}', '${type}', NOW(), NOW(), NOW())`;
       } else {
-        updateSql = `UPDATE company_last_commit SET last_commit_date = NOW() WHERE corp_code='${searchCompanyCode}' && commit_type='${type}'`;
+        updateSql = `UPDATE company_last_commit SET last_commit_date = NOW() WHERE corp_code="${searchCompanyCode}" && commit_type="${type}"`;
       }
       connection.query(updateSql, function(err, rows, fields){
         if (err){
