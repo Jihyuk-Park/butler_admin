@@ -14,6 +14,7 @@ export default function Entrance({ setIsLogin }) {
     setInputPassword(e.target.value);
   };
 
+  // 엔터 로그인
   const onCheckEnter = e => {
     if (e.key === 'Enter') {
       login();
@@ -51,7 +52,13 @@ export default function Entrance({ setIsLogin }) {
             로그인
           </Typography>
           <Typography align="left">아이디</Typography>
-          <TextField fullWidth value={inputId} onChange={onChangeId} sx={{ mb: '20px' }} />
+          <TextField
+            fullWidth
+            value={inputId}
+            onChange={onChangeId}
+            onKeyPress={onCheckEnter}
+            sx={{ mb: '20px' }}
+          />
           <Typography align="left">비밀번호</Typography>
           <form>
             <TextField
