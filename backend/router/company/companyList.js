@@ -74,7 +74,7 @@ router.post('/edit', function(req, res){
 
   // console.log(corp_code, keyword, ir_url);
 
-  var sql = `UPDATE CompanyInfo SET keyword=?, ir_url=? WHERE corp_code = ?`;
+  let sql = `UPDATE CompanyInfo SET keyword=?, ir_url=? WHERE corp_code = ?`;
   connection.query(sql, [keyword, ir_url, corp_code], function(err, result, fields){
       if(err){
           console.log(err);

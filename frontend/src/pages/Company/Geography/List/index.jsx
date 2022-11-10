@@ -126,6 +126,7 @@ export default function GeographyList() {
             onChangeCompanyCode={setSearchCompanyCode}
             clearSwitch={clearSwitch}
             minWidth="300px"
+            enterFunc={searchData}
           />
           <Button variant="contained" color="secondary" onClick={searchData}>
             검색

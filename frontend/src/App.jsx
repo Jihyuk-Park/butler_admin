@@ -41,7 +41,7 @@ function App() {
           <Grid item xs={1.8}>
             <NavBar />
           </Grid>
-          <Grid item xs={10.2}>
+          <Grid item xs={10.2} sx={{ minHeight: { lg: '95vh', xl: '97vh' } }}>
             <Routes>
               {/* 메인(기본url) 페이지('/') */}
               <Route path="/" element={<CompanyList />} />

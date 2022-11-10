@@ -35,18 +35,18 @@ export default function IRIndividual() {
   }, [searchStockCode, refreshSwitch]);
 
   const searchData = () => {
-    if (stockCode) {
-      navigate(`/Company/IR/Individual/${stockCode}`);
-    } else {
-      alert('종목코드가 없는 기업입니다');
-    }
+    navigate(`/Company/IR/Individual/${stockCode}`);
   };
 
   return (
     <div>
       <Grid container direction="row" justifyContent="space-between" alignItems="center">
         <Stack direction="row" spacing={2} alignItems="center">
-          <CompanyListAutoComplete onChangeStockCode={setStockCode} minWidth="300px" />
+          <CompanyListAutoComplete
+            onChangeStockCode={setStockCode}
+            minWidth="300px"
+            enterFunc={searchData}
+          />
           <Button variant="contained" color="secondary" onClick={searchData}>
             검색
           </Button>

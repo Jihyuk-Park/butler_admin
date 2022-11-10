@@ -2,23 +2,26 @@ import express from 'express';
 const router = express.Router();
 import connection from '../../module/database.js';
 import { itemNumber } from '../../module/constVariable.js';
-import { userDailyCompanySearchCondition } from '../../module/userFunction.js'
+import { sortTypeReturn, userDailyCompanySortField, userDailyCompanySearchCondition } from '../../module/userFunction.js'
 
 // getData
-router.get('/getData/all/:page', function(req,res){
-  let page = req.params.page;
+router.get('/getData/all/:page/:sortField/:sortType', function(req,res){
+  let [page, sortField, sortType] = [req.params.page, req.params.sortField, req.params.sortType];
+
+  sortType = sortTypeReturn(sortType);
+  sortField = userDailyCompanySortField(sortField);
 
   // outer join (LEFT + RIGHT + UNION)
-  let sql=`SELECT DATE(a.created_at) as date, totalSearchCounting, nonMemberSearchCounting, watchCounting, totalWatchCounting FROM SearchHistory as a
+  let sql=`SELECT DATE(a.created_at) as date, totalSearchCounting, totalSearchCounting - nonMemberSearchCounting as memberSearchCounting, nonMemberSearchCounting, watchCounting, totalWatchCounting FROM SearchHistory as a
     LEFT OUTER JOIN (SELECT created_at, COUNT(case when userId is null then 1 end) as nonMemberSearchCounting, (count(*)) as totalSearchCounting FROM SearchHistory Group BY DATE(created_at)) as b ON a.created_at = b.created_at
     LEFT OUTER JOIN (SELECT created_at, count(*) as watchCounting, SUM(count(id)) over(order by created_at) as totalWatchCounting FROM Watch Group BY DATE(created_at)) as c ON a.created_at = c.created_at
     Group BY DATE(a.created_at)
     UNION
-    SELECT DATE(c.created_at) as date, totalSearchCounting, nonMemberSearchCounting, watchCounting, totalWatchCounting FROM SearchHistory as a
+    SELECT DATE(c.created_at) as date, totalSearchCounting, totalSearchCounting - nonMemberSearchCounting as memberSearchCounting, nonMemberSearchCounting, watchCounting, totalWatchCounting FROM SearchHistory as a
     RIGHT OUTER JOIN (SELECT created_at, COUNT(case when userId is null then 1 end) as nonMemberSearchCounting, (count(*)) as totalSearchCounting FROM SearchHistory Group BY DATE(created_at)) as b ON a.created_at = b.created_at
     RIGHT OUTER JOIN (SELECT created_at, count(*) as watchCounting, SUM(count(id)) over(order by created_at) as totalWatchCounting FROM Watch Group BY DATE(created_at)) as c ON a.created_at = c.created_at
     Group BY DATE(c.created_at)
-    ORDER BY date DESC
+    ORDER BY ${sortField} ${sortType}
     LIMIT ${itemNumber} OFFSET ${itemNumber*(page-1)};`
 	
   connection.query(sql, function(err, rows, fields){
@@ -30,33 +33,36 @@ router.get('/getData/all/:page', function(req,res){
   })
 });
 
-router.get(`/getData/search/:page`, function(req,res){
-  let page = req.params.page;
+router.get(`/getData/search/:page/:sortField/:sortType`, function(req,res){
+  let [page, sortField, sortType] = [req.params.page, req.params.sortField, req.params.sortType];
 
   let searchCountingStart = req.query.searchCountingStart;
   let searchCountingEnd = req.query.searchCountingEnd;
   let searchUserCountingStart = req.query.searchUserCountingStart;
   let searchUserCountingEnd = req.query.searchUserCountingEnd;
 
+  sortType = sortTypeReturn(sortType);
+  sortField = userDailyCompanySortField(sortField);
+
   let searchCondition = userDailyCompanySearchCondition(searchCountingStart,searchCountingEnd, searchUserCountingStart, searchUserCountingEnd);
 
   // 일자별 검색 기준 + 일자별 관심목록 기준이므로 a.created_at와 c.created_at으로 조인
   let sql=`SELECT * FROM
-      (SELECT DATE(a.created_at) as date, totalSearchCounting, nonMemberSearchCounting, watchCounting, totalWatchCounting FROM SearchHistory as a
+      (SELECT DATE(a.created_at) as date, totalSearchCounting, totalSearchCounting - nonMemberSearchCounting as memberSearchCounting, nonMemberSearchCounting, watchCounting, totalWatchCounting FROM SearchHistory as a
       LEFT OUTER JOIN (SELECT created_at, COUNT(case when userId is null then 1 end) as nonMemberSearchCounting, (count(*)) as totalSearchCounting FROM SearchHistory Group BY DATE(created_at)) as b ON a.created_at = b.created_at
       LEFT OUTER JOIN (SELECT created_at, count(*) as watchCounting, SUM(count(id)) over(order by created_at) as totalWatchCounting FROM Watch Group BY DATE(created_at)) as c ON a.created_at = c.created_at
       Group BY DATE(a.created_at)
 
       UNION
 
-      SELECT DATE(c.created_at) as date, totalSearchCounting, nonMemberSearchCounting, watchCounting, totalWatchCounting FROM SearchHistory as a
+      SELECT DATE(c.created_at) as date, totalSearchCounting, totalSearchCounting - nonMemberSearchCounting as memberSearchCounting, nonMemberSearchCounting, watchCounting, totalWatchCounting FROM SearchHistory as a
       RIGHT OUTER JOIN (SELECT created_at, COUNT(case when userId is null then 1 end) as nonMemberSearchCounting, (count(*)) as totalSearchCounting FROM SearchHistory Group BY DATE(created_at)) as b ON a.created_at = b.created_at
       RIGHT OUTER JOIN (SELECT created_at, count(*) as watchCounting, SUM(count(id)) over(order by created_at) as totalWatchCounting FROM Watch Group BY DATE(created_at)) as c ON a.created_at = c.created_at
       Group BY DATE(c.created_at)
       ) A
 
     ${searchCondition}
-    ORDER BY date DESC
+    ORDER BY ${sortField} ${sortType}
     LIMIT ${itemNumber} OFFSET ${itemNumber*(page-1)};`
 
   let searchCompanyCode = req.query.searchCompanyCode;
@@ -65,7 +71,7 @@ router.get(`/getData/search/:page`, function(req,res){
 
     // 기업 검색 시, 일자별 검색 히스토리 기준이 아니라 존재하는 기업의 검색(+ 관심목록)데이터 기준이므로 필터링 후 outer join
     sql=`SELECT * FROM
-        (SELECT date, nonMemberSearchCounting, totalSearchCounting, watchCounting, totalWatchCounting FROM 
+        (SELECT date, nonMemberSearchCounting, totalSearchCounting, totalSearchCounting - nonMemberSearchCounting as memberSearchCounting, watchCounting, totalWatchCounting FROM 
         ((SELECT DATE(created_at) as date, COUNT(case when userId is null then 1 end) as nonMemberSearchCounting, (count(*)) as totalSearchCounting
         FROM SearchHistory WHERE corp_code = ${searchCompanyCode} Group BY DATE(created_at)) A
         LEFT OUTER JOIN 
@@ -75,7 +81,7 @@ router.get(`/getData/search/:page`, function(req,res){
 
         UNION
 
-        SELECT date, nonMemberSearchCounting, totalSearchCounting, watchCounting, totalWatchCounting FROM 
+        SELECT date, nonMemberSearchCounting, totalSearchCounting, totalSearchCounting - nonMemberSearchCounting as memberSearchCounting, watchCounting, totalWatchCounting FROM 
         ((SELECT DATE(created_at) as dateA, COUNT(case when userId is null then 1 end) as nonMemberSearchCounting, (count(*)) as totalSearchCounting
         FROM SearchHistory WHERE corp_code = ${searchCompanyCode} Group BY DATE(created_at)) A
         RIGHT OUTER JOIN 
@@ -84,24 +90,8 @@ router.get(`/getData/search/:page`, function(req,res){
         ON dateA = date) GROUP BY date) B
 
       ${searchCondition}
-      ORDER BY date DESC
+      ORDER BY ${sortField} ${sortType}
       LIMIT ${itemNumber} OFFSET ${itemNumber*(page-1)};`
-    
-    // (삭제 예정) 기존 변형 코드 맨 위 요상한게 남는. 
-    // sql=`SELECT * FROM
-    //   (SELECT DATE(b.created_at) as date, totalSearchCounting, nonMemberSearchCounting, watchCounting, totalWatchCounting FROM SearchHistory as a
-    //   LEFT JOIN (SELECT created_at, COUNT(case when userId is null then 1 end) as nonMemberSearchCounting, (count(*)) as totalSearchCounting FROM SearchHistory ${companyCondition} Group BY DATE(created_at)) as b ON a.created_at = b.created_at
-    //   LEFT JOIN (SELECT created_at, count(*) as watchCounting, SUM(count(id)) over(order by created_at) as totalWatchCounting FROM Watch ${companyCondition} Group BY DATE(created_at)) as c ON a.created_at = c.created_at
-    //   Group BY DATE(b.created_at)
-    //   UNION
-    //   SELECT DATE(c.created_at) as date, totalSearchCounting, nonMemberSearchCounting, watchCounting, totalWatchCounting FROM SearchHistory as a
-    //   RIGHT JOIN (SELECT created_at, COUNT(case when userId is null then 1 end) as nonMemberSearchCounting, (count(*)) as totalSearchCounting FROM SearchHistory ${companyCondition} Group BY DATE(created_at)) as b ON a.created_at = b.created_at
-    //   RIGHT JOIN (SELECT created_at, count(*) as watchCounting, SUM(count(id)) over(order by created_at) as totalWatchCounting FROM Watch ${companyCondition} Group BY DATE(created_at)) as c ON a.created_at = c.created_at
-    //   Group BY DATE(c.created_at)
-    //   ) A
-    // ${searchCondition}
-    // ORDER BY date DESC
-    // LIMIT ${itemNumber} OFFSET ${itemNumber*(page-1)};`
   }
 	
   connection.query(sql, function(err, rows, fields){

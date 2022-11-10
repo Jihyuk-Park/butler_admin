@@ -18,16 +18,31 @@ import FixedBox from '../../../component/UI/FixedBox';
 import StyledTableCell from '../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../component/UI/StyledTableRow';
 import { url } from '../../../component/commonVariable';
+import { changeDateDash, addComma } from '../../../component/commonFunction';
 import DropDown from '../../../component/UI/DropDown';
 import Pagination from '../../../component/Pagination/index';
 
 export default function UserInfo() {
+  // 데이터 정렬 기준 선택
+  const [sortField, setSortField] = useState('Uid');
+  const [sortType, setSortType] = useState('▼');
+
   // 유저 정보 데이터 관련
-  const dataTable = ['닉네임', '이름', '전화번호', '이메일', '로그인 방식', 'Grade', 'Type', 'Uid'];
+  const dataTable = [
+    '닉네임',
+    '이름',
+    '전화번호',
+    '이메일',
+    '로그인 방식',
+    '가입일',
+    'Grade',
+    'Type',
+    'Uid',
+  ];
   const [userInfoData, setUserInfoData] = useState([]);
 
   // 검색 관련
-  const searchTypeList = ['닉네임', '이름', '로그인 방식', 'Grade', 'Type', 'Uid'];
+  const searchTypeList = ['닉네임', '이름', '로그인 방식', '가입일', 'Grade', 'Type', 'Uid'];
   const [searchType, setSearchType] = useState('닉네임');
   const [searchInput, setSearchInput] = useState('');
   const [isSearch, setIsSearch] = useState(false);
@@ -105,7 +120,7 @@ export default function UserInfo() {
   useEffect(() => {
     if (isSearch === false) {
       axios
-        .get(`${url}/admin/user/userInfo/getData/all/${page}`)
+        .get(`${url}/admin/user/userInfo/getData/all/${page}/${sortField}/${sortType}`)
         .then(result => {
           // console.log(result.data);
           setUserInfoData(result.data);
@@ -116,7 +131,9 @@ export default function UserInfo() {
         });
     } else {
       axios
-        .get(`${url}/admin/user/userInfo/getData/search/${page}/${searchType}/${searchInput}`)
+        .get(
+          `${url}/admin/user/userInfo/getData/search/${page}/${sortField}/${sortType}/${searchType}/${searchInput}`,
+        )
         .then(result => {
           // console.log(result.data);
           setUserInfoData(result.data);
@@ -125,7 +142,7 @@ export default function UserInfo() {
           console.log('실패했습니다');
         });
     }
-  }, [page, refreshSwitch]);
+  }, [page, sortField, sortType, refreshSwitch]);
 
   // 전체 페이지 수 계산을 위한 Hook (무한 스크롤)
   useEffect(() => {
@@ -151,6 +168,22 @@ export default function UserInfo() {
         });
     }
   }, [isSearch, refreshSwitch]);
+
+  // 정렬
+  const sortData = field => {
+    if (field !== '삭제') {
+      if (sortField !== field) {
+        setSortField(field);
+      } else if (sortField === field) {
+        if (sortType === '▼') {
+          setSortType('▲');
+        } else {
+          setSortField('Uid');
+          setSortType('▼');
+        }
+      }
+    }
+  };
 
   // 검색 타입 설정
   const selectType = e => {
@@ -318,30 +351,51 @@ export default function UserInfo() {
     <Grid container columnSpacing={1}>
       {/* userInfo 표 영역 */}
       <Grid item xs={8}>
-        <TableContainer component={Paper} sx={{ maxHeight: { md: '610px', xl: '885px' } }}>
+        <TableContainer component={Paper} sx={{ maxHeight: { md: '610px', xl: '955px' } }}>
           <Table stickyHeader>
             <TableHead>
               <TableRow>
                 {dataTable.map(function (eachdata) {
-                  return <StyledTableCell key={eachdata}>{eachdata}</StyledTableCell>;
+                  return (
+                    <StyledTableCell
+                      key={eachdata}
+                      onClick={() => {
+                        sortData(eachdata);
+                      }}
+                      sx={{ cursor: 'pointer' }}
+                    >
+                      {eachdata} {sortField === eachdata ? sortType : null}
+                    </StyledTableCell>
+                  );
                 })}
               </TableRow>
             </TableHead>
             <TableBody>
               {userInfoData.map(eachdata => (
                 <StyledTableRow key={eachdata.id}>
-                  <StyledTableCell>
+                  <StyledTableCell sx={{ minWidth: { xl: 100 }, maxWidth: 100 }}>
                     <Button onClick={() => setEditData(eachdata)} color="secondary" sx={{ p: 0 }}>
                       {eachdata.NickName}
                     </Button>
                   </StyledTableCell>
-                  <StyledTableCell>{eachdata.Name}</StyledTableCell>
-                  <StyledTableCell>{eachdata.Phone}</StyledTableCell>
+                  <StyledTableCell sx={{ minWidth: 50, maxWidth: 50 }}>
+                    {eachdata.Name}
+                  </StyledTableCell>
+                  <StyledTableCell sx={{ minWidth: 80, maxWidth: 80 }}>
+                    {eachdata.Phone}
+                  </StyledTableCell>
                   <StyledTableCell>{eachdata.EMail}</StyledTableCell>
                   <StyledTableCell>{eachdata.AuthType}</StyledTableCell>
-                  <StyledTableCell>{eachdata.status}</StyledTableCell>
-                  <StyledTableCell>{eachdata.type}</StyledTableCell>
-                  <StyledTableCell>{eachdata.id}</StyledTableCell>
+                  <StyledTableCell>{changeDateDash(eachdata.createdAt)}</StyledTableCell>
+                  <StyledTableCell sx={{ minWidth: { xl: 50 }, maxWidth: { xl: 50 } }}>
+                    {eachdata.status}
+                  </StyledTableCell>
+                  <StyledTableCell sx={{ minWidth: { xl: 50 }, maxWidth: { xl: 50 } }}>
+                    {eachdata.type}
+                  </StyledTableCell>
+                  <StyledTableCell sx={{ minWidth: { lg: 40, xl: 50 }, maxWidth: { xl: 50 } }}>
+                    {addComma(eachdata.id)}
+                  </StyledTableCell>
                 </StyledTableRow>
               ))}
             </TableBody>

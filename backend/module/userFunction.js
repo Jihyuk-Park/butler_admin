@@ -1,11 +1,35 @@
 /** 내림차순/오름차순 타입을 반환 */
 function sortTypeReturn (sortType) {
-  if (sortType === "내림차순") {
-    sortType = 'DESC';
-  } else {
+  if (sortType === "▲") {
     sortType = 'ASC';
+  } else {
+    sortType = 'DESC';
   }
   return sortType;
+}
+
+/** (userInfo) 정렬 기준(필드)을 반환 */
+function userInfoSortField (sortField) {
+  if (sortField === "닉네임") {
+    sortField = 'a.NickName';
+  } else if (sortField === "이름"){
+    sortField = 'a.Name';
+  } else if (sortField === "전화번호") {
+    sortField = 'a.Phone';
+  } else if (sortField === "이메일") {
+    sortField = 'a.Email';
+  } else if (sortField === "로그인 방식") {
+    sortField = 'a.AuthType';
+  } else if (sortField === "가입일") {
+    sortField = 'a.createdAt';
+  } else if (sortField === "GRADE") {
+    sortField = 'b.status';
+  } else if (sortField === "TYPE") {
+    sortField = 'b.type';
+  } else {
+    sortField = 'a.id';
+  }
+  return sortField;
 }
 
 /** (userInfo) 검색 타입에 따라 필드명을 반환  ex) 로그인 방식 => AuthType 반환 */
@@ -39,8 +63,12 @@ function userMemoSortField (sortField) {
     sortField = 'a.updated_at';
   } else if (sortField === "기업명") {
     sortField = 'b.corp_name';
-  } else {
+  } else if (sortField === "유저 닉네임") {
     sortField = 'c.NickName';
+  } else if (sortField === "타입") {
+    sortField = 'a.type';
+  } else {
+    sortField = 'a.memo';
   }
 
   return sortField;
@@ -48,7 +76,9 @@ function userMemoSortField (sortField) {
 
 /** (userUsage) 정렬 기준(필드)을 반환 */
 function userUsageSortField (sortField) {
-  if (sortField === "가입일"){
+  if (sortField === "닉네임") {
+    sortField = 'a.NickName';
+  } else if (sortField === "가입일"){
     sortField = 'a.createdAt';
   } else if (sortField === "최근 접속일") {
     sortField = 'a.updatedAt';
@@ -56,10 +86,50 @@ function userUsageSortField (sortField) {
     sortField = 'c.searchCounting';
   } else if (sortField === "관심목록 그룹 수") {
     sortField = 'g.watchCompanyCounting';
-  } else {
+  } else if (sortField === "관심목록 기업 수 ") {
     sortField = 'd.watchGroupCounting';
+  } else {
+    sortField = 'b.memoCounting';
   }
 
+  return sortField;
+}
+
+/** (userDailyCompany) 정렬 기준(필드)을 반환 */
+function userDailyCompanySortField (sortField) {
+  if (sortField === "일자"){
+    sortField = 'date';
+  } else if (sortField === "가입자의 검색 횟수") {
+    sortField = 'memberSearchCounting';
+  } else if (sortField === "비 가입자의 검색 횟수") {
+    sortField = 'nonMemberSearchCounting';
+  } else if (sortField === "검색 횟수 총합") {
+    sortField = 'totalSearchCounting';
+  } else if (sortField === "관심목록 신규 유저 수") {
+    sortField = 'watchCounting';
+  } else {
+    sortField = 'totalWatchCounting';
+  }
+  return sortField;
+}
+
+/** (userEntire) 정렬 기준(필드)을 반환 */
+function userEntireSortField (sortField) {
+  if (sortField === "일자"){
+    sortField = 'date';
+  } else if (sortField === "네이버 일간 가입자" || sortField === "네이버 월간 가입자") {
+    sortField = 'NAVER';
+  } else if (sortField === "카카오 일간 가입자" || sortField === "카카오 월간 가입자") {
+    sortField = 'KAKAO';
+  } else if (sortField === "일간 가입자 합계" || sortField === "월간 가입자 합계") {
+    sortField = 'Daily';
+  } else if (sortField === "네이버 누적 가입자") {
+    sortField = 'TOTAL_NAVER';
+  } else if (sortField === "카카오 누적 가입자") {
+    sortField = 'TOTAL_KAKAO';
+  } else {
+    sortField = 'TOTAL_Daily';
+  }
   return sortField;
 }
 
@@ -139,7 +209,9 @@ function userUsageCompanyCondition (searchCompanyStart, searchCompanyEnd) {
 
 /** (userCompanyUsage) 정렬 기준(필드)을 반환 */
 function userCompanyUsageSortField (sortField) {
-  if (sortField === "가입자의 검색 횟수"){
+  if (sortField === "기업명"){
+    sortField = 'a.corp_name';
+  } else if (sortField === "가입자의 검색 횟수"){
     sortField = 'b.memberSearchCounting';
   } else if (sortField === "비 가입자의 검색 횟수") {
     sortField = 'd.nonMemberSearchCounting';
@@ -275,10 +347,13 @@ function userDailyCompanySearchCondition (searchCountingStart, searchCountingEnd
 
 export { 
   sortTypeReturn,
+  userInfoSortField,
   userInfoSearchType,
   userMemoSortField,
   userUsageSortField,
   userUsageSearchCondition,
+  userDailyCompanySortField,
+  userEntireSortField,
   userUsageCompanyCondition,
   userCompanyUsageSortField,
   userCompanyUsageSearchCondition,

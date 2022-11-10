@@ -12,6 +12,7 @@ export default function CompanyListAutoComplete({
   onChangeStockCode,
   clearSwitch,
   minWidth,
+  enterFunc,
 }) {
   const [inputText, setInputText] = useState('');
   const [companyListData, setCompanyListData] = useState([]);
@@ -54,6 +55,12 @@ export default function CompanyListAutoComplete({
     setAutoCompleteText('');
   };
 
+  const onCheckEnter = e => {
+    if (e.key === 'Enter') {
+      enterFunc();
+    }
+  };
+
   return (
     <Autocomplete
       // 받은 데이터들 중 corp_name을 목록으로 보여주는 옵션 (default - option.label)
@@ -74,8 +81,14 @@ export default function CompanyListAutoComplete({
         );
       }}
       renderInput={params => (
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        <TextField {...params} label="Company" onChange={onChangeInput} value={inputText} />
+        <TextField
+          // eslint-disable-next-line react/jsx-props-no-spreading
+          {...params}
+          label="Company"
+          onChange={onChangeInput}
+          value={inputText}
+          onKeyPress={onCheckEnter}
+        />
       )}
     />
   );
@@ -87,6 +100,7 @@ CompanyListAutoComplete.defaultProps = {
   onChangeStockCode: () => {},
   clearSwitch: 0,
   minWidth: '100px',
+  enterFunc: () => {},
 };
 
 CompanyListAutoComplete.propTypes = {
@@ -95,4 +109,5 @@ CompanyListAutoComplete.propTypes = {
   onChangeStockCode: PropTypes.func,
   clearSwitch: PropTypes.number,
   minWidth: PropTypes.string,
+  enterFunc: PropTypes.func,
 };

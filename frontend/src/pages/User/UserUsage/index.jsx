@@ -14,25 +14,17 @@ import {
   Typography,
 } from '@mui/material';
 import { url } from '../../../component/commonVariable';
-import { changeDateDot } from '../../../component/commonFunction';
+import { changeDateDot, addComma } from '../../../component/commonFunction';
 import OutLinedBox from '../../../component/UI/OutLinedBox';
 import StyledTableCell from '../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../component/UI/StyledTableRow';
 import FixedBox from '../../../component/UI/FixedBox';
-import DropDown from '../../../component/UI/DropDown';
 import Pagination from '../../../component/Pagination/index';
 
 export default function UserUsage() {
   // 데이터 정렬 기준 선택
-  const sortFieldList = [
-    '가입일',
-    '최근 접속일',
-    '기업 검색 횟수',
-    '관심목록 그룹 수',
-    '작성 메모 수',
-  ];
   const [sortField, setSortField] = useState('가입일');
-  const [sortType, setSortType] = useState('내림차순');
+  const [sortType, setSortType] = useState('▼');
 
   // 유저 사용 정보 관련
   const dataTable = [
@@ -142,21 +134,17 @@ export default function UserUsage() {
     }
   }, [isSearch, refreshSwitch]);
 
-  // 데이터 정렬 타입 선택
-  const selectField = e => {
-    setUserUsageData([]);
-    setPage(1);
-    setSortField(e.target.value);
-  };
-
-  // 내림/오름차순 선택
-  const selectSortType = () => {
-    setUserUsageData([]);
-    setPage(1);
-    if (sortType === '내림차순') {
-      setSortType('오름차순');
-    } else {
-      setSortType('내림차순');
+  // 정렬
+  const sortData = field => {
+    if (sortField !== field) {
+      setSortField(field);
+    } else if (sortField === field) {
+      if (sortType === '▼') {
+        setSortType('▲');
+      } else {
+        setSortField('가입일');
+        setSortType('▼');
+      }
     }
   };
 
@@ -218,25 +206,6 @@ export default function UserUsage() {
 
   return (
     <div>
-      {/* 정렬 영역  */}
-      <Grid container alignItems="flex-start" sx={{ mb: '20px' }}>
-        <DropDown
-          value={sortField}
-          label="정렬 타입"
-          onChange={selectField}
-          selectList={sortFieldList}
-        />
-        <Button
-          onClick={selectSortType}
-          color={sortType === '내림차순' ? 'primary' : 'inactive'}
-          sx={{ ml: '15px' }}
-        >
-          내림차순
-        </Button>
-        <Button onClick={selectSortType} color={sortType === '오름차순' ? 'primary' : 'inactive'}>
-          오름차순
-        </Button>
-      </Grid>
       <Grid container columnSpacing={2}>
         {/* UserUsage 데이터 영역 */}
         <Grid item xs={8}>
@@ -246,8 +215,14 @@ export default function UserUsage() {
                 <TableRow>
                   {dataTable.map(function (eachdata) {
                     return (
-                      <StyledTableCell key={eachdata} align="center">
-                        {eachdata}
+                      <StyledTableCell
+                        key={eachdata}
+                        onClick={() => {
+                          sortData(eachdata);
+                        }}
+                        sx={{ cursor: 'pointer' }}
+                      >
+                        {eachdata} {sortField === eachdata ? sortType : null}
                       </StyledTableCell>
                     );
                   })}
@@ -259,10 +234,18 @@ export default function UserUsage() {
                     <StyledTableCell>{eachdata.NickName}</StyledTableCell>
                     <StyledTableCell>{changeDateDot(eachdata.createdAt)}</StyledTableCell>
                     <StyledTableCell>{changeDateDot(eachdata.updatedAt)}</StyledTableCell>
-                    <StyledTableCell>{eachdata.searchCounting || 0}</StyledTableCell>
-                    <StyledTableCell>{eachdata.watchGroupCounting || 0}</StyledTableCell>
-                    <StyledTableCell>{eachdata.watchCompanyCounting || 0}</StyledTableCell>
-                    <StyledTableCell>{eachdata.memoCounting || 0}</StyledTableCell>
+                    <StyledTableCell align="right">
+                      {addComma(eachdata.searchCounting) || 0}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {addComma(eachdata.watchGroupCounting) || 0}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {addComma(eachdata.watchCompanyCounting) || 0}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {addComma(eachdata.memoCounting) || 0}
+                    </StyledTableCell>
                   </StyledTableRow>
                 ))}
               </TableBody>

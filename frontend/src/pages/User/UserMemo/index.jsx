@@ -8,21 +8,18 @@ import {
   TableRow,
   Paper,
   Button,
-  Grid,
 } from '@mui/material';
 import StyledTableCell from '../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../component/UI/StyledTableRow';
 import CustomModal from '../../../component/UI/CustomModal';
 import { url } from '../../../component/commonVariable';
 import { changeDateDot } from '../../../component/commonFunction';
-import DropDown from '../../../component/UI/DropDown';
 import Pagination from '../../../component/Pagination/index';
 
 export default function UserMemo() {
   // 데이터 정렬 기준 선택
-  const sortFieldList = ['순번', '작성일', '갱신일', '기업명', '유저 닉네임'];
   const [sortField, setSortField] = useState('순번');
-  const [sortType, setSortType] = useState('내림차순');
+  const [sortType, setSortType] = useState('▼');
 
   // 메모 데이터 관련
   const dataTable = ['순번', '작성일', '갱신일', '기업명', '유저 닉네임', '타입', '메모', '삭제'];
@@ -62,21 +59,19 @@ export default function UserMemo() {
       });
   }, []);
 
-  // 데이터 정렬 타입 선택
-  const selectField = e => {
-    setMemoData([]);
-    setPage(1);
-    setSortField(e.target.value);
-  };
-
-  // 내림/오름차순 선택
-  const selectSortType = () => {
-    setMemoData([]);
-    setPage(1);
-    if (sortType === '내림차순') {
-      setSortType('오름차순');
-    } else {
-      setSortType('내림차순');
+  // 정렬
+  const sortData = field => {
+    if (field !== '삭제') {
+      if (sortField !== field) {
+        setSortField(field);
+      } else if (sortField === field) {
+        if (sortType === '▼') {
+          setSortType('▲');
+        } else {
+          setSortField('순번');
+          setSortType('▼');
+        }
+      }
     }
   };
 
@@ -101,35 +96,21 @@ export default function UserMemo() {
 
   return (
     <div>
-      {/* 정렬 영역  */}
-      <Grid container alignItems="flex-start" sx={{ mb: '20px' }}>
-        <DropDown
-          value={sortField}
-          label="정렬 타입"
-          onChange={selectField}
-          selectList={sortFieldList}
-        />
-        <Button
-          onClick={selectSortType}
-          color={sortType === '내림차순' ? 'primary' : 'inactive'}
-          sx={{ ml: '15px' }}
-        >
-          내림차순
-        </Button>
-        <Button onClick={selectSortType} color={sortType === '오름차순' ? 'primary' : 'inactive'}>
-          오름차순
-        </Button>
-      </Grid>
-
       {/* 메모 데이터 영역 */}
-      <TableContainer component={Paper} sx={{ maxHeight: { md: '545px', xl: '885px' } }}>
+      <TableContainer component={Paper} sx={{ maxHeight: { md: '605px', xl: '950px' } }}>
         <Table stickyHeader>
           <TableHead>
             <TableRow>
               {dataTable.map(function (eachdata) {
                 return (
-                  <StyledTableCell key={eachdata} align="center">
-                    {eachdata}
+                  <StyledTableCell
+                    key={eachdata}
+                    onClick={() => {
+                      sortData(eachdata);
+                    }}
+                    sx={{ cursor: 'pointer' }}
+                  >
+                    {eachdata} {sortField === eachdata ? sortType : null}
                   </StyledTableCell>
                 );
               })}
@@ -139,7 +120,7 @@ export default function UserMemo() {
           <TableBody>
             {memoData.map(eachdata => (
               <StyledTableRow key={eachdata.id}>
-                <StyledTableCell>{eachdata.id}</StyledTableCell>
+                <StyledTableCell sx={{ minWidth: 50, maxWidth: 50 }}>{eachdata.id}</StyledTableCell>
                 <StyledTableCell>{changeDateDot(eachdata.created_at)}</StyledTableCell>
                 <StyledTableCell>{changeDateDot(eachdata.updated_at)}</StyledTableCell>
                 <StyledTableCell sx={{ minWidth: 90, maxWidth: 90 }}>

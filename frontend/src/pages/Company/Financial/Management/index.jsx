@@ -63,7 +63,11 @@ export default function Management() {
     <Grid sx={{ minHeight: '93vh' }}>
       <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: '10px' }}>
         <Stack direction="row" spacing={2} alignItems="center">
-          <CompanyListAutoComplete onChangeCompanyCode={setSearchCompanyCode} minWidth="300px" />
+          <CompanyListAutoComplete
+            onChangeCompanyCode={setSearchCompanyCode}
+            minWidth="300px"
+            enterFunc={searchData}
+          />
           <Button variant="contained" color="secondary" onClick={searchData}>
             검색
           </Button>

@@ -17,11 +17,15 @@ import StyledTableCell from '../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../component/UI/StyledTableRow';
 import FixedBox from '../../../component/UI/FixedBox';
 import { url } from '../../../component/commonVariable';
-import { changeDateDot } from '../../../component/commonFunction';
+import { changeDateDot, addComma } from '../../../component/commonFunction';
 import CompanyListAutoComplete from '../../../component/CompanyListAutoComplete';
 import Pagination from '../../../component/Pagination/index';
 
 export default function UserDailyCompany() {
+  // 데이터 정렬 기준 선택
+  const [sortField, setSortField] = useState('일자');
+  const [sortType, setSortType] = useState('▼');
+
   // 일별 전체 기업 정보 데이터 관련
   const dataTable = [
     '일자',
@@ -68,7 +72,7 @@ export default function UserDailyCompany() {
   useEffect(() => {
     if (isSearch === false) {
       axios
-        .get(`${url}/admin/user/userDailyCompany/getData/all/${page}`)
+        .get(`${url}/admin/user/userDailyCompany/getData/all/${page}/${sortField}/${sortType}`)
         .then(result => {
           // console.log(result.data);
           setUserDailyCompanyData(result.data);
@@ -81,7 +85,7 @@ export default function UserDailyCompany() {
       // eslint-disable-next-line object-shorthand
       const body = { searchCompanyCode: searchCompanyCode, ...searchInput };
       axios
-        .get(`${url}/admin/user/userDailyCompany/getData/search/${page}`, {
+        .get(`${url}/admin/user/userDailyCompany/getData/search/${page}/${sortField}/${sortType}`, {
           params: body,
         })
         .then(result => {
@@ -92,7 +96,7 @@ export default function UserDailyCompany() {
           console.log('실패했습니다');
         });
     }
-  }, [page, refreshSwitch]);
+  }, [page, sortField, sortType, refreshSwitch]);
 
   // 전체 페이지 수 계산을 위한 Hook (무한 스크롤)
   useEffect(() => {
@@ -121,6 +125,20 @@ export default function UserDailyCompany() {
         });
     }
   }, [isSearch, refreshSwitch]);
+
+  // 정렬
+  const sortData = field => {
+    if (sortField !== field) {
+      setSortField(field);
+    } else if (sortField === field) {
+      if (sortType === '▼') {
+        setSortType('▲');
+      } else {
+        setSortField('일자');
+        setSortType('▼');
+      }
+    }
+  };
 
   // 노출 조건 입력 input
   const onChangeSearchInput = e => {
@@ -179,14 +197,20 @@ export default function UserDailyCompany() {
     <Grid container columnSpacing={2}>
       {/* 일별 전체 기업 데이터 영역 */}
       <Grid item xs={8}>
-        <TableContainer component={Paper} sx={{ maxHeight: { md: '545px', xl: '885px' } }}>
+        <TableContainer component={Paper} sx={{ maxHeight: { md: '555px', xl: '885px' } }}>
           <Table stickyHeader>
             <TableHead>
               <TableRow>
                 {dataTable.map(function (eachdata) {
                   return (
-                    <StyledTableCell key={eachdata} align="center">
-                      {eachdata}
+                    <StyledTableCell
+                      key={eachdata}
+                      onClick={() => {
+                        sortData(eachdata);
+                      }}
+                      sx={{ cursor: 'pointer' }}
+                    >
+                      {eachdata} {sortField === eachdata ? sortType : null}
                     </StyledTableCell>
                   );
                 })}
@@ -198,13 +222,21 @@ export default function UserDailyCompany() {
                   <StyledTableCell component="th" scope="row">
                     {changeDateDot(eachdata.date)}
                   </StyledTableCell>
-                  <StyledTableCell>
-                    {eachdata.totalSearchCounting - eachdata.nonMemberSearchCounting || 0}
+                  <StyledTableCell align="right">
+                    {addComma(eachdata.memberSearchCounting) || 0}
                   </StyledTableCell>
-                  <StyledTableCell>{eachdata.nonMemberSearchCounting || 0}</StyledTableCell>
-                  <StyledTableCell>{eachdata.totalSearchCounting || 0}</StyledTableCell>
-                  <StyledTableCell>{eachdata.watchCounting || 0}</StyledTableCell>
-                  <StyledTableCell>{eachdata.totalWatchCounting || 0}</StyledTableCell>
+                  <StyledTableCell align="right">
+                    {addComma(eachdata.nonMemberSearchCounting) || 0}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {addComma(eachdata.totalSearchCounting) || 0}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {addComma(eachdata.watchCounting) || 0}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {addComma(eachdata.totalWatchCounting) || 0}
+                  </StyledTableCell>
                 </StyledTableRow>
               ))}
             </TableBody>

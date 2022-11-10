@@ -129,7 +129,7 @@ export default function NavBar() {
         <Box
           sx={{
             background: 'linear-gradient(180deg, #3E3E45 0%, #1D1C1D 100%);',
-            height: '90vh',
+            height: { xs: '90vh', xl: '95vh' },
             width: '13vw',
             p: 1,
             pt: 3,

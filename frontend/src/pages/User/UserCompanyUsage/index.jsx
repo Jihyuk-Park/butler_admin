@@ -14,24 +14,17 @@ import {
   Typography,
 } from '@mui/material';
 import { url } from '../../../component/commonVariable';
+import { addComma } from '../../../component/commonFunction';
 import OutLinedBox from '../../../component/UI/OutLinedBox';
 import StyledTableCell from '../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../component/UI/StyledTableRow';
 import FixedBox from '../../../component/UI/FixedBox';
-import DropDown from '../../../component/UI/DropDown';
 import Pagination from '../../../component/Pagination/index';
 
 export default function UserCompanyUsage() {
   // 데이터 정렬 기준 선택
-  const sortFieldList = [
-    '가입자의 검색 횟수',
-    '비 가입자의 검색 횟수',
-    '검색 횟수 총합',
-    '관심목록 수',
-    '작성된 메모 수',
-  ];
   const [sortField, setSortField] = useState('가입자의 검색 횟수');
-  const [sortType, setSortType] = useState('내림차순');
+  const [sortType, setSortType] = useState('▼');
 
   // 기업 사용 정보 데이터 관련
   const dataTable = [
@@ -140,21 +133,17 @@ export default function UserCompanyUsage() {
     }
   }, [isSearch, refreshSwitch]);
 
-  // 데이터 정렬 타입 선택
-  const selectField = e => {
-    setUserCompanyUsageData([]);
-    setPage(1);
-    setSortField(e.target.value);
-  };
-
-  // 내림/오름차순 선택
-  const selectSortType = () => {
-    setUserCompanyUsageData([]);
-    setPage(1);
-    if (sortType === '내림차순') {
-      setSortType('오름차순');
-    } else {
-      setSortType('내림차순');
+  // 정렬
+  const sortData = field => {
+    if (sortField !== field) {
+      setSortField(field);
+    } else if (sortField === field) {
+      if (sortType === '▼') {
+        setSortType('▲');
+      } else {
+        setSortField('가입자의 검색 횟수');
+        setSortType('▼');
+      }
     }
   };
 
@@ -216,36 +205,23 @@ export default function UserCompanyUsage() {
 
   return (
     <div>
-      {/* 정렬 영역  */}
-      <Grid container alignItems="flex-start" sx={{ mb: '20px' }}>
-        <DropDown
-          value={sortField}
-          label="정렬 타입"
-          onChange={selectField}
-          selectList={sortFieldList}
-        />
-        <Button
-          onClick={selectSortType}
-          color={sortType === '내림차순' ? 'primary' : 'inactive'}
-          sx={{ ml: '15px' }}
-        >
-          내림차순
-        </Button>
-        <Button onClick={selectSortType} color={sortType === '오름차순' ? 'primary' : 'inactive'}>
-          오름차순
-        </Button>
-      </Grid>
       <Grid container columnSpacing={2}>
         {/* 기업 사용 정보 데이터 영역 */}
         <Grid item xs={8}>
-          <TableContainer component={Paper} sx={{ maxHeight: { md: '545px', xl: '885px' } }}>
+          <TableContainer component={Paper} sx={{ maxHeight: { md: '595px', xl: '955px' } }}>
             <Table stickyHeader>
               <TableHead>
                 <TableRow>
                   {dataTable.map(function (eachdata) {
                     return (
-                      <StyledTableCell key={eachdata} align="center">
-                        {eachdata}
+                      <StyledTableCell
+                        key={eachdata}
+                        onClick={() => {
+                          sortData(eachdata);
+                        }}
+                        sx={{ cursor: 'pointer' }}
+                      >
+                        {eachdata} {sortField === eachdata ? sortType : null}
                       </StyledTableCell>
                     );
                   })}
@@ -255,12 +231,24 @@ export default function UserCompanyUsage() {
               <TableBody>
                 {userCompanyUsageData.map(eachdata => (
                   <StyledTableRow key={eachdata.corp_code}>
-                    <StyledTableCell>{eachdata.corp_name}</StyledTableCell>
-                    <StyledTableCell>{eachdata.memberSearchCounting || 0}</StyledTableCell>
-                    <StyledTableCell>{eachdata.nonMemberSearchCounting || 0}</StyledTableCell>
-                    <StyledTableCell>{eachdata.totalSearchCounting || 0}</StyledTableCell>
-                    <StyledTableCell>{eachdata.watchCounting || 0}</StyledTableCell>
-                    <StyledTableCell>{eachdata.memoCounting || 0}</StyledTableCell>
+                    <StyledTableCell sx={{ minWidth: { xl: '170px' }, maxWidth: '170px' }}>
+                      {eachdata.corp_name}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {addComma(eachdata.memberSearchCounting) || 0}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {addComma(eachdata.nonMemberSearchCounting) || 0}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {addComma(eachdata.totalSearchCounting) || 0}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {addComma(eachdata.watchCounting) || 0}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {addComma(eachdata.memoCounting) || 0}
+                    </StyledTableCell>
                   </StyledTableRow>
                 ))}
               </TableBody>

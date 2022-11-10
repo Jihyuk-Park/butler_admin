@@ -19,7 +19,11 @@ export default function CompanySearchNMove({ navigateTo }) {
   return (
     <Grid container direction="row" justifyContent="space-between" alignItems="center">
       <Stack direction="row" spacing={2} alignItems="center">
-        <CompanyListAutoComplete onChangeCompanyCode={setSearchCompanyCode} minWidth="300px" />
+        <CompanyListAutoComplete
+          onChangeCompanyCode={setSearchCompanyCode}
+          minWidth="300px"
+          enterFunc={searchData}
+        />
         <Button variant="contained" color="secondary" onClick={searchData}>
           검색
         </Button>

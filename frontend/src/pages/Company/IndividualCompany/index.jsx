@@ -71,7 +71,11 @@ export default function IndividualCompany() {
     <div>
       <Grid container direction="row" justifyContent="space-between" alignItems="center">
         <Stack direction="row" spacing={2} alignItems="center">
-          <CompanyListAutoComplete onChangeCompanyCode={setSearchCompanyCode} minWidth="300px" />
+          <CompanyListAutoComplete
+            enterFunc={searchData}
+            onChangeCompanyCode={setSearchCompanyCode}
+            minWidth="300px"
+          />
           <Button variant="contained" color="secondary" onClick={searchData}>
             검색
           </Button>

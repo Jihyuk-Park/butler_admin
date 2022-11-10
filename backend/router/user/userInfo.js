@@ -1,16 +1,19 @@
 import express from 'express';
 const router = express.Router();
 import connection from '../../module/database.js';
-import { userInfoSearchType } from '../../module/userFunction.js';
+import { userInfoSearchType, sortTypeReturn, userInfoSortField } from '../../module/userFunction.js';
 import { itemNumber } from '../../module/constVariable.js';
 
 // getData
-router.get('/getData/all/:page', function(req,res){
-  let page = req.params.page;
+router.get('/getData/all/:page/:sortField/:sortType', function(req,res){
+  let [page, sortField, sortType] = [req.params.page, req.params.sortField, req.params.sortType];
 
-  let sql = `SELECT a.id, a.AuthType, a.EMail, a.Phone, a.Name, a.NickName, b.status, b.type
+  sortType = sortTypeReturn(sortType);
+  sortField = userInfoSortField(sortField);
+
+  let sql = `SELECT a.id, a.AuthType, a.EMail, a.Phone, a.Name, a.NickName, a.createdAt, b.status, b.type
     FROM Users a LEFT JOIN Subscribe b ON a.id = b.uid
-    ORDER BY id DESC
+    ORDER BY ${sortField} ${sortType}
     LIMIT ${itemNumber} OFFSET ${itemNumber*(page-1)};`;
 	
   connection.query(sql, function(err, rows, fields){
@@ -22,17 +25,21 @@ router.get('/getData/all/:page', function(req,res){
   })
 });
 
-router.get('/getData/search/:page/:searchType/:searchInput', function(req,res){
-  let [page, searchType, searchInput] = [req.params.page, req.params.searchType, req.params.searchInput];
+router.get('/getData/search/:page/:sortField/:sortType/:searchType/:searchInput', function(req,res){
+  let [page, sortField, sortType] = [req.params.page, req.params.sortField, req.params.sortType];
+  let [searchType, searchInput] = [req.params.searchType, req.params.searchInput];
+
+  sortType = sortTypeReturn(sortType);
+  sortField = userInfoSortField(sortField);
 
   let searchField = userInfoSearchType(searchType);
 
   // console.log(page, searchInput, searchType, searchField);
 
-  let sql = `SELECT a.id, a.AuthType, a.EMail, a.Phone, a.Name, a.NickName, b.status, b.type
+  let sql = `SELECT a.id, a.AuthType, a.EMail, a.Phone, a.Name, a.NickName, a.createdAt, b.status, b.type
     FROM Users a LEFT JOIN Subscribe b ON a.id = b.uid
     WHERE ${searchField} LIKE "%${searchInput}%"
-    ORDER BY id DESC
+    ORDER BY ${sortField} ${sortType}
     LIMIT ${itemNumber} OFFSET ${itemNumber*(page-1)};`;
 	
   connection.query(sql, function(err, rows, fields){
