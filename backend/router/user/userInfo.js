@@ -11,7 +11,7 @@ router.get('/getData/all/:page/:sortField/:sortType', function(req,res){
   sortType = sortTypeReturn(sortType);
   sortField = userInfoSortField(sortField);
 
-  let sql = `SELECT a.id, a.AuthType, a.EMail, a.Phone, a.Name, a.NickName, a.createdAt, b.status, b.type
+  let sql = `SELECT a.id, a.AuthType, a.EMail, a.Phone, a.Name, a.NickName, a.createdAt, b.status, b.type, b.uid
     FROM Users a LEFT JOIN Subscribe b ON a.id = b.uid
     ORDER BY ${sortField} ${sortType}
     LIMIT ${itemNumber} OFFSET ${itemNumber*(page-1)};`;
@@ -34,11 +34,15 @@ router.get('/getData/search/:page/:sortField/:sortType/:searchType/:searchInput'
 
   let searchField = userInfoSearchType(searchType);
 
+  let whereSQL = searchType === "가입일" 
+    ? `WHERE ${searchField} = "${searchInput}"`
+    : `WHERE ${searchField} LIKE "%${searchInput}%"`;
+
   // console.log(page, searchInput, searchType, searchField);
 
-  let sql = `SELECT a.id, a.AuthType, a.EMail, a.Phone, a.Name, a.NickName, a.createdAt, b.status, b.type
+  let sql = `SELECT a.id, a.AuthType, a.EMail, a.Phone, a.Name, a.NickName, a.createdAt, b.status, b.type, b.uid
     FROM Users a LEFT JOIN Subscribe b ON a.id = b.uid
-    WHERE ${searchField} LIKE "%${searchInput}%"
+    ${whereSQL}
     ORDER BY ${sortField} ${sortType}
     LIMIT ${itemNumber} OFFSET ${itemNumber*(page-1)};`;
 	
@@ -72,9 +76,13 @@ router.get('/getTotalNum/search/:searchType/:searchInput', function(req,res){
 
   let searchField = userInfoSearchType(searchType);
 
+  let whereSQL = searchType === "가입일" 
+  ? `WHERE ${searchField} = "${searchInput}"`
+  : `WHERE ${searchField} LIKE "%${searchInput}%"`;
+
   let sql = `SELECT COUNT(*) as totalnum
     FROM Users a LEFT JOIN Subscribe b ON a.id = b.uid
-    WHERE ${searchField} LIKE "%${searchInput}%"`;
+    ${whereSQL}`;
 
   connection.query(sql, function(err, rows, fields){
     if (err){
@@ -96,22 +104,24 @@ router.post('/edit', function(req, res){
   let Phone = req.body.Phone;
   let Email = req.body.Email;
   let AuthType = req.body.AuthType;
+  let createdAt = req.body.createdAt;
   let Grade = req.body.Grade;
   let Type = req.body.Type;
   let Uid = req.body.Uid;
 
-  // console.log(id, NickName, Name, Phone, Email, AuthType, Grade, Type, Uid);
+  // console.log(id, NickName, Name, Phone, Email, AuthType, createdAt, Grade, Type, Uid);
 
-  var sql = `UPDATE Users a INNER JOIN Subscribe b
-  ON a.id = b.uid
-  SET a.NickName=?, a.Name=?, a.Phone=?, a.Email=?, a.AuthType=?, b.status=?, b.type=?, a.id=? WHERE a.id = ? && b.uid = ?`;
-  connection.query(sql, [NickName, Name, Phone, Email, AuthType, Grade, Type, Uid, id, id], function(err, result, fields){
-      if(err){
-          console.log(err);
-          res.status(500).send('Interner Server Error')
-      } else {
-          return res.json("수정 성공");
-      }
+  let sql = `UPDATE Users a LEFT JOIN Subscribe b ON a.id = b.uid
+    SET NickName = "${NickName}", Name = "${Name}", Phone = "${Phone}", Email = "${Email}", AuthType = "${AuthType}",
+      a.createdAt = "${createdAt}", b.status = "${Grade}", b.type = "${Type}", b.uid = "${Uid}" WHERE a.id = "${id}"`;
+
+    connection.query(sql, function(err, result, fields){
+    if(err){
+        console.log(err);
+        res.status(500).send('Interner Server Error')
+    } else {
+        return res.json("수정 성공");
+    }
   })
 })
 

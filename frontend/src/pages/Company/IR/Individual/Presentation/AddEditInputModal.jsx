@@ -9,7 +9,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import PropTypes from 'prop-types';
-import { changeDateNoDot } from '../../../../../component/commonFunction';
+import { changeDateNoDot, removeDotNDash } from '../../../../../component/commonFunction';
 
 export default function AddEditInputModal({
   addEditModalSwitch,
@@ -33,7 +33,7 @@ export default function AddEditInputModal({
   const [editTitle, setEditTitle] = useState(isEditModal === true ? editData.title : '');
 
   // 드롭다운 onChange
-  const onChangeDate = e => setEditDate(e.target.value);
+  const onChangeDate = e => setEditDate(removeDotNDash(e.target.value));
   const onChangeConferenceName = e => setEditConferenceName(e.target.value);
   const onChangeTitle = e => setEditTitle(e.target.value);
   const editArray = [

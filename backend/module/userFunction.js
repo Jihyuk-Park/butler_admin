@@ -44,6 +44,8 @@ function userInfoSearchType (input) {
     result = 'a.Name';
   } else if (input === "Grade") {
     result = 'b.status';
+  } else if (input === "가입일") {
+    result = 'DATE(a.createdAt)';
   } else if (input === "Type") {
     result = 'b.type';
   } else {

@@ -17,7 +17,7 @@ import {
 } from '@mui/material';
 import StyledTableCell from '../../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../../component/UI/StyledTableRow';
-import { changeDateNoDot } from '../../../../../component/commonFunction';
+import { changeDateNoDot, removeDotNDash } from '../../../../../component/commonFunction';
 
 export default function AddMutlipleFile({
   addMutlipleModalSwitch,
@@ -149,7 +149,8 @@ export default function AddMutlipleFile({
         formData.append('stock_code', searchStockCode);
         formData.append('directory', '3. IR Presentation');
         for (let i = 0; i < newFileText.length; i += 1) {
-          formData.append('published_date', newFileText[i].published_date);
+          console.log(removeDotNDash(newFileText[i].published_date));
+          formData.append('published_date', removeDotNDash(newFileText[i].published_date));
           formData.append('conference_name', newFileText[i].conference_name);
           formData.append('title', newFileText[i].title);
           formData.append('file_name', newFile[i].name);

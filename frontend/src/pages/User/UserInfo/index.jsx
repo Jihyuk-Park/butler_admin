@@ -18,7 +18,12 @@ import FixedBox from '../../../component/UI/FixedBox';
 import StyledTableCell from '../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../component/UI/StyledTableRow';
 import { url } from '../../../component/commonVariable';
-import { changeDateDash, addComma } from '../../../component/commonFunction';
+import {
+  changeDateDash,
+  addComma,
+  removeDotNDash,
+  changeDateNoDot,
+} from '../../../component/commonFunction';
 import DropDown from '../../../component/UI/DropDown';
 import Pagination from '../../../component/Pagination/index';
 
@@ -55,7 +60,7 @@ export default function UserInfo() {
   const typeList = ['SIGNUP', 'MONTH', 'HARF_YEAR', 'YEAR'];
 
   // 수정 관련 (수정 내용이 있는지 비교를 위한 데이터 및 인풋)
-  const [originalData, setOriginalData] = useState(['', '', '', '', '', '', '', '']);
+  const [originalData, setOriginalData] = useState(['', '', '', '', '', '', '', '', '']);
   const [isChange, setIsChange] = useState(false);
   const [originalId, setOriginalId] = useState(0);
   const [editInput, setEditInput] = useState({
@@ -64,6 +69,7 @@ export default function UserInfo() {
     editPhone: '',
     editEmail: '',
     editAuthType: '',
+    editCreatedAt: '',
     editGrade: '',
     editType: '',
     editUid: '',
@@ -74,6 +80,7 @@ export default function UserInfo() {
     editPhone,
     editEmail,
     editAuthType,
+    editCreatedAt,
     editGrade,
     editType,
     editUid,
@@ -85,6 +92,7 @@ export default function UserInfo() {
     editPhone,
     editEmail,
     editAuthType,
+    editCreatedAt,
     editGrade,
     editType,
     editUid,
@@ -96,11 +104,13 @@ export default function UserInfo() {
     'editPhone',
     'editEmail',
     'editAuthType',
+    'editCreatedAt',
     'editGrade',
     'editType',
     'editUid',
   ];
   const [editableSwitch, setEditableSwitch] = useState([
+    false,
     false,
     false,
     false,
@@ -206,7 +216,7 @@ export default function UserInfo() {
 
   // 검색어 입력 input
   const searchInputOnChange = e => {
-    setSearchInput(e.target.value);
+    setSearchInput(removeDotNDash(e.target.value));
   };
 
   // 검색 버튼 클릭 (검색어로 데이터 로드)
@@ -221,7 +231,7 @@ export default function UserInfo() {
     setRefreshSwitch(!refreshSwitch);
 
     onReset();
-    setOriginalData(['', '', '', '', '', '', '', '']);
+    setOriginalData(['', '', '', '', '', '', '', '', '']);
   };
 
   // 엔터키
@@ -239,6 +249,7 @@ export default function UserInfo() {
       editPhone: each.Phone,
       editEmail: each.EMail,
       editAuthType: each.AuthType,
+      editCreatedAt: changeDateNoDot(each.createdAt),
       editGrade: each.status,
       editType: each.type,
       editUid: each.id,
@@ -250,20 +261,22 @@ export default function UserInfo() {
       each.Phone,
       each.EMail,
       each.AuthType,
+      changeDateNoDot(each.createdAt),
       each.status,
       each.type,
       each.id,
     ]);
-    setEditableSwitch([false, false, false, false, false, false, false, false]);
+    setEditableSwitch([false, false, false, false, false, false, false, false, false]);
     setIsChange(false);
   };
 
   // 데이터 수정 input
   const onChangeEditInput = e => {
     const { name, value } = e.target;
+    console.log(name);
     setEditInput({
       ...editInput,
-      [name]: value,
+      [name]: name === 'editCreatedAt' ? removeDotNDash(value) : value,
     });
   };
 
@@ -276,11 +289,12 @@ export default function UserInfo() {
       editEmail: '',
       editAuthType: '',
       editGrade: '',
+      editCreatedAt: '',
       editType: '',
       editUid: '',
     });
-    setEditableSwitch([false, false, false, false, false, false, false, false]);
-    setOriginalData(['', '', '', '', '', '', '', '']);
+    setEditableSwitch([false, false, false, false, false, false, false, false, false]);
+    setOriginalData(['', '', '', '', '', '', '', '', '']);
     setIsChange(false);
   };
 
@@ -315,6 +329,7 @@ export default function UserInfo() {
       Phone: editPhone,
       Email: editEmail,
       AuthType: editAuthType,
+      createdAt: editCreatedAt,
       Grade: editGrade,
       Type: editType,
       Uid: editUid,
@@ -324,14 +339,16 @@ export default function UserInfo() {
       userInfoData.map((eachdata, index) => {
         if (eachdata.id === originalId) {
           const temp = {
+            id: originalId,
             NickName: editNickName,
             Name: editName,
             Phone: editPhone,
             EMail: editEmail,
             AuthType: editAuthType,
+            createdAt: editCreatedAt,
             status: editGrade,
             type: editType,
-            id: editUid,
+            Uid: editUid,
           };
           Object.assign(userInfoData[index], temp);
         }
@@ -344,13 +361,14 @@ export default function UserInfo() {
         editPhone: '',
         editEmail: '',
         editAuthType: '',
+        editCreatedAt: '',
         editGrade: '',
         editType: '',
         editUid: '',
       });
     });
-    setEditableSwitch([false, false, false, false, false, false, false, false]);
-    setOriginalData(['', '', '', '', '', '', '', '']);
+    setEditableSwitch([false, false, false, false, false, false, false, false, false]);
+    setOriginalData(['', '', '', '', '', '', '', '', '']);
     setIsChange(false);
   };
 

@@ -14,7 +14,7 @@ import {
   Typography,
 } from '@mui/material';
 import { url } from '../../../component/commonVariable';
-import { changeDateDot, addComma } from '../../../component/commonFunction';
+import { changeDateDot, addComma, removeDotNDash } from '../../../component/commonFunction';
 import OutLinedBox from '../../../component/UI/OutLinedBox';
 import StyledTableCell from '../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../component/UI/StyledTableRow';
@@ -150,7 +150,10 @@ export default function UserUsage() {
 
   // 노출 조건 입력 input
   const onChangeSearchInput = e => {
-    const { name, value } = e.target;
+    // eslint-disable-next-line
+    const name = e.target.name;
+    const value = removeDotNDash(e.target.value);
+
     setSearchInput({
       ...searchInput,
       [name]: value,

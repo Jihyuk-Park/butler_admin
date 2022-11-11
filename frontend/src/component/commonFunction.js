@@ -102,6 +102,15 @@ export const removeComma = input => {
   return newInput;
 };
 
+/** 점 삭제 */
+export const removeDotNDash = input => {
+  let newInput = input;
+  if (input) {
+    newInput = input.replaceAll('.', '');
+  }
+  return newInput.replaceAll('-', '');
+};
+
 /** 소수점 세 자리까지 혹은 특정 자리수 */
 export const decimalPercent = (input, inputDigit) => {
   let newInput = input;
