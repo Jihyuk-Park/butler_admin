@@ -22,7 +22,7 @@ export default function AddEditInputModal({
 }) {
   const { searchStockCode } = useParams();
   // 필드
-  const editField = ['파일명', '날짜', '행사명', '제목'];
+  const editField = ['파일명', '날짜\n(20220101)', '행사명', '제목'];
   // 날짜, 행사명, 제목 인풋
   const [editDate, setEditDate] = useState(
     isEditModal === true ? changeDateNoDot(editData.published_date) : '',
@@ -164,7 +164,7 @@ export default function AddEditInputModal({
           {editField.map(function (each, index) {
             return (
               <Stack key={each} direction="row" spacing={2} alignItems="center">
-                <Box sx={{ width: '70px' }}>
+                <Box sx={{ width: '130px' }}>
                   <h4>{each}</h4>
                 </Box>
                 {index === 0 ? (

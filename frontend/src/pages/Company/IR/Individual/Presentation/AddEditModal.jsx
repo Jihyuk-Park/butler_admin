@@ -19,6 +19,7 @@ import { changeDateDot } from '../../../../../component/commonFunction';
 import StyledTableCell from '../../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../../component/UI/StyledTableRow';
 import AddEditInputModal from './AddEditInputModal';
+import AddMutlipleFile from './AddMutlipleFile';
 
 export default function AddEditModal({
   addModalSwtich,
@@ -37,8 +38,8 @@ export default function AddEditModal({
   const [addEditModalSwitch, setAddEditModalSwitch] = useState(false);
   const [selectedData, setSelectedData] = useState({});
 
-  // 수정 / 추가 후 데이터 갱신
-  const [refreshSwitch2Depth, setRefreshSwitch2Depth] = useState(true);
+  // 파일 다중 추가
+  const [addMutlipleModalSwitch, setAddMutlipleModalSwitch] = useState(false);
 
   useEffect(() => {
     axios
@@ -50,7 +51,7 @@ export default function AddEditModal({
       .catch(() => {
         console.log('실패했습니다');
       });
-  }, [refreshSwitch2Depth]);
+  }, [refreshSwitch]);
 
   const editSelectData = each => {
     setSelectedData(each);
@@ -61,6 +62,10 @@ export default function AddEditModal({
   const addNewData = () => {
     setIsEditModal(false);
     setAddEditModalSwitch(true);
+  };
+
+  const addMultipleFile = () => {
+    setAddMutlipleModalSwitch(true);
   };
 
   const modalClose = () => {
@@ -137,7 +142,14 @@ export default function AddEditModal({
 
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Button variant="contained" onClick={addNewData} sx={{ color: 'white', mr: '10px' }}>
-              추가하기
+              파일 개별 추가
+            </Button>
+            <Button
+              variant="contained"
+              onClick={addMultipleFile}
+              sx={{ color: 'white', mr: '10px' }}
+            >
+              파일 다중 추가
             </Button>
             <Button variant="contained" color="secondary" onClick={modalClose}>
               취소
@@ -151,10 +163,20 @@ export default function AddEditModal({
           editData={selectedData}
           addEditModalSwitch={addEditModalSwitch}
           setAddEditModalSwitch={setAddEditModalSwitch}
-          refreshSwitch={refreshSwitch2Depth}
-          setRefreshSwitch={setRefreshSwitch2Depth}
+          refreshSwitch={refreshSwitch}
+          setRefreshSwitch={setRefreshSwitch}
           isEditModal={isEditModal}
           presentationData={presentationData}
+        />
+      )}
+
+      {addMutlipleModalSwitch === false ? null : (
+        <AddMutlipleFile
+          addMutlipleModalSwitch={addMutlipleModalSwitch}
+          setAddMutlipleModalSwitch={setAddMutlipleModalSwitch}
+          presentationData={presentationData}
+          refreshSwitch={refreshSwitch}
+          setRefreshSwitch={setRefreshSwitch}
         />
       )}
     </div>

@@ -224,6 +224,13 @@ export default function UserInfo() {
     setOriginalData(['', '', '', '', '', '', '', '']);
   };
 
+  // 엔터키
+  const onCheckEnter = e => {
+    if (e.key === 'Enter') {
+      searchUserInfo();
+    }
+  };
+
   // 데이터 클릭 (수정 영역에 데이터 세팅 + 오리지날 데이터 세팅)
   const setEditData = each => {
     setEditInput({
@@ -415,7 +422,12 @@ export default function UserInfo() {
               p="10px 100px 10px 15px"
             />
             {isInputType === true ? (
-              <TextField fullWidth value={searchInput} onChange={searchInputOnChange} />
+              <TextField
+                fullWidth
+                value={searchInput}
+                onChange={searchInputOnChange}
+                onKeyPress={onCheckEnter}
+              />
             ) : (
               <DropDown
                 value={searchInput}

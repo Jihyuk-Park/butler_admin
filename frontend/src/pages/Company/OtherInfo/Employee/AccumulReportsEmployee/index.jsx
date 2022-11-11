@@ -75,9 +75,13 @@ export default function AccumulReportsEmployee() {
             >
               {accumulReportsEmployeeAccountArray[index]}
             </StyledTableCell>
-            {periodArray.map(function (period) {
+            {periodArray.map(function (period, periodIndex) {
               return (
-                <PeriodTableCell align="right" key={`${eachdata}${period}`}>
+                <PeriodTableCell
+                  align="right"
+                  key={`${eachdata}${period}`}
+                  sx={[periodIndex % 4 === 3 ? { borderRight: '0.8px solid #A9A9A9' } : {}]}
+                >
                   {index % 3 === 0 && index !== 9
                     ? addComma(eachdata[changeKeyName(period)])
                     : null}

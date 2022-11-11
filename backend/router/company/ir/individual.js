@@ -55,7 +55,7 @@ router.get('/getData/search/earningList/:searchStockCode', function(req,res){
   let sql = `SELECT b.corp_name, b.stock_code, b.corp_code, a.id, bsns_year, quarter_id, file_name FROM ir_quarter_earning a 
     LEFT JOIN CompanyInfo b ON a.stock_code = b.stock_code
     WHERE a.stock_code = ${searchStockCode}
-    ORDER BY bsns_year ASC, quarter_id ASC;`;
+    ORDER BY bsns_year DESC, quarter_id DESC;`;
 	
   connection.query(sql, function(err, rows, fields){
     if (err){
@@ -145,6 +145,63 @@ router.post('/add/earning', uploadIRS3.single('file'), (req, res) => {
   }  
 })
 
+
+// 검색 기업 - add 다중 (실적 - 파일, 연도, 분기)
+router.post('/add/multiple/earning', uploadIRS3.array('files'), (req, res) => {
+  let stock_code = req.body.stock_code;
+
+  let bsns_year = req.body.bsns_year;
+  let quarter_id = req.body.quarter_id;
+  let file_name = req.body.file_name;
+  let isDuplicate = req.body.isDuplicate;
+  let deleteFileName = req.body.deleteFileName;
+
+  isDuplicate.forEach((each, index) => {
+    // 기간 중복 있을 시, S3 및 DB 파일 삭제
+    if (each === '1') {
+      let path = `${stock_code}/1. Earnings Release/${deleteFileName[index]}`;
+      let isDelete = deleteIRS3(path);
+      if (isDelete) {
+        let deleteSql = `DELETE FROM ir_quarter_earning WHERE stock_code = "${stock_code}" && bsns_year = "${bsns_year[index]}" && quarter_id = "${quarter_id[index]}"`;
+
+        connection.query(deleteSql, function(err, rows, fields){
+          if (err){
+            console.log(err);
+          } else {
+            // db 추가
+            let insertSql=`INSERT INTO ir_quarter_earning(bsns_year, quarter_id, file_name, stock_code, created_at, updated_at)
+              VALUES("${bsns_year[index]}", "${quarter_id[index]}", "${file_name[index]}", "${stock_code}", NOW(), NOW())`;
+
+            connection.query(insertSql, function(err, result, fields){
+              if(err){
+                console.log(err);
+                res.status(500).send('Interner Server Error')
+              }
+            })
+          }
+        });
+      }
+    } else {
+      // 중복 없을 시 바로 db 추가
+      let insertSql=`INSERT INTO ir_quarter_earning(bsns_year, quarter_id, file_name, stock_code, created_at, updated_at)
+        VALUES("${bsns_year[index]}", "${quarter_id[index]}", "${file_name[index]}", "${stock_code}", NOW(), NOW())`;
+
+      connection.query(insertSql, function(err, result, fields){
+        if(err){
+          console.log(err);
+          res.status(500).send('Interner Server Error')
+        }
+      })
+    }
+    
+    if (index === isDuplicate.length - 1) {
+      updateCommitStockCode(stock_code, 'IR');
+      return res.json("추가 성공");
+    }
+  })
+})
+
+
 // 검색 기업 - delete (실적)
 router.post('/delete/earning/select', function(req, res){
   let corp_code = req.body.corp_code;
@@ -229,7 +286,7 @@ router.get('/getData/search/presentationList/:searchStockCode', function(req,res
   let sql = `SELECT b.corp_name, b.corp_code, b.stock_code, a.id, published_date, conference_name, title, file_name FROM ir_presentation a
     LEFT JOIN CompanyInfo b On a.stock_code = b.stock_code
     WHERE a.stock_code = ${searchStockCode}
-    ORDER BY published_date ASC;`;
+    ORDER BY published_date DESC;`;
 	
   connection.query(sql, function(err, rows, fields){
     if (err){
@@ -281,7 +338,7 @@ router.post('/add/presentation', uploadIRS3.single('file'), (req, res) => {
     let path = `${stock_code}/3. IR Presentation/${deleteFileName}`;
     let isDelete = deleteIRS3(path);
     if (isDelete) {
-      sql = `DELETE FROM ir_presentation WHERE id = "${isDuplicate}"`;;
+      sql = `DELETE FROM ir_presentation WHERE id = "${isDuplicate}"`;
   
       connection.query(sql, function(err, rows, fields){
         if (err){
@@ -318,6 +375,63 @@ router.post('/add/presentation', uploadIRS3.single('file'), (req, res) => {
       }
     })
   }
+})
+
+
+// 검색 기업 - add 다중 (프리젠테이션 - 파일, 날짜, 행사명, 제목)
+router.post('/add/multiple/presentation', uploadIRS3.array('files'), (req, res) => {
+  let stock_code = req.body.stock_code;
+
+  let published_date = req.body.published_date;
+  let conference_name = req.body.conference_name;
+  let title = req.body.title;
+  let file_name = req.body.file_name;
+  let isDuplicate = req.body.isDuplicate;
+  let deleteFileName = req.body.deleteFileName;
+
+  isDuplicate.forEach((each, index) => {
+    // 기간 중복 있을 시, S3 및 DB 파일 삭제
+    if (each === '1') {
+      let path = `${stock_code}/3. IR Presentation/${deleteFileName[index]}`;
+      let isDelete = deleteIRS3(path);
+      if (isDelete) {
+        let deleteSql = `DELETE FROM ir_presentation WHERE stock_code = "${stock_code}" && file_name = "${deleteFileName[index]}"`;
+
+        connection.query(deleteSql, function(err, rows, fields){
+          if (err){
+            console.log(err);
+          } else {
+            // db 추가
+            let insertSql=`INSERT INTO ir_presentation(published_date, conference_name, title, file_name, stock_code, created_at, updated_at)
+              VALUES("${published_date[index]}", "${conference_name[index]}", "${title[index]}", "${file_name[index]}", "${stock_code}", NOW(), NOW())`;
+
+            connection.query(insertSql, function(err, result, fields){
+              if(err){
+                console.log(err);
+                res.status(500).send('Interner Server Error')
+              }
+            })
+          }
+        });
+      }
+    } else {
+      // 중복 없을 시 바로 db 추가
+      let insertSql=`INSERT INTO ir_presentation(published_date, conference_name, title, file_name, stock_code, created_at, updated_at)
+        VALUES("${published_date[index]}", "${conference_name[index]}", "${title[index]}", "${file_name[index]}", "${stock_code}", NOW(), NOW())`;
+
+      connection.query(insertSql, function(err, result, fields){
+        if(err){
+          console.log(err);
+          res.status(500).send('Interner Server Error')
+        }
+      })
+    }
+    
+    if (index === isDuplicate.length - 1) {
+      updateCommitStockCode(stock_code, 'IR');
+      return res.json("추가 성공");
+    }
+  })
 })
 
 

@@ -187,9 +187,14 @@ export default function SalesAndProfit({ type }) {
                         >
                           {eachdata.depth3}
                         </StyledTableCell>
-                        {periodArray.map(function (period) {
+                        {periodArray.map(function (period, periodIndex) {
                           return (
-                            <PeriodTableCell key={`${eachdata}${period}`}>
+                            <PeriodTableCell
+                              key={`${eachdata}${period}`}
+                              sx={[
+                                periodIndex % 4 === 3 ? { borderRight: '0.8px solid #A9A9A9' } : {},
+                              ]}
+                            >
                               {eachdata[changeKeyName(period)] === null ||
                               eachdata[changeKeyName(period)] === undefined
                                 ? null
@@ -211,9 +216,14 @@ export default function SalesAndProfit({ type }) {
                         >
                           합계
                         </StyledTableCell>
-                        {periodArray.map(function (period) {
+                        {periodArray.map(function (period, periodIndex) {
                           return (
-                            <PeriodTableCell key={`${eachdata}${period}`}>
+                            <PeriodTableCell
+                              key={`${eachdata}${period}`}
+                              sx={[
+                                periodIndex % 4 === 3 ? { borderRight: '0.8px solid #A9A9A9' } : {},
+                              ]}
+                            >
                               {eachdata[changeKeyName(period)] === null ||
                               eachdata[changeKeyName(period)] === undefined
                                 ? null

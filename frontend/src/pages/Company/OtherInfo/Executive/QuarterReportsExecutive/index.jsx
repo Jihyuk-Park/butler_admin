@@ -70,9 +70,13 @@ export default function QuarterReportsExecutive() {
             >
               {quarterReportsExecutiveAccountArray[index]}
             </StyledTableCell>
-            {periodArray.map(function (period) {
+            {periodArray.map(function (period, periodIndex) {
               return (
-                <PeriodTableCell align="right" key={`${eachdata}${period}`}>
+                <PeriodTableCell
+                  align="right"
+                  key={`${eachdata}${period}`}
+                  sx={[periodIndex % 4 === 3 ? { borderRight: '0.8px solid #A9A9A9' } : {}]}
+                >
                   {index === 0 ? addComma(eachdata[changeKeyName(period)]) : null}
                   {index === 1 ? divideAndComma(eachdata[changeKeyName(period)], 1000000, 0) : null}
                   {index !== 0 && index !== 1

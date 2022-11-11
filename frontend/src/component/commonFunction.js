@@ -72,7 +72,7 @@ export const periodArrayAuto = () => {
 export const YearArrayAuto = (startYear, addText) => {
   const thisYear = new Date().getFullYear();
   const yearArr = [];
-  for (let year = startYear; year <= thisYear; year += 1) {
+  for (let year = thisYear; year >= startYear; year -= 1) {
     // 문자열
     if (addText) {
       yearArr.push(`${year}${addText}`);

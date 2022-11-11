@@ -32,7 +32,7 @@ router.post('/info/company/edit', function(req, res){
   let unit = req.body.unit;
   let is_available = req.body.is_available === 'O' ? 1 : 0;
 
-  console.log(analysis_id, segment_title1, segment_title2, segment_source, currency, unit, is_available);
+  // console.log(analysis_id, segment_title1, segment_title2, segment_source, currency, unit, is_available);
 
   let sql = `UPDATE analysis_company_info SET segment_title1 = ?, segment_title2 = ?, segment_source = ?, currency = ?,
   unit = ?, is_available = ? WHERE id = ?`;
@@ -177,25 +177,67 @@ router.post('/info/sector/edit', function(req, res){
 })
 
 // 검색 기업 - delete (정보 - 부문별 정보)
-router.post('/info/sector/delete/:id/:searchCompanyCode', function(req,res){
+router.post('/info/sector/delete/:searchCompanyCode', async function(req,res){
   let id = req.params.id;
   let searchCompanyCode = req.params.searchCompanyCode;
 
-  let sql = `DELETE FROM segment_analysis WHERE analysis_part_info_id = ${id}`;
+  let depth1 = req.body.depth1;
+  let depth2 = req.body.depth2;
+  let depth3 = req.body.depth3;
+
+  let selectSql = '';
+
+  // 각각 depth3, depth2, depth1 id 조회 (segment_analysis 삭제를 위한)
+  if (depth3 !== '') {
+    selectSql = `SELECT id FROM analysis_part_info WHERE id = ${req.body.id}`;
+  } else if (depth3 === '' && depth2 !== '') {
+    selectSql = `SELECT id FROM analysis_part_info WHERE corp_code="${searchCompanyCode}" && part_type = "SEGMENT" && depth1 = "${depth1}" && depth2 = "${depth2}"`;
+  } else if (depth3 === '' && depth2 === '') {
+    selectSql = `SELECT id FROM analysis_part_info WHERE corp_code="${searchCompanyCode}" && part_type = "SEGMENT" && depth1 = "${depth1}"`;
+  }
 	
-  // segment_analysis 먼저 삭제 후 analysis_part_info 삭제 (foreign key)
-  connection.query(sql, function(err, rows, fields){
-    if (err){
-      console.log(err);
-    } else {
-      sql = `DELETE FROM analysis_part_info WHERE id = ${id};`;
-      connection.query(sql, id, function(err, rows, fields){
+  // analysis_part_info_id 먼저 조회하여 segment_analysis 데이터 먼저 삭제 후 analysis_part_info 삭제 (foreign key)
+  const deleteSegmentAnalysis = () => {
+    return new Promise((resolve, reject) => {
+      connection.query(selectSql, function(err, rows, fields){
         if (err){
           console.log(err);
         } else {
-          res.send('데이터 삭제 완료');
+
+          let deleteSegmentSql = '';
+          rows.forEach((each, index) => {
+            deleteSegmentSql = `DELETE FROM segment_analysis WHERE analysis_part_info_id = ${each.id}`;
+
+            connection.query(deleteSegmentSql, id, function(err) {
+              if (err){
+                console.log(err);
+              } else {
+                if (index === rows.length -1 ) {
+                  resolve(true);
+                }
+              }
+            })        
+          });
         }
-      })
+      });
+    })
+  }
+  await deleteSegmentAnalysis();
+
+  let deleteAnalyisSql = '';
+  if (depth3 !== '') {
+    deleteAnalyisSql = `DELETE FROM analysis_part_info WHERE id = "${req.body.id}"`;
+  } else if (depth3 === '' && depth2 !== '') {
+    deleteAnalyisSql = `DELETE FROM analysis_part_info WHERE corp_code = "${searchCompanyCode}" && part_type = "SEGMENT" && depth2 = "${depth2}" && depth1 = "${depth1}"`;
+  } else if (depth3 === '' && depth2 === '') {
+    deleteAnalyisSql = `DELETE FROM analysis_part_info WHERE corp_code = "${searchCompanyCode}" && part_type = "SEGMENT" && depth1 = "${depth1}"`;
+  }
+  
+  connection.query(deleteAnalyisSql, function(err, result, fields){
+    if(err){
+        console.log(err);
+    } else {
+      res.send('데이터 삭제 완료');
     }
   })
 
@@ -217,7 +259,7 @@ router.get('/performance/:type/getData/:searchCompanyCode', function(req,res){
   // 개별 항목
   periodArray.map(function (year) {
     for (let quarter = 1; quarter <= 4; quarter += 1){
-      pivotSQL += `GROUP_CONCAT(if(bsns_year = 20${year} && quarter = ${quarter}, value, null)) AS 'Q${quarter}${year}',\n`
+      pivotSQL += `GROUP_CONCAT(if(bsns_year = 20${year} && quarter = ${quarter} && title = "${type}", value, null)) AS 'Q${quarter}${year}',\n`
     }
   });
   // 마지막 줄 엔터 및 콤마 제거
@@ -227,7 +269,7 @@ router.get('/performance/:type/getData/:searchCompanyCode', function(req,res){
   // 합계
   periodArray.map(function (year) {
     for (let quarter = 1; quarter <= 4; quarter += 1){
-      pivotSumSQL += `SUM(if(bsns_year = 20${year} && quarter = ${quarter}, value, null)) AS 'Q${quarter}${year}',\n`
+      pivotSumSQL += `SUM(if(bsns_year = 20${year} && quarter = ${quarter} && title = "${type}", value, null)) AS 'Q${quarter}${year}',\n`
     }
   });
   // 마지막 줄 엔터 및 콤마 제거
@@ -239,7 +281,7 @@ router.get('/performance/:type/getData/:searchCompanyCode', function(req,res){
     ${pivotSQL}
     FROM analysis_part_info a
     LEFT JOIN segment_analysis b on a.id = b.analysis_part_info_id
-    WHERE a.corp_code = ${searchCompanyCode} && part_type = "SEGMENT" && title = "${type}"
+    WHERE a.corp_code = ${searchCompanyCode} && part_type = "SEGMENT"
     GROUP by a.id
 
     UNION
@@ -248,7 +290,7 @@ router.get('/performance/:type/getData/:searchCompanyCode', function(req,res){
     ${pivotSumSQL}
     FROM analysis_part_info a
     LEFT JOIN segment_analysis b on a.id = b.analysis_part_info_id
-    WHERE a.corp_code = ${searchCompanyCode} && part_type = "SEGMENT" && title = "${type}" && depth2 = "" && depth3 = "";`;
+    WHERE a.corp_code = ${searchCompanyCode} && part_type = "SEGMENT" && depth2 = "" && depth3 = "";`;
 	
   connection.query(sql, function(err, rows, fields){
     if (err){

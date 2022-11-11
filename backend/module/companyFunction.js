@@ -322,32 +322,39 @@ const filterS3Data = (accountArray, S3Data, whichField) => {
   const yearArray = periodYearArrayAuto();
   let filteredData = [];
 
-  // filteredData에 한 줄씩 데이터 삽입 {field : 계정명(유동자산, 매출채권 등), Q115: value, Q215, ..., Q322: value, Q422: value}
-  accountArray.map(function(each){
-    let tempObj = { ...each };
+  try {
+    // filteredData에 한 줄씩 데이터 삽입 {field : 계정명(유동자산, 매출채권 등), Q115: value, Q215, ..., Q322: value, Q422: value}
+    accountArray.map(function(each){
+      let tempObj = { ...each };
 
-    yearArray.map(function(year){
-      for (let quarter = 1; quarter <=4; quarter += 1){
-        let tempData = S3Data.filter(
-          data => parseInt(data.bsns_year, 10) === year + 2000
-          && data.quarter_id === quarter
-          && data[whichField] !== null
-        );
+      yearArray.map(function(year){
+        for (let quarter = 1; quarter <=4; quarter += 1){
+          let tempData = S3Data.filter(
+            data => parseInt(data.bsns_year, 10) === year + 2000
+            && data.quarter_id === quarter
+            && data[whichField] !== null
+            && data[whichField][financialType] !== null
+          );
 
-        // 해당 년, 분기의 자료가 없으면 null 값
-        if (tempData.length === 0){
-          tempObj[`Q${quarter}${year}`] = null;
-          // 해당 년, 분기의 자료가 있으면 value or null(값이 없을 시) 값
-        } else {
-          tempObj[`Q${quarter}${year}`] = tempData[0][whichField][financialType][each.type] || null;
+          // 해당 년, 분기의 자료가 없으면 null 값
+          if (tempData.length === 0){
+            tempObj[`Q${quarter}${year}`] = null;
+            // 해당 년, 분기의 자료가 있으면 value or null(값이 없을 시) 값
+          } else {
+            // console.log(tempData[0][whichField]);
+            tempObj[`Q${quarter}${year}`] = 
+              tempData[0][whichField][financialType][each.type] && tempData[0][whichField][financialType][each.type] || null;
+          }
         }
-      }
-    })
-    filteredData.push(tempObj);
-    return null;
-  });
+      })
+      filteredData.push(tempObj);
+      return null;
+    });
+    return filteredData
 
-  return filteredData
+  } catch (err) {
+    console.log(err);
+  };
 };
 
 

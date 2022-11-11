@@ -63,34 +63,6 @@ export default function EditSectorModal({
     setAddEditModalSwitch(true);
   };
 
-  // 삭제 가능여부 확인 함수
-  const deletableCheck = data => {
-    if (data.depth3 !== '') {
-      // depth3인 데이터 => 바로 삭제
-      openDeleteModal(data);
-    } else if (data.depth3 === '' && data.depth2 !== '') {
-      // depth2인 데이터 => depth3 탐색 후 삭제
-      const checkDepth3 = sectorInfoData.filter(
-        each => data.depth2 === each.depth2 && each.depth3 !== '',
-      );
-      if (checkDepth3.length !== 0) {
-        alert('하위 부문이 존재합니다. 하위 부문을 먼저 삭제해주세요');
-      } else {
-        openDeleteModal(data);
-      }
-    } else {
-      // depth1인 데이터 => depth2 탐색 후 삭제
-      const checkDepth2 = sectorInfoData.filter(
-        each => data.depth1 === each.depth1 && each.depth2 !== '',
-      );
-      if (checkDepth2.length !== 0) {
-        alert('하위 부문이 존재합니다. 하위 부문을 먼저 삭제해주세요');
-      } else {
-        openDeleteModal(data);
-      }
-    }
-  };
-
   // 삭제 확인 모달을 여는 함수
   const openDeleteModal = data => {
     setSelectedData(data);
@@ -99,10 +71,9 @@ export default function EditSectorModal({
 
   // 삭제 함수
   const deleteData = () => {
+    const body = { ...selectedData };
     axios
-      .post(
-        `${url}/admin/company/sector/individual/info/sector/delete/${selectedData.id}/${searchCorpCode}`,
-      )
+      .post(`${url}/admin/company/sector/individual/info/sector/delete/${searchCorpCode}`, body)
       .then(() => {
         alert('삭제가 완료되었습니다.');
         setDeleteConfirmModalSwitch(false);
@@ -199,7 +170,7 @@ export default function EditSectorModal({
                       <Button
                         sx={{ py: 0 }}
                         onClick={() => {
-                          deletableCheck(eachdata);
+                          openDeleteModal(eachdata);
                         }}
                       >
                         삭제
@@ -224,7 +195,8 @@ export default function EditSectorModal({
 
       {deleteConfirmModalSwitch === false ? null : (
         <CustomModal
-          message={`부문1 : ${selectedData.depth1}\n부문2 : ${selectedData.depth2}\n부문3 : ${selectedData.depth3}\n데이터를 삭제하시겠습니까?`}
+          // eslint-disable-next-line
+          message={`부문1 : ${selectedData.depth1}${selectedData.depth2 && `\n부문2 : ${selectedData.depth2}`}${selectedData.depth3 && `\n부문3 : ${selectedData.depth3}`}\n의 데이터를 ${selectedData.depth2 === '' || selectedData.depth3 === '' ? '전부 ' : ''}삭제하시겠습니까?`}
           customModalSwitch={deleteConfirmModalSwitch}
           setCustomModalSwitch={setDeleteConfirmModalSwitch}
           customFunction={deleteData}

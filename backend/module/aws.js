@@ -33,14 +33,15 @@ const deleteIRS3 = (fileName) => s3.deleteObject({
 // IR upload
 const uploadIRS3 = multer({
    storage: multerS3({
-       s3: s3,
-       bucket: irBucket,
-       key: function(req, file, cb) {
+      s3: s3,
+      bucket: irBucket,
+      key: function(req, file, cb) {
          // console.log(`${req.body.stock_code}/${req.body.directory}/${file.originalname}`);
-           cb(null, `${req.body.stock_code}/${req.body.directory}/${file.originalname}`);
+         cb(null, `${req.body.stock_code}/${req.body.directory}/${file.originalname}`);
        }
    }),
 });
+
 
 /** s3 내 필요한 데이터를 얻는 함수 - 기업 코드, 필요한 데이터(분기, 연간누적 등) 종류, 연결/개별을 인풋으로 */
 async function getDataS3 (corp_code, whichData, fs_div) {
@@ -52,6 +53,7 @@ async function getDataS3 (corp_code, whichData, fs_div) {
       s3Obj = await s3.getObject(params).promise();
    } catch (err) {
       console.log(err);
+      console.log('s3 파일이 없습니다');
    };
    
    // 키(데이터 파일)이 있는 경우

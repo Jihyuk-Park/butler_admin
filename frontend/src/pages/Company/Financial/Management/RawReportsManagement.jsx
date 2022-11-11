@@ -142,9 +142,13 @@ export default function RawReportsManagement({
                   >
                     {eachdata.id}
                   </StyledTableCell>
-                  {periodArray.map(function (period) {
+                  {periodArray.map(function (period, periodIndex) {
                     return (
-                      <PeriodTableCell align="right" key={`${eachdata.field}${period}`}>
+                      <PeriodTableCell
+                        align="right"
+                        key={`${eachdata.field}${period}`}
+                        sx={[periodIndex % 4 === 3 ? { borderRight: '0.8px solid #A9A9A9' } : {}]}
+                      >
                         {divideAndComma(eachdata[changeKeyName(period)], 1000000000, 1)}
                       </PeriodTableCell>
                     );

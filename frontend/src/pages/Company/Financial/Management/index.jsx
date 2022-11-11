@@ -57,6 +57,7 @@ export default function Management() {
       ...searchInput,
       [key]: e.target.value,
     });
+    searchData();
   };
 
   return (

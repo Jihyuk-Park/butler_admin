@@ -62,6 +62,7 @@ export default function Dart() {
       ...searchInput,
       [key]: e.target.value,
     });
+    searchData();
   };
 
   return (

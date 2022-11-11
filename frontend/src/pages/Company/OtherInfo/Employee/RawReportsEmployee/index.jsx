@@ -77,9 +77,13 @@ export default function RawReportsEmployee() {
             >
               {rawReportsEmployeeAccountArray[index][0]}
             </StyledTableCell>
-            {periodArray.map(function (period) {
+            {periodArray.map(function (period, periodIndex) {
               return (
-                <PeriodTableCell align="right" key={`${eachdata}${period}`}>
+                <PeriodTableCell
+                  align="right"
+                  key={`${eachdata}${period}`}
+                  sx={[periodIndex % 4 === 3 ? { borderRight: '0.8px solid #A9A9A9' } : {}]}
+                >
                   {index % 4 === 0 || index % 4 === 1
                     ? addComma(eachdata[changeKeyName(period)])
                     : null}
