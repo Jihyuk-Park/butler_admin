@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import {
@@ -24,17 +23,12 @@ import {
 } from '../../../../../../component/commonFunction';
 import EditAddSalesAndProfitModal from './EditAddSalesAndProfitModal';
 
-// * 매출액, 영업이익 공통 컴포넌트 (type에 따라 매출액, 영업이익)
-export default function SalesAndProfit({ type }) {
-  // corp_code
-  const { searchCorpCode } = useParams();
-
+// * 매출액, 영업이익 공통 컴포넌트 (type에 따라 매출액, 영업이익 등)
+export default function SalesAndProfit({ infoData, type, searchCorpCode }) {
   // salesAndProfitData
   const [salesAndProfitData, setSalesAndProfitData] = useState([]);
   const salesAndProfitDataArray = ['부문1', '부문2', '부문3'];
   const periodArray = periodArrayAuto();
-  // unit
-  const [unit, setUnit] = useState(1);
 
   // editModal
   const [editModalSwitch, setEditModalSwitch] = useState(false);
@@ -45,12 +39,28 @@ export default function SalesAndProfit({ type }) {
   useEffect(() => {
     if (searchCorpCode !== 'main') {
       axios
-        .get(`${url}/admin/company/sector/individual/performance/${type}/getData/${searchCorpCode}`)
+        .get(
+          `${url}/admin/company/sector/individual/performance/getData/${searchCorpCode}/
+          ${infoData[`segment_title${type}`]}`,
+        )
         .then(result => {
+          // console.log(result.data);
           if (result.data.length !== 1) {
-            setSalesAndProfitData(result.data);
+            let isEmpty = true;
+
+            periodArray.forEach(function (period) {
+              // 맨 마지막 sum 행을 이용
+              if (result.data[result.data.length - 1][changeKeyName(period)] !== null) {
+                isEmpty = false;
+              }
+            });
+
+            // 모두 null이 아닐 때만, 값이 있는 것이므로 노출
+            if (isEmpty === false) {
+              setSalesAndProfitData(result.data);
+            }
           }
-          console.log(type, result.data);
+          // console.log(type, result.data);
           scrollRight(type);
         })
         .catch(() => {
@@ -58,21 +68,6 @@ export default function SalesAndProfit({ type }) {
         });
     }
   }, [searchCorpCode, refreshSwitch]);
-
-  useEffect(() => {
-    if (searchCorpCode !== 'main') {
-      axios
-        .get(`${url}/admin/company/sector/individual/info/company/getData/${searchCorpCode}`)
-        .then(result => {
-          // console.log(result.data[0].unit);
-          setUnit(result.data[0].unit);
-          scrollRight(type);
-        })
-        .catch(() => {
-          console.log('실패했습니다');
-        });
-    }
-  }, [searchCorpCode]);
 
   const openAddEditModal = period => {
     setEditModalSwitch(true);
@@ -86,7 +81,7 @@ export default function SalesAndProfit({ type }) {
         depth1: each.depth1,
         depth2: each.depth2,
         depth3: each.depth3,
-        value: each[changeKeyName(period)] / unit || null,
+        value: each[changeKeyName(period)] / infoData.unit || null,
       });
       return null;
     });
@@ -98,7 +93,7 @@ export default function SalesAndProfit({ type }) {
     <div>
       <Stack direction="row" spacing={2} alignItems="center" sx={{ mt: '20px', pl: '5px' }}>
         <Typography fontSize={20} fontWeight={600}>
-          {type === 'sales' ? '매출액' : '영업이익'}
+          {infoData[`segment_title${type}`]}
           {salesAndProfitData.length === 0 ? ' 데이터가 없습니다' : null}
         </Typography>
       </Stack>
@@ -197,7 +192,7 @@ export default function SalesAndProfit({ type }) {
                               {eachdata[changeKeyName(period)] === null ||
                               eachdata[changeKeyName(period)] === undefined
                                 ? null
-                                : addComma(eachdata[changeKeyName(period)] / unit)}
+                                : addComma(eachdata[changeKeyName(period)] / infoData.unit)}
                             </PeriodTableCell>
                           );
                         })}
@@ -226,7 +221,7 @@ export default function SalesAndProfit({ type }) {
                               {eachdata[changeKeyName(period)] === null ||
                               eachdata[changeKeyName(period)] === undefined
                                 ? null
-                                : addComma(eachdata[changeKeyName(period)] / unit)}
+                                : addComma(eachdata[changeKeyName(period)] / infoData.unit)}
                             </PeriodTableCell>
                           );
                         })}
@@ -242,14 +237,14 @@ export default function SalesAndProfit({ type }) {
 
       {editModalSwitch === true ? (
         <EditAddSalesAndProfitModal
-          type={type}
+          type={infoData[`segment_title${type}`]}
           editModalSwitch={editModalSwitch}
           setEditModalSwitch={setEditModalSwitch}
           editData={selectedData}
           editDate={selectedDate}
           refreshSwitch={refreshSwitch}
           setRefreshSwitch={setRefreshSwitch}
-          unit={unit}
+          unit={infoData.unit}
         />
       ) : null}
     </div>
@@ -257,9 +252,13 @@ export default function SalesAndProfit({ type }) {
 }
 
 SalesAndProfit.defaultProps = {
-  type: 'sales',
+  type: '1',
+  infoData: {},
+  searchCorpCode: '0',
 };
 
 SalesAndProfit.propTypes = {
   type: PropTypes.string,
+  infoData: PropTypes.objectOf(PropTypes.string, PropTypes.number),
+  searchCorpCode: PropTypes.string,
 };

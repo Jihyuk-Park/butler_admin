@@ -104,6 +104,11 @@ export default function RawReportsManagement({
                         : {
                             cursor: 'pointer',
                           },
+                      {
+                        '&:nth-of-type(4n + 2)': {
+                          borderRight: '0.8px solid #A9A9A9',
+                        },
+                      },
                     ]}
                   >
                     {eachdata}

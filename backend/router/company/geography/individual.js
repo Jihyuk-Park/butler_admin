@@ -249,8 +249,8 @@ router.post('/info/geography/delete/:searchCompanyCode', async function(req,res)
 
 // ㅇ 실적
 // 검색 기업 - getData (매출액 & 영업이익)
-router.get('/performance/:type/getData/:searchCompanyCode', function(req,res){
-  let type = req.params.type === 'sales' ? '매출액' : '영업이익';
+router.get('/performance/getData/:searchCompanyCode/:type', function(req,res){
+  let type = req.params.type.trim();
   let searchCompanyCode = req.params.searchCompanyCode;
 
   let periodArray = periodYearArrayAuto();
@@ -305,7 +305,7 @@ router.get('/performance/:type/getData/:searchCompanyCode', function(req,res){
 
 // 검색 기업 - edit (실적 - 매출액 & 영업이익)
 router.post('/performance/:type/edit/:searchCorpCode/:year/:quarter/:unit', function(req, res){
-  let type = req.params.type === 'sales' ? '매출액' : '영업이익';
+  let type = req.params.type.trim();
   let searchCorpCode = req.params.searchCorpCode;
   let bsns_year = req.params.year;
   let quarter= req.params.quarter;

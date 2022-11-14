@@ -13,6 +13,6 @@ export default styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.body}`]: {
     fontSize: 13,
     padding: '10px 10px',
-    minWidth: 40,
+    minWidth: 41,
   },
 }));

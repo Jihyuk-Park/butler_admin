@@ -174,7 +174,7 @@ export default function EditAddSalesAndProfitModal({
 }
 
 EditAddSalesAndProfitModal.defaultProps = {
-  type: 'sales',
+  type: '매출액',
   editModalSwitch: true,
   setEditModalSwitch: () => {},
   editData: [],

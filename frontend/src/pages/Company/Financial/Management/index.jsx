@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Grid, Button, Stack, Box } from '@mui/material';
 import CompanyListAutoComplete from '../../../../component/CompanyListAutoComplete';
@@ -27,6 +27,13 @@ export default function Management() {
     ['연결/개별', [fsDivArray, 'fs_div']],
     ['재무제표', [financialTypeArray, 'financialType']],
   ];
+
+  // 기업 검색 시 바로 노출
+  useEffect(() => {
+    if (searchCompanyCode !== '') {
+      searchData();
+    }
+  }, [searchCompanyCode]);
 
   const searchData = () => {
     if (searchCompanyCode === '') {
