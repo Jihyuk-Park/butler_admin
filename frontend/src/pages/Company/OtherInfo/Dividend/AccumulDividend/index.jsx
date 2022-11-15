@@ -70,13 +70,9 @@ export default function AccumulDividend() {
             >
               {accumulDividendAccountArray[index]}
             </StyledTableCell>
-            {periodArray.map(function (period, periodIndex) {
+            {periodArray.map(function (period) {
               return (
-                <PeriodTableCell
-                  align="right"
-                  key={`${eachdata}${period}`}
-                  sx={[periodIndex % 4 === 3 ? { borderRight: '0.8px solid #A9A9A9' } : {}]}
-                >
+                <PeriodTableCell align="right" key={`${eachdata}${period}`}>
                   {index !== 1 && index !== 4 && index !== 6 && index !== 8
                     ? addComma(eachdata[changeKeyName(period)])
                     : null}

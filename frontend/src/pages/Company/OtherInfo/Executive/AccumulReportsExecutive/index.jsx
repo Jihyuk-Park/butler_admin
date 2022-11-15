@@ -66,13 +66,9 @@ export default function AccumulReportsExecutive() {
             >
               {accumulReportsExecutiveAccountArray[index]}
             </StyledTableCell>
-            {periodArray.map(function (period, periodIndex) {
+            {periodArray.map(function (period) {
               return (
-                <PeriodTableCell
-                  align="right"
-                  key={`${eachdata}${period}`}
-                  sx={[periodIndex % 4 === 3 ? { borderRight: '0.8px solid #A9A9A9' } : {}]}
-                >
+                <PeriodTableCell align="right" key={`${eachdata}${period}`}>
                   {index === 0 || index === 1
                     ? divideAndComma(eachdata[changeKeyName(period)], 1000000, 0)
                     : null}

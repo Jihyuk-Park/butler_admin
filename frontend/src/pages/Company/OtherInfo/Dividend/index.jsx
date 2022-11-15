@@ -1,6 +1,6 @@
 import React from 'react';
 import { Paper, Table, TableHead, TableRow, TableBody, TableContainer } from '@mui/material';
-import StyledTableCell from '../../../../component/UI/StyledTableCell';
+import PeriodTableCell from '../../../../component/UI/PeriodTableCell';
 import { periodArrayAuto } from '../../../../component/commonFunction';
 import RawReportsDividend from './RawReportsDividend';
 import QuarterDividend from './QuarterDividend';
@@ -25,7 +25,7 @@ export default function Dividend() {
             <TableRow>
               {['배당(연간누적)', ...periodArray].map(function (eachdata, index) {
                 return (
-                  <StyledTableCell
+                  <PeriodTableCell
                     key={eachdata}
                     align="center"
                     sx={[
@@ -35,7 +35,7 @@ export default function Dividend() {
                     ]}
                   >
                     {eachdata}
-                  </StyledTableCell>
+                  </PeriodTableCell>
                 );
               })}
             </TableRow>

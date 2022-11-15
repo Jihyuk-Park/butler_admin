@@ -1,6 +1,6 @@
 import React from 'react';
 import { Paper, Table, TableHead, TableRow, TableBody, TableContainer } from '@mui/material';
-import StyledTableCell from '../../../../component/UI/StyledTableCell';
+import PeriodTableCell from '../../../../component/UI/PeriodTableCell';
 import { periodArrayAuto } from '../../../../component/commonFunction';
 import CommonBuyback from './CommonBuyback';
 import PreferredBuyback from './PreferredBuyback';
@@ -24,7 +24,7 @@ export default function Buyback() {
             <TableRow>
               {['자사주 내역(보통주)', ...periodArray].map(function (eachdata, index) {
                 return (
-                  <StyledTableCell
+                  <PeriodTableCell
                     key={eachdata}
                     align="center"
                     sx={[
@@ -34,7 +34,7 @@ export default function Buyback() {
                     ]}
                   >
                     {eachdata}
-                  </StyledTableCell>
+                  </PeriodTableCell>
                 );
               })}
             </TableRow>

@@ -12,6 +12,7 @@ import {
   Typography,
 } from '@mui/material';
 import PeriodTableCell from '../../../../../../component/UI/PeriodTableCell';
+import PeriodTableCell3 from '../../../../../../component/UI/PeriodTableCell3';
 import StyledTableCell from '../../../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../../../component/UI/StyledTableRow';
 import { url } from '../../../../../../component/commonVariable';
@@ -108,7 +109,7 @@ export default function SalesAndProfit({ infoData, type, searchCorpCode }) {
               <TableRow>
                 {[...salesAndProfitDataArray, ...periodArray].map(function (eachdata, index) {
                   return (
-                    <StyledTableCell
+                    <PeriodTableCell3
                       key={eachdata}
                       onClick={
                         index === 0 || index === 1 || index === 2
@@ -129,11 +130,12 @@ export default function SalesAndProfit({ infoData, type, searchCorpCode }) {
                       ]}
                     >
                       {eachdata}
-                    </StyledTableCell>
+                    </PeriodTableCell3>
                   );
                 })}
               </TableRow>
             </TableHead>
+
             <TableBody>
               {salesAndProfitData.map(function (eachdata, index) {
                 return (
@@ -181,19 +183,14 @@ export default function SalesAndProfit({ infoData, type, searchCorpCode }) {
                         >
                           {eachdata.depth3}
                         </StyledTableCell>
-                        {periodArray.map(function (period, periodIndex) {
+                        {periodArray.map(function (period) {
                           return (
-                            <PeriodTableCell
-                              key={`${eachdata}${period}`}
-                              sx={[
-                                periodIndex % 4 === 3 ? { borderRight: '0.8px solid #A9A9A9' } : {},
-                              ]}
-                            >
+                            <PeriodTableCell3 key={`${eachdata}${period}`}>
                               {eachdata[changeKeyName(period)] === null ||
                               eachdata[changeKeyName(period)] === undefined
                                 ? null
                                 : addComma(eachdata[changeKeyName(period)] / infoData.unit)}
-                            </PeriodTableCell>
+                            </PeriodTableCell3>
                           );
                         })}
                       </>
@@ -210,14 +207,10 @@ export default function SalesAndProfit({ infoData, type, searchCorpCode }) {
                         >
                           합계
                         </StyledTableCell>
-                        {periodArray.map(function (period, periodIndex) {
+                        {periodArray.map(function (period) {
                           return (
-                            <PeriodTableCell
-                              key={`${eachdata}${period}`}
-                              sx={[
-                                periodIndex % 4 === 3 ? { borderRight: '0.9px solid #A9A9A9' } : {},
-                              ]}
-                            >
+                            // 합계의 경우 4n+1 border
+                            <PeriodTableCell key={`${eachdata}${period}`}>
                               {eachdata[changeKeyName(period)] === null ||
                               eachdata[changeKeyName(period)] === undefined
                                 ? null
@@ -259,6 +252,7 @@ SalesAndProfit.defaultProps = {
 
 SalesAndProfit.propTypes = {
   type: PropTypes.string,
-  infoData: PropTypes.objectOf(PropTypes.string, PropTypes.number),
+  // eslint-disable-next-line
+  infoData: PropTypes.object,
   searchCorpCode: PropTypes.string,
 };

@@ -39,6 +39,11 @@ const theme = createTheme({
         },
       },
     },
+    MuiTable: {
+      defaultProps: {
+        style: { borderSpacing: 0, borderCollapse: 'collapse' },
+      },
+    },
     MuiTableCell: {
       defaultProps: {
         align: 'center',

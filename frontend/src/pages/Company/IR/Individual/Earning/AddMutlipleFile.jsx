@@ -28,7 +28,7 @@ export default function AddMutlipleFile({
 }) {
   const { searchStockCode } = useParams();
   // 실적발표 목록
-  const earningTable = ['파일 목록', '사업 연도', '분기'];
+  const earningTable = ['파일 목록', '사업 연도', '분기', '삭제'];
 
   // 파일 추가 시
   const [newFile, setNewFile] = useState([]);
@@ -38,6 +38,28 @@ export default function AddMutlipleFile({
   // 연도 및 분기 인풋
   const yearArray = YearArrayAuto(2000);
   const quarterArray = ['1', '2', '3', '4'];
+
+  const onChangeYear = (e, index) => {
+    const tempArray = [...newFileText];
+    tempArray[index].bsns_year = e.target.value;
+    setNewFileText(tempArray);
+  };
+
+  const onChangeQuarter = (e, index) => {
+    const tempArray = [...newFileText];
+    tempArray[index].quarter_id = e.target.value;
+    setNewFileText(tempArray);
+  };
+
+  const deleteFile = index => {
+    const tempArray = [...newFileText];
+    tempArray.splice(index, 1);
+    setNewFileText(tempArray);
+
+    const tempArray2 = [...newFile];
+    tempArray2.splice(index, 1);
+    setNewFile(tempArray2);
+  };
 
   const addFile = () => {
     fileInput.current.click();
@@ -72,18 +94,6 @@ export default function AddMutlipleFile({
     }
   };
 
-  const onChangeYear = (e, index) => {
-    const tempArray = [...newFileText];
-    tempArray[index].bsns_year = e.target.value;
-    setNewFileText(tempArray);
-  };
-
-  const onChangeQuarter = (e, index) => {
-    const tempArray = [...newFileText];
-    tempArray[index].quarter_id = e.target.value;
-    setNewFileText(tempArray);
-  };
-
   const saveData = () => {
     if (newFile.length === 0) {
       alert('파일과 데이터를 추가해주세요');
@@ -92,11 +102,14 @@ export default function AddMutlipleFile({
     } else {
       // 추가할 데이터간 기간 중복 체크
       const checkDuplicateAddPeriod = [];
+      let isShowAlert = false;
       newFileText.forEach(each => {
-        if (each.bsns_year === '') {
+        if (each.bsns_year === '' && isShowAlert === false) {
           alert('연도를 입력해주세요');
-        } else if (each.quarter_id === '') {
+          isShowAlert = true;
+        } else if (each.quarter_id === '' && isShowAlert === false) {
           alert('분기를 입력해주세요');
+          isShowAlert = true;
         } else {
           // 연도, 분기가 같은 데이터 개수 검사 (중복 없을 시 1개)
           const checkArray = newFileText.filter(
@@ -108,53 +121,55 @@ export default function AddMutlipleFile({
         }
       });
 
-      if (checkDuplicateAddPeriod.length !== 0) {
-        alert('입력한 데이터 내 중복된 기간이 있습니다');
-      } else {
-        // 입력한 연도, 분기에 기존 데이터가 있는지 검사 (중복 여부에 따라 DB 수정 혹은 추가)
-        newFileText.forEach((each, index) => {
-          const checkDuplicateOgPeriod = earningData.filter(
-            data =>
-              data.bsns_year === parseInt(each.bsns_year, 10) &&
-              data.quarter_id === parseInt(each.quarter_id, 10),
-          );
+      if (isShowAlert === false) {
+        if (checkDuplicateAddPeriod.length !== 0) {
+          alert('입력한 데이터 내 중복된 기간이 있습니다');
+        } else {
+          // 입력한 연도, 분기에 기존 데이터가 있는지 검사 (중복 여부에 따라 DB 수정 혹은 추가)
+          newFileText.forEach((each, index) => {
+            const checkDuplicateOgPeriod = earningData.filter(
+              data =>
+                data.bsns_year === parseInt(each.bsns_year, 10) &&
+                data.quarter_id === parseInt(each.quarter_id, 10),
+            );
 
-          let isDuplicate = 0;
-          let deleteFileName = '';
-          // 중복 기간이 있으므로 수정
-          if (checkDuplicateOgPeriod.length !== 0) {
-            isDuplicate = 1;
-            deleteFileName = checkDuplicateOgPeriod[0].file_name;
+            let isDuplicate = 0;
+            let deleteFileName = '';
+            // 중복 기간이 있으므로 수정
+            if (checkDuplicateOgPeriod.length !== 0) {
+              isDuplicate = 1;
+              deleteFileName = checkDuplicateOgPeriod[0].file_name;
+            }
+            const tempArray = [...newFileText];
+            tempArray[index].isDuplicate = isDuplicate;
+            tempArray[index].deleteFileName = deleteFileName;
+            setNewFileText(tempArray);
+          });
+
+          // formData에 데이터 삽입
+          const formData = new FormData();
+
+          formData.append('stock_code', searchStockCode);
+          formData.append('directory', '1. Earnings Release');
+          for (let i = 0; i < newFileText.length; i += 1) {
+            formData.append('bsns_year', newFileText[i].bsns_year);
+            formData.append('quarter_id', newFileText[i].quarter_id);
+            formData.append('file_name', newFile[i].name);
+            formData.append('isDuplicate', newFileText[i].isDuplicate);
+            formData.append('deleteFileName', newFileText[i].deleteFileName);
           }
-          const tempArray = [...newFileText];
-          tempArray[index].isDuplicate = isDuplicate;
-          tempArray[index].deleteFileName = deleteFileName;
-          setNewFileText(tempArray);
-        });
 
-        // formData에 데이터 삽입
-        const formData = new FormData();
+          for (let i = 0; i < newFile.length; i += 1) {
+            formData.append('files', newFile[i]);
+          }
+          // const body = JSON.stringify({ newFileText });
 
-        formData.append('stock_code', searchStockCode);
-        formData.append('directory', '1. Earnings Release');
-        for (let i = 0; i < newFileText.length; i += 1) {
-          formData.append('bsns_year', newFileText[i].bsns_year);
-          formData.append('quarter_id', newFileText[i].quarter_id);
-          formData.append('file_name', newFile[i].name);
-          formData.append('isDuplicate', newFileText[i].isDuplicate);
-          formData.append('deleteFileName', newFileText[i].deleteFileName);
+          axios.post(`/admin/company/ir/individual/add/multiple/earning`, formData).then(() => {
+            alert('추가가 완료되었습니다');
+            setRefreshSwitch(!refreshSwitch);
+            modalClose();
+          });
         }
-
-        for (let i = 0; i < newFile.length; i += 1) {
-          formData.append('files', newFile[i]);
-        }
-        // const body = JSON.stringify({ newFileText });
-
-        axios.post(`/admin/company/ir/individual/add/multiple/earning`, formData).then(() => {
-          alert('추가가 완료되었습니다');
-          setRefreshSwitch(!refreshSwitch);
-          modalClose();
-        });
       }
     }
   };
@@ -225,6 +240,9 @@ export default function AddMutlipleFile({
                           value={each.quarter_id}
                           onChange={e => onChangeQuarter(e, index)}
                         />
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <Button onClick={() => deleteFile(index)}>삭제</Button>
                       </StyledTableCell>
                     </StyledTableRow>
                   );

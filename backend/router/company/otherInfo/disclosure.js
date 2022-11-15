@@ -53,6 +53,7 @@ router.get('/getData/search/:searchCompanyCode/:startDate/:endDate/:page', funct
   let sql = `SELECT report_nm, rcept_dt, rcept_no, flr_nm, corp_name FROM DartReport a
     LEFT JOIN CompanyInfo b on a.corp_code = b.corp_code
     WHERE a.corp_code = ${searchCompanyCode} && rcept_dt >= ${startDate} && rcept_dt <= ${endDate}
+    ORDER BY rcept_dt DESC
     LIMIT ${itemNumber} OFFSET ${itemNumber*(page-1)};`;
 	
   connection.query(sql, function(err, rows, fields){

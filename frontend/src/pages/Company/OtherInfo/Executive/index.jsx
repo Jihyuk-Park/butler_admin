@@ -1,6 +1,6 @@
 import React from 'react';
 import { Paper, Table, TableHead, TableRow, TableBody, TableContainer } from '@mui/material';
-import StyledTableCell from '../../../../component/UI/StyledTableCell';
+import PeriodTableCell from '../../../../component/UI/PeriodTableCell';
 import { periodArrayAuto } from '../../../../component/commonFunction';
 import BoundaryTableRow from '../../../../component/UI/BoundaryTableRow';
 import CompanySearchNMove from '../../../../component/UI/CompanySearchNMove';
@@ -25,7 +25,7 @@ export default function Executive() {
             <TableRow>
               {['임원보수 내역', ...periodArray].map(function (eachdata, index) {
                 return (
-                  <StyledTableCell
+                  <PeriodTableCell
                     key={eachdata}
                     align="center"
                     sx={[
@@ -35,7 +35,7 @@ export default function Executive() {
                     ]}
                   >
                     {eachdata}
-                  </StyledTableCell>
+                  </PeriodTableCell>
                 );
               })}
             </TableRow>

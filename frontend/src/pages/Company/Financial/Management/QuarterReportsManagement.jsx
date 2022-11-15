@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import { Paper, Table, TableHead, TableRow, TableBody, TableContainer } from '@mui/material';
-import PeriodTableCell from '../../../../component/UI/PeriodTableCell';
+import PeriodTableCell2 from '../../../../component/UI/PeriodTableCell2';
 import StyledTableCell from '../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../component/UI/StyledTableRow';
 import { url } from '../../../../component/commonVariable';
@@ -57,7 +57,7 @@ export default function QuarterReportsManagement({
             <TableRow>
               {['분기별 (십억)', 'ID', ...periodArray].map(function (eachdata, index) {
                 return (
-                  <StyledTableCell
+                  <PeriodTableCell2
                     key={eachdata}
                     align="center"
                     sx={[
@@ -72,7 +72,7 @@ export default function QuarterReportsManagement({
                     ]}
                   >
                     {eachdata}
-                  </StyledTableCell>
+                  </PeriodTableCell2>
                 );
               })}
             </TableRow>
@@ -107,15 +107,11 @@ export default function QuarterReportsManagement({
                   >
                     {null}
                   </StyledTableCell>
-                  {periodArray.map(function (period, periodIndex) {
+                  {periodArray.map(function (period) {
                     return (
-                      <PeriodTableCell
-                        align="right"
-                        key={`${eachdata.field}${period}`}
-                        sx={[periodIndex % 4 === 3 ? { borderRight: '0.8px solid #A9A9A9' } : {}]}
-                      >
+                      <PeriodTableCell2 align="right" key={`${eachdata.field}${period}`}>
                         {divideAndComma(eachdata[changeKeyName(period)], 1000000000, 1)}
-                      </PeriodTableCell>
+                      </PeriodTableCell2>
                     );
                   })}
                 </StyledTableRow>

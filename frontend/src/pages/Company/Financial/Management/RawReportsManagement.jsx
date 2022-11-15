@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import { Paper, Table, TableHead, TableRow, TableBody, TableContainer } from '@mui/material';
-import PeriodTableCell from '../../../../component/UI/PeriodTableCell';
+import PeriodTableCell2 from '../../../../component/UI/PeriodTableCell2';
 import StyledTableCell from '../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../component/UI/StyledTableRow';
 import { url } from '../../../../component/commonVariable';
@@ -85,7 +85,7 @@ export default function RawReportsManagement({
             <TableRow>
               {['연간누적 (십억)', 'ID', ...periodArray].map(function (eachdata, index) {
                 return (
-                  <StyledTableCell
+                  <PeriodTableCell2
                     key={eachdata}
                     align="center"
                     onClick={
@@ -96,7 +96,7 @@ export default function RawReportsManagement({
                     sx={[
                       index === 0 || index === 1
                         ? {
-                            minWidth: index === 0 ? 180 : 30,
+                            minWidth: index === 0 ? 180 : 50,
                             position: 'sticky',
                             left: index === 0 ? 0 : 200,
                             zIndex: 100,
@@ -104,15 +104,10 @@ export default function RawReportsManagement({
                         : {
                             cursor: 'pointer',
                           },
-                      {
-                        '&:nth-of-type(4n + 2)': {
-                          borderRight: '0.8px solid #A9A9A9',
-                        },
-                      },
                     ]}
                   >
                     {eachdata}
-                  </StyledTableCell>
+                  </PeriodTableCell2>
                 );
               })}
             </TableRow>
@@ -140,22 +135,18 @@ export default function RawReportsManagement({
                       minWidth: 30,
                       maxWidth: 30,
                       position: 'sticky',
-                      left: 201,
+                      left: 200,
                       backgroundColor: '#FFFAFA',
                       borderRight: '1px solid black',
                     }}
                   >
                     {eachdata.id}
                   </StyledTableCell>
-                  {periodArray.map(function (period, periodIndex) {
+                  {periodArray.map(function (period) {
                     return (
-                      <PeriodTableCell
-                        align="right"
-                        key={`${eachdata.field}${period}`}
-                        sx={[periodIndex % 4 === 3 ? { borderRight: '0.8px solid #A9A9A9' } : {}]}
-                      >
+                      <PeriodTableCell2 align="right" key={`${eachdata.field}${period}`}>
                         {divideAndComma(eachdata[changeKeyName(period)], 1000000000, 1)}
-                      </PeriodTableCell>
+                      </PeriodTableCell2>
                     );
                   })}
                 </StyledTableRow>

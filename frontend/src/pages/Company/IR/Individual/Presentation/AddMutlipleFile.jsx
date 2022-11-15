@@ -28,7 +28,7 @@ export default function AddMutlipleFile({
 }) {
   const { searchStockCode } = useParams();
   // 실적발표 목록
-  const presentationDataTable = ['파일명', '날짜(20220101)', '행사명', '제목'];
+  const presentationDataTable = ['파일명', '날짜(20220101)', '행사명', '제목', '삭제'];
 
   // 파일 추가 시
   const [newFile, setNewFile] = useState([]);
@@ -91,6 +91,16 @@ export default function AddMutlipleFile({
     setNewFileText(tempArray);
   };
 
+  const deleteFile = index => {
+    const tempArray = [...newFileText];
+    tempArray.splice(index, 1);
+    setNewFileText(tempArray);
+
+    const tempArray2 = [...newFile];
+    tempArray2.splice(index, 1);
+    setNewFile(tempArray2);
+  };
+
   const saveData = () => {
     if (newFile.length === 0) {
       alert('파일과 데이터를 추가해주세요');
@@ -99,13 +109,17 @@ export default function AddMutlipleFile({
     } else {
       // 추가할 데이터간 기간 중복 체크
       const checkDuplicateAddPeriod = [];
+      let isShowAlert = false;
       newFileText.forEach(each => {
-        if (each.published_date === '') {
+        if (each.published_date === '' && isShowAlert === false) {
           alert('날짜를 입력해주세요');
-        } else if (each.conference_name === '') {
+          isShowAlert = true;
+        } else if (each.conference_name === '' && isShowAlert === false) {
           alert('행사명을 입력해주세요');
-        } else if (each.title === '') {
+          isShowAlert = true;
+        } else if (each.title === '' && isShowAlert === false) {
           alert('제목을 입력해주세요');
+          isShowAlert = true;
         } else {
           // 날짜, 행사명이 같은 데이터 개수 검사 (중복 없을 시 1개)
           const checkArray = newFileText.filter(
@@ -119,55 +133,59 @@ export default function AddMutlipleFile({
         }
       });
 
-      if (checkDuplicateAddPeriod.length !== 0) {
-        alert('입력한 데이터 내 중복된 날짜와 행사명이 있습니다');
-      } else {
-        // 입력한 날짜, 행사명의 기존 데이터가 있는지 검사 (중복 여부에 따라 DB 수정 혹은 추가)
-        newFileText.forEach((each, index) => {
-          const checkDuplicateOgPeriod = presentationData.filter(
-            data =>
-              changeDateNoDot(data.published_date) === each.published_date &&
-              data.conference_name === each.conference_name,
-          );
+      if (isShowAlert === false) {
+        if (checkDuplicateAddPeriod.length !== 0) {
+          alert('입력한 데이터 내 중복된 날짜와 행사명이 있습니다');
+        } else {
+          // 입력한 날짜, 행사명의 기존 데이터가 있는지 검사 (중복 여부에 따라 DB 수정 혹은 추가)
+          newFileText.forEach((each, index) => {
+            const checkDuplicateOgPeriod = presentationData.filter(
+              data =>
+                changeDateNoDot(data.published_date) === each.published_date &&
+                data.conference_name === each.conference_name,
+            );
 
-          let isDuplicate = 0;
-          let deleteFileName = '';
-          // 중복 기간이 있으므로 수정
-          if (checkDuplicateOgPeriod.length !== 0) {
-            isDuplicate = 1;
-            deleteFileName = checkDuplicateOgPeriod[0].file_name;
+            let isDuplicate = 0;
+            let deleteFileName = '';
+            // 중복 기간이 있으므로 수정
+            if (checkDuplicateOgPeriod.length !== 0) {
+              isDuplicate = 1;
+              deleteFileName = checkDuplicateOgPeriod[0].file_name;
+            }
+            const tempArray = [...newFileText];
+            tempArray[index].isDuplicate = isDuplicate;
+            tempArray[index].deleteFileName = deleteFileName;
+            setNewFileText(tempArray);
+          });
+
+          // formData에 데이터 삽입
+          const formData = new FormData();
+
+          formData.append('stock_code', searchStockCode);
+          formData.append('directory', '3. IR Presentation');
+          for (let i = 0; i < newFileText.length; i += 1) {
+            console.log(removeDotNDash(newFileText[i].published_date));
+            formData.append('published_date', removeDotNDash(newFileText[i].published_date));
+            formData.append('conference_name', newFileText[i].conference_name);
+            formData.append('title', newFileText[i].title);
+            formData.append('file_name', newFile[i].name);
+            formData.append('isDuplicate', newFileText[i].isDuplicate);
+            formData.append('deleteFileName', newFileText[i].deleteFileName);
           }
-          const tempArray = [...newFileText];
-          tempArray[index].isDuplicate = isDuplicate;
-          tempArray[index].deleteFileName = deleteFileName;
-          setNewFileText(tempArray);
-        });
 
-        // formData에 데이터 삽입
-        const formData = new FormData();
+          for (let i = 0; i < newFile.length; i += 1) {
+            formData.append('files', newFile[i]);
+          }
+          // const body = JSON.stringify({ newFileText });
 
-        formData.append('stock_code', searchStockCode);
-        formData.append('directory', '3. IR Presentation');
-        for (let i = 0; i < newFileText.length; i += 1) {
-          console.log(removeDotNDash(newFileText[i].published_date));
-          formData.append('published_date', removeDotNDash(newFileText[i].published_date));
-          formData.append('conference_name', newFileText[i].conference_name);
-          formData.append('title', newFileText[i].title);
-          formData.append('file_name', newFile[i].name);
-          formData.append('isDuplicate', newFileText[i].isDuplicate);
-          formData.append('deleteFileName', newFileText[i].deleteFileName);
+          axios
+            .post(`/admin/company/ir/individual/add/multiple/presentation`, formData)
+            .then(() => {
+              alert('추가가 완료되었습니다');
+              setRefreshSwitch(!refreshSwitch);
+              modalClose();
+            });
         }
-
-        for (let i = 0; i < newFile.length; i += 1) {
-          formData.append('files', newFile[i]);
-        }
-        // const body = JSON.stringify({ newFileText });
-
-        axios.post(`/admin/company/ir/individual/add/multiple/presentation`, formData).then(() => {
-          alert('추가가 완료되었습니다');
-          setRefreshSwitch(!refreshSwitch);
-          modalClose();
-        });
       }
     }
   };
@@ -240,6 +258,9 @@ export default function AddMutlipleFile({
                           value={newFileText.title}
                           onChange={e => onChangeTitle(e, index)}
                         />
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <Button onClick={() => deleteFile(index)}>삭제</Button>
                       </StyledTableCell>
                     </StyledTableRow>
                   );

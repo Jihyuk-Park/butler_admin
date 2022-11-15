@@ -8,6 +8,8 @@ export default styled(TableCell)(({ theme }) => ({
     color: theme.palette.common.white,
     fontSize: 15,
     padding: '10px 0px',
+    borderSpacing: 0,
+    borderCollaspe: 'collapse',
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 13,

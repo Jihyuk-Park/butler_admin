@@ -83,13 +83,9 @@ export default function CommonBuyback() {
             >
               {buybackAccountArray[index][0]}
             </StyledTableCell>
-            {periodArray.map(function (period, periodIndex) {
+            {periodArray.map(function (period) {
               return (
-                <PeriodTableCell
-                  align="right"
-                  key={`${eachdata}${period}`}
-                  sx={[periodIndex % 4 === 3 ? { borderRight: '0.8px solid #A9A9A9' } : {}]}
-                >
+                <PeriodTableCell align="right" key={`${eachdata}${period}`}>
                   {addComma(eachdata[changeKeyName(period)])}
                 </PeriodTableCell>
               );
