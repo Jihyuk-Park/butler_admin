@@ -18,7 +18,6 @@ import { url } from '../../../../../component/commonVariable';
 import { changeDateDash } from '../../../../../component/commonFunction';
 import StyledTableCell from '../../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../../component/UI/StyledTableRow';
-import DeleteModal from './DeleteModal';
 import AddEditModal from './AddEditModal';
 
 export default function Presentation({ update, refreshSwitch, setRefreshSwitch }) {
@@ -29,9 +28,8 @@ export default function Presentation({ update, refreshSwitch, setRefreshSwitch }
   const dataTable = ['보고일', '행사명', '제목', 'IR 자료'];
   const [presentationData, setPresentationData] = useState([]);
 
-  // 삭제, 추가 버튼
-  const [deleteModalSwitch, setDeleteModalSwitch] = useState(false);
-  const [addModalSwitch, setAddModalSwitch] = useState(false);
+  // 편집 버튼
+  const [addEditModalSwitch, setAddEditModalSwitch] = useState(false);
 
   // 프리젠테이션 데이터를 받아오는 Hook
   useEffect(() => {
@@ -48,12 +46,8 @@ export default function Presentation({ update, refreshSwitch, setRefreshSwitch }
     }
   }, [searchStockCode, refreshSwitch]);
 
-  const openDeleteModal = () => {
-    setDeleteModalSwitch(true);
-  };
-
   const openAddEditModal = () => {
-    setAddModalSwitch(true);
+    setAddEditModalSwitch(true);
   };
 
   return (
@@ -75,20 +69,11 @@ export default function Presentation({ update, refreshSwitch, setRefreshSwitch }
           <Button
             variant="contained"
             color="secondary"
-            onClick={openDeleteModal}
-            disabled={searchStockCode === 'main'}
-            sx={{ minWidth: '90px' }}
-          >
-            삭제
-          </Button>
-          <Button
-            variant="contained"
-            color="secondary"
             onClick={openAddEditModal}
             disabled={searchStockCode === 'main'}
             sx={{ minWidth: '90px' }}
           >
-            수정/추가
+            편집
           </Button>
         </Stack>
       </Grid>
@@ -123,19 +108,10 @@ export default function Presentation({ update, refreshSwitch, setRefreshSwitch }
         </Table>
       </TableContainer>
 
-      {deleteModalSwitch === true ? (
-        <DeleteModal
-          deleteModalSwtich={deleteModalSwitch}
-          setDeleteModalSwitch={setDeleteModalSwitch}
-          refreshSwitch={refreshSwitch}
-          setRefreshSwitch={setRefreshSwitch}
-        />
-      ) : null}
-
-      {addModalSwitch === true ? (
+      {addEditModalSwitch === true ? (
         <AddEditModal
-          addModalSwtich={addModalSwitch}
-          setAddModalSwitch={setAddModalSwitch}
+          addModalSwtich={addEditModalSwitch}
+          setAddModalSwitch={setAddEditModalSwitch}
           refreshSwitch={refreshSwitch}
           setRefreshSwitch={setRefreshSwitch}
         />

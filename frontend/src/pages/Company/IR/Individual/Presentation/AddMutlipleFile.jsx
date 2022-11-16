@@ -164,7 +164,7 @@ export default function AddMutlipleFile({
           formData.append('stock_code', searchStockCode);
           formData.append('directory', '3. IR Presentation');
           for (let i = 0; i < newFileText.length; i += 1) {
-            console.log(removeDotNDash(newFileText[i].published_date));
+            // console.log(removeDotNDash(newFileText[i].published_date));
             formData.append('published_date', removeDotNDash(newFileText[i].published_date));
             formData.append('conference_name', newFileText[i].conference_name);
             formData.append('title', newFileText[i].title);

@@ -20,6 +20,9 @@ import StyledTableCell from '../../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../../component/UI/StyledTableRow';
 import CustomModal from '../../../../../component/UI/CustomModal';
 
+
+// 11.16 피드백 편집 모달로 합병
+// 따로 사용 시, modalSwitch를 통해 컨트롤
 export default function DeleteModal({
   deleteModalSwtich,
   setDeleteModalSwitch,

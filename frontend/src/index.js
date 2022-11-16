@@ -18,6 +18,9 @@ const theme = createTheme({
     inactive: {
       main: '#999999',
     },
+    red: {
+      main: '#C21807',
+    },
   },
   components: {
     MuiButton: {

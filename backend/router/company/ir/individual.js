@@ -238,7 +238,7 @@ router.post('/delete/earning/all', function(req, res){
   req.body.map(function(each, index){
     let path = `${each.stock_code}/1. Earnings Release/${each.file_name}`;
     // console.log(path);
-    let isDelete = deleteIR(path);
+    let isDelete = deleteIRS3(path);
 
     if (isDelete) {
       let sql = `DELETE FROM ir_quarter_earning WHERE id = "${each.id}"`;

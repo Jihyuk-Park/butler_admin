@@ -19,6 +19,7 @@ import StyledTableCell from '../../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../../component/UI/StyledTableRow';
 import AddEditInputModal from './AddEditInputModal';
 import AddMutlipleFile from './AddMutlipleFile';
+import CustomModal from '../../../../../component/UI/CustomModal';
 
 export default function AddEditModal({
   addModalSwtich,
@@ -29,7 +30,7 @@ export default function AddEditModal({
   const { searchStockCode } = useParams();
 
   // 실적발표 데이터
-  const earningTable = ['파일 목록', '사업 연도', '분기', '수정'];
+  const earningTable = ['파일 목록', '사업 연도', '분기', '삭제'];
   const [earningData, setEarningData] = useState([]);
 
   // 선택 자료 수정 모달 및 선택 자료
@@ -39,6 +40,12 @@ export default function AddEditModal({
 
   // 파일 다중 추가
   const [addMutlipleModalSwitch, setAddMutlipleModalSwitch] = useState(false);
+
+  // 선택 자료 삭제 확인 모달
+  const [confirmSelectModalSwitch, setConfirmSelectModalSwitch] = useState(false);
+
+  // 전채 자료 삭제 확인 모달
+  const [confirmAllModalSwitch, setConfirmAllModalSwitch] = useState(false);
 
   useEffect(() => {
     axios
@@ -52,10 +59,33 @@ export default function AddEditModal({
       });
   }, [refreshSwitch]);
 
-  const editSelectData = each => {
+  const openDeleteSelectConfirm = each => {
     setSelectedData(each);
-    setIsEditModal(true);
-    setAddEditModalSwitch(true);
+    setConfirmSelectModalSwitch(true);
+  };
+
+  const deleteSelectedData = () => {
+    const body = { ...selectedData };
+
+    axios.post(`${url}/admin/company/ir/individual/delete/earning/select`, body).then(() => {
+      alert('삭제가 완료되었습니다');
+      setRefreshSwitch(!refreshSwitch);
+      setConfirmSelectModalSwitch(false);
+    });
+  };
+
+  const openDeleteAllConfirm = () => {
+    setConfirmAllModalSwitch(true);
+  };
+
+  const deleteAllData = () => {
+    const body = [...earningData];
+
+    axios.post(`${url}/admin/company/ir/individual/delete/earning/all`, body).then(() => {
+      alert('삭제가 완료되었습니다');
+      setConfirmAllModalSwitch(false);
+      setRefreshSwitch(!refreshSwitch);
+    });
   };
 
   const addNewData = () => {
@@ -124,11 +154,11 @@ export default function AddEditModal({
                     <StyledTableCell sx={{ minWidth: 70, maxWidth: 70 }}>
                       <Button
                         onClick={() => {
-                          editSelectData(eachdata);
+                          openDeleteSelectConfirm(eachdata);
                         }}
                         sx={{ py: 0 }}
                       >
-                        수정
+                        삭제
                       </Button>
                     </StyledTableCell>
                   </StyledTableRow>
@@ -150,6 +180,14 @@ export default function AddEditModal({
             </Button>
             <Button variant="contained" color="secondary" onClick={modalClose}>
               취소
+            </Button>
+            <Button
+              variant="contained"
+              color="red"
+              onClick={openDeleteAllConfirm}
+              sx={{ color: '#FFF', ml: '10px' }}
+            >
+              전체 삭제
             </Button>
           </Box>
         </Box>
@@ -174,6 +212,24 @@ export default function AddEditModal({
           earningData={earningData}
           refreshSwitch={refreshSwitch}
           setRefreshSwitch={setRefreshSwitch}
+        />
+      )}
+
+      {confirmSelectModalSwitch === false ? null : (
+        <CustomModal
+          message={`${selectedData.bsns_year}년 ${selectedData.quarter_id}분기 실적발표 자료를\n삭제하시겠습니까?`}
+          customModalSwitch={confirmSelectModalSwitch}
+          setCustomModalSwitch={setConfirmSelectModalSwitch}
+          customFunction={deleteSelectedData}
+        />
+      )}
+
+      {confirmAllModalSwitch === false ? null : (
+        <CustomModal
+          message={`${earningData[0].corp_name}의 모든 실적발표 자료를\n삭제하시겠습니까?`}
+          customModalSwitch={confirmAllModalSwitch}
+          setCustomModalSwitch={setConfirmAllModalSwitch}
+          customFunction={deleteAllData}
         />
       )}
     </div>

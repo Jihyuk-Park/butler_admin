@@ -20,6 +20,7 @@ import StyledTableCell from '../../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../../component/UI/StyledTableRow';
 import AddEditInputModal from './AddEditInputModal';
 import AddMutlipleFile from './AddMutlipleFile';
+import CustomModal from '../../../../../component/UI/CustomModal';
 
 export default function AddEditModal({
   addModalSwtich,
@@ -41,6 +42,12 @@ export default function AddEditModal({
   // 파일 다중 추가
   const [addMutlipleModalSwitch, setAddMutlipleModalSwitch] = useState(false);
 
+  // 선택 자료 삭제 확인 모달
+  const [confirmSelectModalSwitch, setConfirmSelectModalSwitch] = useState(false);
+
+  // 전채 자료 삭제 확인 모달
+  const [confirmAllModalSwitch, setConfirmAllModalSwitch] = useState(false);
+
   useEffect(() => {
     axios
       .get(`${url}/admin/company/ir/individual/getData/search/presentationList/${searchStockCode}`)
@@ -53,10 +60,34 @@ export default function AddEditModal({
       });
   }, [refreshSwitch]);
 
-  const editSelectData = each => {
+  const openDeleteSelectConfirm = each => {
     setSelectedData(each);
-    setIsEditModal(true);
-    setAddEditModalSwitch(true);
+    setConfirmSelectModalSwitch(true);
+  };
+
+  const deleteSelectedData = () => {
+    const body = { ...selectedData };
+    // console.log(body);
+
+    axios.post(`${url}/admin/company/ir/individual/delete/presentation/select`, body).then(() => {
+      alert('삭제가 완료되었습니다');
+      setConfirmSelectModalSwitch(false);
+      setRefreshSwitch(!refreshSwitch);
+    });
+  };
+
+  const openDeleteAllConfirm = () => {
+    setConfirmAllModalSwitch(true);
+  };
+
+  const deleteAllData = () => {
+    const body = [...presentationData];
+
+    axios.post(`${url}/admin/company/ir/individual/delete/presentation/all`, body).then(() => {
+      alert('삭제가 완료되었습니다');
+      setConfirmAllModalSwitch(false);
+      setRefreshSwitch(!refreshSwitch);
+    });
   };
 
   const addNewData = () => {
@@ -127,11 +158,11 @@ export default function AddEditModal({
                     <StyledTableCell sx={{ minWidth: 60, maxWidth: 60 }}>
                       <Button
                         onClick={() => {
-                          editSelectData(eachdata);
+                          openDeleteSelectConfirm(eachdata);
                         }}
                         sx={{ py: 0 }}
                       >
-                        수정
+                        삭제
                       </Button>
                     </StyledTableCell>
                   </StyledTableRow>
@@ -153,6 +184,14 @@ export default function AddEditModal({
             </Button>
             <Button variant="contained" color="secondary" onClick={modalClose}>
               취소
+            </Button>
+            <Button
+              variant="contained"
+              color="red"
+              onClick={openDeleteAllConfirm}
+              sx={{ color: '#FFF', ml: '10px' }}
+            >
+              전체 삭제
             </Button>
           </Box>
         </Box>
@@ -177,6 +216,26 @@ export default function AddEditModal({
           presentationData={presentationData}
           refreshSwitch={refreshSwitch}
           setRefreshSwitch={setRefreshSwitch}
+        />
+      )}
+
+      {confirmSelectModalSwitch === false ? null : (
+        <CustomModal
+          message={`${changeDateDot(
+            selectedData.published_date,
+          )} 프리젠테이션 자료를\n삭제하시겠습니까?`}
+          customModalSwitch={confirmSelectModalSwitch}
+          setCustomModalSwitch={setConfirmSelectModalSwitch}
+          customFunction={deleteSelectedData}
+        />
+      )}
+
+      {confirmAllModalSwitch === false ? null : (
+        <CustomModal
+          message={`${presentationData[0].corp_name}의 모든 프리젠테이션 자료를\n삭제하시겠습니까?`}
+          customModalSwitch={confirmAllModalSwitch}
+          setCustomModalSwitch={setConfirmAllModalSwitch}
+          customFunction={deleteAllData}
         />
       )}
     </div>

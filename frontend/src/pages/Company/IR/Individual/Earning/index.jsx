@@ -17,7 +17,6 @@ import {
 import { url } from '../../../../../component/commonVariable';
 import StyledTableCell from '../../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../../component/UI/StyledTableRow';
-import DeleteModal from './DeleteModal';
 import AddEditModal from './AddEditModal';
 
 export default function Earning({ update, refreshSwitch, setRefreshSwitch }) {
@@ -29,7 +28,6 @@ export default function Earning({ update, refreshSwitch, setRefreshSwitch }) {
   const [earningData, setEarningData] = useState([]);
 
   // 삭제, 추가 버튼
-  const [deleteModalSwitch, setDeleteModalSwitch] = useState(false);
   const [addModalSwitch, setAddModalSwitch] = useState(false);
 
   // 실적 데이터를 받아오는 Hook
@@ -46,10 +44,6 @@ export default function Earning({ update, refreshSwitch, setRefreshSwitch }) {
         });
     }
   }, [searchStockCode, refreshSwitch]);
-
-  const openDeleteModal = () => {
-    setDeleteModalSwitch(true);
-  };
 
   const openAddEditModal = () => {
     setAddModalSwitch(true);
@@ -75,19 +69,10 @@ export default function Earning({ update, refreshSwitch, setRefreshSwitch }) {
             variant="contained"
             color="secondary"
             disabled={searchStockCode === 'main'}
-            onClick={openDeleteModal}
-            sx={{ minWidth: '90px' }}
-          >
-            삭제
-          </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            disabled={searchStockCode === 'main'}
             onClick={openAddEditModal}
             sx={{ minWidth: '90px' }}
           >
-            수정/추가
+            편집
           </Button>
         </Stack>
       </Grid>
@@ -133,14 +118,6 @@ export default function Earning({ update, refreshSwitch, setRefreshSwitch }) {
         </Table>
       </TableContainer>
 
-      {deleteModalSwitch === true ? (
-        <DeleteModal
-          deleteModalSwtich={deleteModalSwitch}
-          setDeleteModalSwitch={setDeleteModalSwitch}
-          refreshSwitch={refreshSwitch}
-          setRefreshSwitch={setRefreshSwitch}
-        />
-      ) : null}
       {addModalSwitch === true ? (
         <AddEditModal
           addModalSwtich={addModalSwitch}
