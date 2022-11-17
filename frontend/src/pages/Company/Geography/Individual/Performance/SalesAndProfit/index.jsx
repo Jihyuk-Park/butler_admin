@@ -38,28 +38,21 @@ export default function SalesAndProfit({ infoData, type, searchCorpCode }) {
   const [refreshSwitch, setRefreshSwitch] = useState(false);
 
   useEffect(() => {
-    if (searchCorpCode !== 'main') {
+    // 기업 검색을 하지 않았거나 정보1,2의 값이 없거나 빈칸이면 데이터를 불러오지 않음
+    if (
+      searchCorpCode !== 'main' &&
+      `${infoData[`geography_title${type}`]}` !== 'null' &&
+      `${infoData[`geography_title${type}`]}` !== ''
+    ) {
       axios
         .get(
           `${url}/admin/company/geography/individual/performance/getData/${searchCorpCode}/
           ${infoData[`geography_title${type}`]}`,
         )
         .then(result => {
-          console.log(result.data);
+          // console.log(result.data);
           if (result.data.length !== 1) {
-            let isEmpty = true;
-
-            periodArray.forEach(function (period) {
-              // 맨 마지막 sum 행을 이용
-              if (result.data[result.data.length - 1][changeKeyName(period)] !== null) {
-                isEmpty = false;
-              }
-            });
-
-            // 모두 null이 아닐 때만, 값이 있는 것이므로 노출
-            if (isEmpty === false) {
-              setSalesAndProfitData(result.data);
-            }
+            setSalesAndProfitData(result.data);
           }
 
           scrollRight(type);
