@@ -35,6 +35,7 @@ export default function S3Table({
         .then(result => {
           // console.log(result.data);
           if (result.data === 'X') {
+            setS3data([]);
             alert('S3에 JSON 파일이 없습니다');
           } else {
             setS3data(result.data);
