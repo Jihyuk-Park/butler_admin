@@ -18,6 +18,7 @@ import {
 import StyledTableCell from '../../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../../component/UI/StyledTableRow';
 import { changeDateNoDot, removeDotNDash } from '../../../../../component/commonFunction';
+import ProgressModal from '../../../../../component/UI/ProgressModal';
 
 export default function AddMutlipleFile({
   addMutlipleModalSwitch,
@@ -34,6 +35,9 @@ export default function AddMutlipleFile({
   const [newFile, setNewFile] = useState([]);
   const fileInput = useRef();
   const [newFileText, setNewFileText] = useState([]);
+
+  // 프로그레스바
+  const [progressBarSwitch, setProgressBarSwitch] = useState(false);
 
   const addFile = () => {
     fileInput.current.click();
@@ -137,6 +141,9 @@ export default function AddMutlipleFile({
         if (checkDuplicateAddPeriod.length !== 0) {
           alert('입력한 데이터 내 중복된 날짜와 행사명이 있습니다');
         } else {
+          // 검사를 끝낸 후 프로그레스바 표시
+          setProgressBarSwitch(true);
+
           // 입력한 날짜, 행사명의 기존 데이터가 있는지 검사 (중복 여부에 따라 DB 수정 혹은 추가)
           newFileText.forEach((each, index) => {
             const checkDuplicateOgPeriod = presentationData.filter(
@@ -184,6 +191,10 @@ export default function AddMutlipleFile({
               alert('추가가 완료되었습니다');
               setRefreshSwitch(!refreshSwitch);
               modalClose();
+            })
+            .catch(() => {
+              setProgressBarSwitch(false);
+              console.log('실패했습니다');
             });
         }
       }
@@ -292,6 +303,8 @@ export default function AddMutlipleFile({
           </Box>
         </Box>
       </Modal>
+
+      {progressBarSwitch === true ? <ProgressModal /> : null}
     </div>
   );
 }

@@ -18,6 +18,7 @@ import StyledTableCell from '../../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../../component/UI/StyledTableRow';
 import { YearArrayAuto } from '../../../../../component/commonFunction';
 import DropDown from '../../../../../component/UI/DropDown';
+import ProgressModal from '../../../../../component/UI/ProgressModal';
 
 export default function AddMutlipleFile({
   addMutlipleModalSwitch,
@@ -38,6 +39,9 @@ export default function AddMutlipleFile({
   // 연도 및 분기 인풋
   const yearArray = YearArrayAuto(2000);
   const quarterArray = ['1', '2', '3', '4'];
+
+  // 프로그레스바
+  const [progressBarSwitch, setProgressBarSwitch] = useState(false);
 
   const onChangeYear = (e, index) => {
     const tempArray = [...newFileText];
@@ -125,6 +129,9 @@ export default function AddMutlipleFile({
         if (checkDuplicateAddPeriod.length !== 0) {
           alert('입력한 데이터 내 중복된 기간이 있습니다');
         } else {
+          // 검사를 끝낸 후 프로그레스바 표시
+          setProgressBarSwitch(true);
+
           // 입력한 연도, 분기에 기존 데이터가 있는지 검사 (중복 여부에 따라 DB 수정 혹은 추가)
           newFileText.forEach((each, index) => {
             const checkDuplicateOgPeriod = earningData.filter(
@@ -164,11 +171,18 @@ export default function AddMutlipleFile({
           }
           // const body = JSON.stringify({ newFileText });
 
-          axios.post(`/admin/company/ir/individual/add/multiple/earning`, formData).then(() => {
-            alert('추가가 완료되었습니다');
-            setRefreshSwitch(!refreshSwitch);
-            modalClose();
-          });
+          axios
+            .post(`/admin/company/ir/individual/add/multiple/earning`, formData)
+            .then(() => {
+              alert('추가가 완료되었습니다');
+              setProgressBarSwitch(false);
+              setRefreshSwitch(!refreshSwitch);
+              modalClose();
+            })
+            .catch(() => {
+              setProgressBarSwitch(false);
+              console.log('실패했습니다');
+            });
         }
       }
     }
@@ -274,6 +288,8 @@ export default function AddMutlipleFile({
           </Box>
         </Box>
       </Modal>
+
+      {progressBarSwitch === true ? <ProgressModal /> : null}
     </div>
   );
 }
