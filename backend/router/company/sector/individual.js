@@ -20,10 +20,40 @@ router.get('/info/company/getData/:searchCompanyCode', function(req,res){
       res.send(rows);
     }
   })
+
 });
+
+// 검색 기업 - add (정보 - 기업정보)
+router.post('/info/company/add', function(req, res){
+  let corp_code = req.body.searchCorpCode;
+  let segment_title1 = req.body.segment_title1;
+  let segment_title2 = req.body.segment_title2;
+  let segment_source = req.body.segment_source;
+  let currency = req.body.currency;
+  let unit = req.body.unit;
+  let is_available = req.body.is_available === 'O' ? 1 : 0;
+
+  // console.log(corp_code, segment_title1, segment_title2, segment_source, currency, unit, is_available);
+
+  let sql = `INSERT INTO analysis_company_info (corp_code, segment_title1, segment_title2, segment_source, currency, unit, is_available, created_at, updated_at)
+  VALUES("${corp_code}", "${segment_title1}", "${segment_title2}", "${segment_source}", "${currency}", "${unit}", "${is_available}", NOW(), NOW())`;
+
+  connection.query(sql, function(err, result, fields){
+      if(err){
+          console.log(err);
+          res.status(500).send('Interner Server Error')
+      } else {
+          return res.json("수정 성공");
+      }
+  })
+
+  // last commit 업데이트
+  updateCommit(corp_code, 'ANALYSIS');
+})
 
 // 검색 기업 - edit (정보 - 기업정보)
 router.post('/info/company/edit', function(req, res){
+  let corp_code = req.body.searchCorpCode;
   let analysis_id = req.body.analysis_id;
   let segment_title1 = req.body.segment_title1;
   let segment_title2 = req.body.segment_title2;
@@ -45,6 +75,9 @@ router.post('/info/company/edit', function(req, res){
           return res.json("수정 성공");
       }
   })
+
+  // last commit 업데이트
+  updateCommit(corp_code, 'ANALYSIS');
 })
 
 
@@ -109,6 +142,9 @@ router.post('/info/sector/add', function(req, res){
       }
     })
   }
+
+  // last commit 업데이트
+  updateCommit(corp_code, 'ANALYSIS');
 })
 
 // 검색 기업 - edit (정보 - 부문별 정보)

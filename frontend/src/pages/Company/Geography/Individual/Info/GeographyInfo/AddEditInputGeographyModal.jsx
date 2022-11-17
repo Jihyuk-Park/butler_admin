@@ -19,9 +19,8 @@ export default function AddEditInputGeographyModal({
   geographyInfoData,
   refreshSwitch,
   setRefreshSwitch,
-  refreshSwitch2Depth,
-  setRefreshSwitch2Depth,
   isEditModal,
+  companyInfoData,
 }) {
   const { searchCorpCode } = useParams();
   const editField = ['지역1', '지역2', '지역3', '주요지역 여부', '지역 설명'];
@@ -41,11 +40,10 @@ export default function AddEditInputGeographyModal({
 
   const saveData = () => {
     let body = {
-      analysis_company_info_id: geographyInfoData[0].analysis_company_info_id,
+      analysis_company_info_id: companyInfoData.analysis_id,
       corp_code: searchCorpCode,
       ...editInput,
     };
-    // console.log(geographyInfoData[0]);
     // console.log(body);
 
     const isDuplicate = checkDuplicate();
@@ -82,7 +80,6 @@ export default function AddEditInputGeographyModal({
             .then(() => {
               alert(isEditModal === true ? '수정이 완료되었습니다' : '추가가 완료되었습니다');
               setRefreshSwitch(!refreshSwitch);
-              setRefreshSwitch2Depth(!refreshSwitch2Depth);
               modalClose();
             });
         }
@@ -258,9 +255,8 @@ AddEditInputGeographyModal.defaultProps = {
   geographyInfoData: [],
   refreshSwitch: true,
   setRefreshSwitch: () => {},
-  refreshSwitch2Depth: true,
-  setRefreshSwitch2Depth: () => {},
   isEditModal: true,
+  companyInfoData: {},
 };
 
 AddEditInputGeographyModal.propTypes = {
@@ -272,7 +268,7 @@ AddEditInputGeographyModal.propTypes = {
   geographyInfoData: PropTypes.array,
   refreshSwitch: PropTypes.bool,
   setRefreshSwitch: PropTypes.func,
-  refreshSwitch2Depth: PropTypes.bool,
-  setRefreshSwitch2Depth: PropTypes.func,
   isEditModal: PropTypes.bool,
+  // eslint-disable-next-line
+  companyInfoData: PropTypes.object,
 };

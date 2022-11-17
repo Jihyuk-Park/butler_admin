@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
@@ -14,12 +15,16 @@ export default function EditCompanyInfoModal({
   editModalSwitch,
   setEditModalSwitch,
   editData,
+  isEdit,
   refreshSwitch,
   setRefreshSwitch,
 }) {
+  const { searchCorpCode } = useParams();
   const editField = ['정보1', '정보2', '소스', '통화', '단위', '서비스 여부'];
   // input 관리
-  const [editInput, setEditInput] = useState(editData);
+  const [editInput, setEditInput] = useState(
+    isEdit ? editData : { currency: 'KRW', is_available: 'X' },
+  );
   const editInputKey = [
     'segment_title1',
     'segment_title2',
@@ -34,11 +39,15 @@ export default function EditCompanyInfoModal({
   const modalClose = () => setEditModalSwitch(false);
 
   const saveData = () => {
-    const body = { ...editInput };
+    const body = { ...editInput, searchCorpCode };
+    // console.log(body);
+
+    const mode = isEdit ? 'edit' : 'add';
+
     if (body.unit === '') {
       alert('단위는 필수 입력사항입니다!');
     } else {
-      axios.post(`/admin/company/sector/individual/info/company/edit`, body).then(() => {
+      axios.post(`/admin/company/sector/individual/info/company/${mode}`, body).then(() => {
         alert('수정이 완료되었습니다');
         setRefreshSwitch(!refreshSwitch);
         modalClose();
@@ -112,7 +121,7 @@ export default function EditCompanyInfoModal({
 
           <Grid container justifyContent="center" sx={{ mt: '15px' }}>
             <Button variant="contained" onClick={saveData} sx={{ color: 'white', mr: '10px' }}>
-              수정하기
+              {isEdit ? '수정하기' : '추가하기'}
             </Button>
             <Button variant="contained" color="secondary" onClick={modalClose}>
               취소
@@ -128,6 +137,7 @@ EditCompanyInfoModal.defaultProps = {
   editModalSwitch: true,
   setEditModalSwitch: () => {},
   editData: {},
+  isEdit: true,
   refreshSwitch: true,
   setRefreshSwitch: () => {},
 };
@@ -137,6 +147,7 @@ EditCompanyInfoModal.propTypes = {
   setEditModalSwitch: PropTypes.func,
   // eslint-disable-next-line
   editData: PropTypes.object,
+  isEdit: PropTypes.bool,
   refreshSwitch: PropTypes.bool,
   setRefreshSwitch: PropTypes.func,
 };

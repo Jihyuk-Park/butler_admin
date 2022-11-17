@@ -25,6 +25,7 @@ export default function EditGeographyModal({
   setEditModalSwitch,
   refreshSwitch,
   setRefreshSwitch,
+  companyInfoData,
 }) {
   const { searchCorpCode } = useParams();
 
@@ -40,9 +41,6 @@ export default function EditGeographyModal({
   // 삭제 모달
   const [deleteConfirmModalSwitch, setDeleteConfirmModalSwitch] = useState(false);
 
-  // 수정 / 추가 후 데이터 갱신
-  const [refreshSwitch2Depth, setRefreshSwitch2Depth] = useState(true);
-
   useEffect(() => {
     if (searchCorpCode !== 'main') {
       axios
@@ -55,7 +53,7 @@ export default function EditGeographyModal({
           console.log('실패했습니다');
         });
     }
-  }, [refreshSwitch2Depth]);
+  }, [refreshSwitch]);
 
   const editSelectData = each => {
     setSelectedData(each);
@@ -80,7 +78,7 @@ export default function EditGeographyModal({
       .then(() => {
         alert('삭제가 완료되었습니다.');
         setDeleteConfirmModalSwitch(false);
-        setRefreshSwitch2Depth(!refreshSwitch2Depth);
+        setRefreshSwitch(!refreshSwitch);
       })
       .catch(() => {
         console.log('실패했습니다');
@@ -215,8 +213,7 @@ export default function EditGeographyModal({
           refreshSwitch={refreshSwitch}
           setRefreshSwitch={setRefreshSwitch}
           isEditModal={isEditModal}
-          refreshSwitch2Depth={refreshSwitch2Depth}
-          setRefreshSwitch2Depth={setRefreshSwitch2Depth}
+          companyInfoData={companyInfoData}
         />
       )}
     </div>
@@ -228,6 +225,7 @@ EditGeographyModal.defaultProps = {
   setEditModalSwitch: () => {},
   refreshSwitch: true,
   setRefreshSwitch: () => {},
+  companyInfoData: {},
 };
 
 EditGeographyModal.propTypes = {
@@ -235,4 +233,6 @@ EditGeographyModal.propTypes = {
   setEditModalSwitch: PropTypes.func,
   refreshSwitch: PropTypes.bool,
   setRefreshSwitch: PropTypes.func,
+  // eslint-disable-next-line
+  companyInfoData: PropTypes.object,
 };

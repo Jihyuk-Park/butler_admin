@@ -22,6 +22,35 @@ router.get('/info/company/getData/:searchCompanyCode', function(req,res){
   })
 });
 
+// 검색 기업 - add (정보 - 기업정보)
+router.post('/info/company/add', function(req, res){
+  let corp_code = req.body.searchCorpCode;
+  let geography_title1 = req.body.geography_title1;
+  let geography_title2 = req.body.geography_title2;
+  let geography_source = req.body.geography_source;
+  let currency = req.body.currency;
+  let unit = req.body.unit;
+  let is_available = req.body.is_available === 'O' ? 1 : 0;
+
+  // console.log(corp_code, geography_title1, geography_title2, geography_source, currency, unit, is_available);
+
+  let sql = `INSERT INTO analysis_company_info (corp_code, geography_title1, geography_title2, geography_source, currency, unit, is_available, created_at, updated_at)
+  VALUES("${corp_code}", "${geography_title1}", "${geography_title2}", "${geography_source}", "${currency}", "${unit}", "${is_available}", NOW(), NOW())`;
+
+  connection.query(sql, function(err, result, fields){
+      if(err){
+          console.log(err);
+          res.status(500).send('Interner Server Error')
+      } else {
+          return res.json("추가 성공");
+      }
+  })
+
+  // last commit 업데이트
+  updateCommit(corp_code, 'ANALYSIS');
+})
+
+
 // 검색 기업 - edit (정보 - 기업정보)
 router.post('/info/company/edit', function(req, res){
   let analysis_id = req.body.analysis_id;

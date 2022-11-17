@@ -19,9 +19,8 @@ export default function AddEditInputSectorModal({
   sectorInfoData,
   refreshSwitch,
   setRefreshSwitch,
-  refreshSwitch2Depth,
-  setRefreshSwitch2Depth,
   isEditModal,
+  companyInfoData,
 }) {
   const { searchCorpCode } = useParams();
   const editField = ['부문1', '부문2', '부문3', '주요부문 여부', '부문 설명'];
@@ -41,11 +40,10 @@ export default function AddEditInputSectorModal({
 
   const saveData = () => {
     let body = {
-      analysis_company_info_id: sectorInfoData[0].analysis_company_info_id,
+      analysis_company_info_id: companyInfoData.analysis_id,
       corp_code: searchCorpCode,
       ...editInput,
     };
-    // console.log(sectorInfoData[0]);
     // console.log(body);
 
     const isDuplicate = checkDuplicate();
@@ -82,7 +80,6 @@ export default function AddEditInputSectorModal({
             .then(() => {
               alert(isEditModal === true ? '수정이 완료되었습니다' : '추가가 완료되었습니다');
               setRefreshSwitch(!refreshSwitch);
-              setRefreshSwitch2Depth(!refreshSwitch2Depth);
               modalClose();
             });
         }
@@ -258,9 +255,8 @@ AddEditInputSectorModal.defaultProps = {
   sectorInfoData: [],
   refreshSwitch: true,
   setRefreshSwitch: () => {},
-  refreshSwitch2Depth: true,
-  setRefreshSwitch2Depth: () => {},
   isEditModal: true,
+  companyInfoData: {},
 };
 
 AddEditInputSectorModal.propTypes = {
@@ -272,7 +268,7 @@ AddEditInputSectorModal.propTypes = {
   sectorInfoData: PropTypes.array,
   refreshSwitch: PropTypes.bool,
   setRefreshSwitch: PropTypes.func,
-  refreshSwitch2Depth: PropTypes.bool,
-  setRefreshSwitch2Depth: PropTypes.func,
   isEditModal: PropTypes.bool,
+  // eslint-disable-next-line
+  companyInfoData: PropTypes.object,
 };

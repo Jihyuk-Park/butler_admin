@@ -25,6 +25,7 @@ export default function EditSectorModal({
   setEditModalSwitch,
   refreshSwitch,
   setRefreshSwitch,
+  companyInfoData,
 }) {
   const { searchCorpCode } = useParams();
 
@@ -40,9 +41,6 @@ export default function EditSectorModal({
   // 삭제 모달
   const [deleteConfirmModalSwitch, setDeleteConfirmModalSwitch] = useState(false);
 
-  // 수정 / 추가 후 데이터 갱신
-  const [refreshSwitch2Depth, setRefreshSwitch2Depth] = useState(true);
-
   useEffect(() => {
     if (searchCorpCode !== 'main') {
       axios
@@ -55,7 +53,7 @@ export default function EditSectorModal({
           console.log('실패했습니다');
         });
     }
-  }, [refreshSwitch2Depth]);
+  }, [refreshSwitch]);
 
   const editSelectData = each => {
     setSelectedData(each);
@@ -77,7 +75,7 @@ export default function EditSectorModal({
       .then(() => {
         alert('삭제가 완료되었습니다.');
         setDeleteConfirmModalSwitch(false);
-        setRefreshSwitch2Depth(!refreshSwitch2Depth);
+        setRefreshSwitch(!refreshSwitch);
       })
       .catch(() => {
         console.log('실패했습니다');
@@ -212,8 +210,7 @@ export default function EditSectorModal({
           refreshSwitch={refreshSwitch}
           setRefreshSwitch={setRefreshSwitch}
           isEditModal={isEditModal}
-          refreshSwitch2Depth={refreshSwitch2Depth}
-          setRefreshSwitch2Depth={setRefreshSwitch2Depth}
+          companyInfoData={companyInfoData}
         />
       )}
     </div>
@@ -225,6 +222,7 @@ EditSectorModal.defaultProps = {
   setEditModalSwitch: () => {},
   refreshSwitch: true,
   setRefreshSwitch: () => {},
+  companyInfoData: {},
 };
 
 EditSectorModal.propTypes = {
@@ -232,4 +230,6 @@ EditSectorModal.propTypes = {
   setEditModalSwitch: PropTypes.func,
   refreshSwitch: PropTypes.bool,
   setRefreshSwitch: PropTypes.func,
+  // eslint-disable-next-line
+  companyInfoData: PropTypes.object,
 };

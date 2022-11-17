@@ -11,19 +11,20 @@ import {
   Button,
   Grid,
 } from '@mui/material';
+import PropTypes from 'prop-types';
 import { url } from '../../../../../../component/commonVariable';
 import { addComma } from '../../../../../../component/commonFunction';
 import StyledTableCell from '../../../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../../../component/UI/StyledTableRow';
 import EditCompanyInfoModal from './EditCompanyInfoModal';
 
-export default function CompanyInfo() {
+export default function CompanyInfo({ refreshSwitch, setRefreshSwitch }) {
   // 기업 stockCode url
   const { searchCorpCode } = useParams();
 
-  // 기업정보 편집 모달 스위치 & 리프레시
+  // 기업정보 편집 모달 스위치
   const [editModalSwitch, setEditModalSwitch] = useState(false);
-  const [refreshSwitch, setRefreshSwitch] = useState(false);
+  const [isEdit, setIsEdit] = useState(true);
 
   // 기업 정보 데이터 관련
   const companyInfoTable = [
@@ -45,6 +46,11 @@ export default function CompanyInfo() {
         .then(result => {
           if (result.data[0] !== undefined) {
             setCompanyInfoData(result.data[0]);
+            if (result.data[0].analysis_id === null) {
+              setIsEdit(false);
+            } else {
+              setIsEdit(true);
+            }
           }
         })
         .catch(() => {
@@ -63,10 +69,10 @@ export default function CompanyInfo() {
         <Button
           variant="contained"
           color="secondary"
-          disabled={searchCorpCode === 'main' || companyInfoData.analysis_id === null}
+          disabled={searchCorpCode === 'main'}
           onClick={openEditModal}
         >
-          {companyInfoData.analysis_id === null ? '파일을 먼저 등록해주세요' : '기업정보 편집'}
+          기업정보 편집
         </Button>
       </Grid>
 
@@ -101,8 +107,19 @@ export default function CompanyInfo() {
           editData={companyInfoData}
           refreshSwitch={refreshSwitch}
           setRefreshSwitch={setRefreshSwitch}
+          isEdit={isEdit}
         />
       ) : null}
     </div>
   );
 }
+
+CompanyInfo.defaultProps = {
+  refreshSwitch: true,
+  setRefreshSwitch: () => {},
+};
+
+CompanyInfo.propTypes = {
+  refreshSwitch: PropTypes.bool,
+  setRefreshSwitch: PropTypes.func,
+};

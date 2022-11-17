@@ -11,12 +11,13 @@ import {
   Grid,
   Button,
 } from '@mui/material';
+import PropTypes from 'prop-types';
 import { url } from '../../../../../../component/commonVariable';
 import StyledTableCell from '../../../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../../../component/UI/StyledTableRow';
 import EditSectorModal from './EditSectorModal';
 
-export default function SectorInfo() {
+export default function SectorInfo({ refreshSwitch, setRefreshSwitch }) {
   // 기업 stockCode url
   const { searchCorpCode } = useParams();
 
@@ -27,9 +28,8 @@ export default function SectorInfo() {
   const dataTable = ['부문정보', '부문1', '부문2', '부문3', '주요부문', '부문설명'];
   const [sectorInfoData, setSectorInfoData] = useState([]);
 
-  // 부문정보 편집 모달 스위치 & 리프레시
+  // 부문정보 편집 모달 스위치
   const [editModalSwitch, setEditModalSwitch] = useState(false);
-  const [refreshSwitch, setRefreshSwitch] = useState(false);
 
   // 기업정보를 받아오는 Hook
   useEffect(() => {
@@ -124,8 +124,19 @@ export default function SectorInfo() {
           setEditModalSwitch={setEditModalSwitch}
           refreshSwitch={refreshSwitch}
           setRefreshSwitch={setRefreshSwitch}
+          companyInfoData={companyInfoData}
         />
       ) : null}
     </div>
   );
 }
+
+SectorInfo.defaultProps = {
+  refreshSwitch: true,
+  setRefreshSwitch: () => {},
+};
+
+SectorInfo.propTypes = {
+  refreshSwitch: PropTypes.bool,
+  setRefreshSwitch: PropTypes.func,
+};

@@ -11,12 +11,13 @@ import {
   Grid,
   Button,
 } from '@mui/material';
+import PropTypes from 'prop-types';
 import { url } from '../../../../../../component/commonVariable';
 import StyledTableCell from '../../../../../../component/UI/StyledTableCell';
 import StyledTableRow from '../../../../../../component/UI/StyledTableRow';
 import EditGeographyModal from './EditGeographyModal';
 
-export default function GeographyInfo() {
+export default function GeographyInfo({ refreshSwitch, setRefreshSwitch }) {
   // 기업 stockCode url
   const { searchCorpCode } = useParams();
 
@@ -27,9 +28,8 @@ export default function GeographyInfo() {
   const dataTable = ['지역정보', '지역1', '지역2', '지역3', '주요지역', '지역설명'];
   const [geographyInfoData, setGeographyInfoData] = useState([]);
 
-  // 지역 정보 편집 모달 스위치 & 리프레시
+  // 지역 정보 편집 모달 스위치
   const [editModalSwitch, setEditModalSwitch] = useState(false);
-  const [refreshSwitch, setRefreshSwitch] = useState(false);
 
   // 기업정보를 받아오는 Hook
   useEffect(() => {
@@ -124,8 +124,19 @@ export default function GeographyInfo() {
           setEditModalSwitch={setEditModalSwitch}
           refreshSwitch={refreshSwitch}
           setRefreshSwitch={setRefreshSwitch}
+          companyInfoData={companyInfoData}
         />
       ) : null}
     </div>
   );
 }
+
+GeographyInfo.defaultProps = {
+  refreshSwitch: true,
+  setRefreshSwitch: () => {},
+};
+
+GeographyInfo.propTypes = {
+  refreshSwitch: PropTypes.bool,
+  setRefreshSwitch: PropTypes.func,
+};
